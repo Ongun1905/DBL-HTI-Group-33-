@@ -1,0 +1,108 @@
+body{
+	color: black;
+	background-color: #363F48; 	/*softer black*/
+	#background-color: #2d353c; /*harder black*/
+	
+}
+*{
+	margin: 0;
+	padding: 0;
+	font-family: Calibri, helevitica, sans-serif;
+}
+/* I try to keep an order in which position is above, then z-index, width,height, floats and display, padding and margins, fonts and colors.*/
+/* # = line comment */
+
+/*Menu						************************************************************************************************************************************************/
+header {
+	position: relative;
+	width: 100%;
+	height: 100px;
+	
+	color: white;
+	background-color: #363F48; 	/*softer black*/
+	#background-color: #2d353c;	/*harder black*/
+}
+header nav {
+	position: absolute;
+	z-index: 100; /*Makes sure dropdown menu is seen as a top layer| higher z-index -> higher layer*/
+	right: 150px;
+	
+	top: 50%; /*vertical align menu*/
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+header nav ul{
+	#line-height: 100px;
+}
+header nav ul li{
+	position: relative;
+	float: left; /*makes sure list is next to each under and not below as normally*/
+	padding: 0px 5px;
+	list-style: none; /*No bullet points in list*/
+}
+header nav ul li a{
+	text-decoration: none; /*No line under link as usual*/
+	padding: 5px;
+	font-size: 20px;
+	color: white;
+}
+header nav ul li a:hover {
+	background-color: #65cca9;	/*light green*/
+}
+header nav ul li ul {
+	position: absolute;
+	width: 120px;
+	display: none;
+	margin-top: 5px; 			/*same 5 as padding in 'li a'*/
+	padding: 10px 0px 10px 0px;
+	background-color: #2d353c;	/*harder black*/
+}
+header nav ul li:hover ul {
+	display: block;
+}
+header nav ul li ul li{
+	#width: 100px;
+}
+header nav ul li ul li:hover{
+	background-color: #65cca9;	/*light green*/
+}
+header nav ul li ul li a{
+	padding: 0px 70px 0px 0px;
+}
+header nav ul li ul li a:hover{
+	background-color: #65cca9;	/*light green*/
+}
+.current {						/*Current page highlighthed in menu*/
+	background-color: #65cca9;	/*light green*/
+}
+/*End Menu						************************************************************************************************************************************************/
+
+
+header p {
+	line-height: 100px;
+	margin-left: 20px;
+	color: #65cca9; 			/*light green*/
+	font-size: 30px;
+}
+
+.container {
+	position: relative;
+	z-index: 10;
+	height: 600px;
+	display: flex;
+	justify-content: center;
+	
+	color: #65cca9;				/*light green*/
+	#background-color: #363F48;	/*softer black*/
+	background-color: #2d353c;	/*harder black*/
+	#background-color: #D3D3D3; /*white-ish*/
+}
+.container .main {
+	width: 60%;
+	border: 1px solid blue;
+}
+footer {
+	color: #65cca9;				/*light green*/
+	background-color: #363F48;	/*softer black*/
+	#background-color: #2d353c;	/*harder black*/
+}
