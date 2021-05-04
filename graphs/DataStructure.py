@@ -10,6 +10,7 @@ from textwrap import dedent as d
 import json
 
 mailSet = pd.read_csv("graphs/enron-v1.csv")
+ailSet['date'] = pd.to_datetime(mailSet['date']) # Filter the date for Dash
 
 mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
 
