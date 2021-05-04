@@ -1,7 +1,7 @@
 body{
 	color: black;
-	background-color: #363F48; 	/*softer black*/
-	#background-color: #2d353c; /*harder black*/
+	background-color: #363F48; 	 /*softer black*/
+	/*background-color: #2d353c;*/ /*harder black*/
 	
 }
 *{
@@ -10,7 +10,6 @@ body{
 	font-family: Calibri, helevitica, sans-serif;
 }
 /* I try to keep an order in which position is above, then z-index, width,height, floats and display, padding and margins, fonts and colors.*/
-/* # = line comment */
 
 /*Menu						************************************************************************************************************************************************/
 header {
@@ -19,8 +18,8 @@ header {
 	height: 100px;
 	
 	color: white;
-	background-color: #363F48; 	/*softer black*/
-	#background-color: #2d353c;	/*harder black*/
+	background-color: #363F48; 	  /*softer black*/
+	/*background-color: #2d353c;*/	/*harder black*/
 }
 header nav {
 	position: absolute;
@@ -30,9 +29,6 @@ header nav {
 	top: 50%; /*vertical align menu*/
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
-}
-header nav ul{
-	#line-height: 100px;
 }
 header nav ul li{
 	position: relative;
@@ -59,9 +55,6 @@ header nav ul li ul {
 }
 header nav ul li:hover ul {
 	display: block;
-}
-header nav ul li ul li{
-	#width: 100px;
 }
 header nav ul li ul li:hover{
 	background-color: #65cca9;	/*light green*/
@@ -92,17 +85,17 @@ header p {
 	display: flex;
 	justify-content: center;
 	
-	color: #65cca9;				/*light green*/
-	#background-color: #363F48;	/*softer black*/
-	background-color: #2d353c;	/*harder black*/
-	#background-color: #D3D3D3; /*white-ish*/
+	color: #65cca9;				   /*light green*/
+	/*background-color: #363F48;*/   /*softer black*/
+	background-color: #2d353c;	   /*harder black*/
+	/*background-color: #D3D3D3;*/   /*white-ish*/
 }
 .container .main {
 	width: 60%;
 	border: 1px solid blue;
 }
 footer {
-	color: #65cca9;				/*light green*/
-	background-color: #363F48;	/*softer black*/
-	#background-color: #2d353c;	/*harder black*/
+	color: #65cca9;				  /*light green*/
+	background-color: #363F48;	  /*softer black*/
+	/*background-color: #2d353c;*/	/*harder black*/
 }
