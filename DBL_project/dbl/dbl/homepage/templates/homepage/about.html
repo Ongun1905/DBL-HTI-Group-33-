@@ -1,41 +1,26 @@
-{% load static %}
+{% extends "homepage/layout.html" %}
 
-<!DOCTYPE html>
-<html lang='en'>
-
-	<head>
-		<title>DBL Group 33 | About</title>
-		<link href="{% static 'homepage/styles.css' %}" type="text/css" rel="stylesheet" >
-	</head>
-
-<body>
-	<header>
-			<p>DBL Group 33</p>
-			<nav>
+{% block title %}
+DBL Group 33 | About
+{% endblock %}
+{% block nav %}
+	<nav>
+		<ul>
+			<li><a href="{% url 'index' %}">Home</a></li>
+			<li><a href="#">Visualisations</a>
 				<ul>
-					<li><a href="index">Home</a></li>
-					<li><a href="#">Visualisations</a>
-						<ul>
-							<li><a href="#">Vis 1</a></li>
-							<li><a href="#">Vis 2</a></li>
-						</ul></li>
-					<li><a href="#" class="current">About</a></li>
-				</ul>
-			</nav>
-	</header>
-	
-	
-	<div class="container">
-		<div class="main">
-			<p>About page just to test, I dont even know if we want an about page</p>
-		</div>
+					<li><a href="#">Vis 1</a></li>
+					<li><a href="#">Vis 2</a></li>
+				</ul></li>
+			<li><a href="#" class="current">About</a></li>
+		</ul>
+	</nav>
+{% endblock %}
+
+{% block div %}
+<div class="container">
+	<div class="main">
+		<p>About page just to test, I dont even know if we want an about page</p>
 	</div>
-	
-	<footer>
-		<p>&copy 2021 </p>
-		<p>names: ... </p>
-	</footer>
-
-</body>
-
-</html>
+</div>
+{% endblock %}
