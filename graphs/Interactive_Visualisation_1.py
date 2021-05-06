@@ -31,7 +31,7 @@ displayMultiEdges = False
 sentimentRange = [-1, 1]
 
 # Read CSV and prepare data
-mailSet = pd.read_csv("graphs/enron-v1.csv", engine='python')
+mailSet = pd.read_csv("enron-v1.csv", engine='python')
 mailSet['date'] = pd.to_datetime(mailSet['date']) # Filter the date for Dash
 
 # Generate graph from CSV information
@@ -84,13 +84,12 @@ app.layout = html.Div([
         max=1,
         step=0.01,
         marks={
-        -1: {'label':'-1: Very Negative Email', 'style': {'color': '#f50'}},
-        0: {'label':'0: Neutral Email'},
-        1: {'label':'1: Very Positive Email', 'style': {'color': '#77b0b1'}},
+        -1: {'label': '-1: Very Negative Email', 'style': {'color': '#f50'}},
+        0: {'label': '0: Neutral Email'},
+        1: {'label': '1: Very Positive Email', 'style': {'color': '#77b0b1'}},
         },
         value=[-1, 1],
         allowCross=False
-        
     ),
     dcc.Checklist(
         id='job-options-checklist',
