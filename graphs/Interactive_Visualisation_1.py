@@ -22,15 +22,19 @@ import math
 # visualization.
 # -------------------------------------------------------
 
+# Whether to create a MultiDiGraph or a DiGraph.
+# Implemented because my computer spazzed out on the MultiDiGraph with 30.000 edges.
+# WARNING: There's also a variable `displayMultiEdges` in `NodeLinkFunctions.py`. Make sure to change BOTH if you want to change this variable!
+displayMultiEdges = False
+
 # Global Filtering Variables
 sentimentRange = [-1, 1]
 
-# Read CSV and setup NX graph data structure
+# Read CSV and prepare data
 mailSet = pd.read_csv("enron-v1.csv", engine='python')
 mailSet['date'] = pd.to_datetime(mailSet['date']) # Filter the date for Dash
 
 # Generate graph from CSV information
-displayMultiEdges = True
 mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = (nx.MultiDiGraph() if displayMultiEdges else nx.DiGraph()))
 
 # Set up initial graph with positions and node attributes
@@ -40,14 +44,15 @@ vis1Graph = nlf.createGraph(mailGraph)
 # Puts all values of the given `attribute` in the given list `list`
 def getNodeAttributeValues(graph, attribute, list):
     j = 0
-    for i in range(1, len(graph.nodes)):
-        if graph.nodes[i][attribute] not in list:
-            list.append(graph.nodes[i][attribute])
+    for node in graph.nodes:
+        if graph.nodes[node][attribute] not in list:
+            list.append(graph.nodes[node][attribute])
             j += 1
 
 # Apply above function to find all possible jobs
 jobOptions = []
 getNodeAttributeValues(vis1Graph, "Job", jobOptions)
+# print(jobOptions) # Uncomment this line to see what the `getNodeAttributeValues()` function does.
 
 # Set up options checkboxes
 jobOptionsSelect = []
@@ -61,8 +66,8 @@ for i in range(len(jobOptions)):
 
 
 # Filter the graph
-vis1GraphFilter1 = nlf.filterGraph(vis1Graph, "range", sentimentRange, None)
-vis1GraphFiltered = nlf.filterGraph(vis1GraphFilter1, "checkbox", jobOptionsNumbers, jobOptions)
+vis1GraphFilter1 = nlf.filterGraphSentiment(vis1Graph, sentimentRange)
+vis1GraphFiltered = nlf.filterGraphJobs(vis1GraphFilter1, jobOptionsNumbers, jobOptions)
 
 # Get external styles for the Dash app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -89,7 +94,7 @@ app.layout = html.Div([
     dcc.Checklist(
         id='job-options-checklist',
         options=jobOptionsSelect,
-        value=jobOptionsNumbers # Makes all job options be selected when ran
+        value=jobOptionsNumbers # Makes all job options be selected on startup
     ),
     #html.Div(id='output-container-range-slider'),
     html.Div(
@@ -107,10 +112,16 @@ app.layout = html.Div([
     dash.dependencies.Input('job-options-checklist', 'value'),
 )
 def update_output(sentimentValue, jobChecklistValue):
-    #return 'You have selected the sentiment interval {}'.format(value)
+    #return 'You have selected the sentiment interval {}'.format(sentimentValue)
+
+    # We take the "original graph", vis1Graph, which is the result of createGraph(mailGraph). It has no filters applied.
     originalGraph = vis1Graph
-    filter_1 = nlf.filterGraph(originalGraph, "range", sentimentValue, None)
-    filter_2 = nlf.filterGraph(filter_1, "checkbox", jobChecklistValue, jobOptions)
+
+    # Apply(/recalculate) the sentiment and jobs filter every time the output should be updated.
+    filter_1 = nlf.filterGraphSentiment(originalGraph, sentimentValue)
+    filter_2 = nlf.filterGraphJobs(filter_1, jobChecklistValue, jobOptions)
+
+    # Render the new graph as a figure
     return nlf.renderGraph(filter_2)
 
 if __name__ == '__main__':

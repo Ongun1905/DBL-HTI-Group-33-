@@ -3,7 +3,15 @@ import plotly.graph_objs as go # Graph drawing imports
 import random
 import math
 
-displayMultiEdges = True
+displayMultiEdges = False
+
+
+# -------------------------------------------------------
+# Graph creation
+#
+# The functions below initialize the graph. They add
+# attributes to the nodes and generate positions.
+# -------------------------------------------------------
 
 # The overarching function that does all the graph creating
 def createGraph(graph):
@@ -26,52 +34,6 @@ def createGraph(graph):
     return G
 
 
-def filterGraph(graph, filterType, filterValue, props):
-    # The `props` parameter is a so-called "overloading argument". That means that you can pass extra properties into the function that will end up in this `props` parameter.
-    filteredGraph = graph.copy(as_view=False)
-
-    if (filterType == 'checkbox'):
-        # Remove the nodes that don't satisfy the selection
-        nodesToRemove = []
-        tickedBoxes = filterValue
-
-        # Generate an array of numbers of length of job options
-        allBoxes = []
-        for i in range(len(props)):
-            allBoxes.append(i)
-
-        untickedBoxes = list(set(allBoxes) - set(tickedBoxes))
-
-        # print("The ticked boxes are " + str(tickedBoxes))
-        print("Removing nodes with jobs in the list " + str(untickedBoxes))
-
-        for node in filteredGraph.nodes:
-            # Check every node. If the node has a job that shouldn't be in the graph, remove it.
-            # `props` contains an array with all possible job options (text)
-            for box in untickedBoxes:
-                if (filteredGraph.nodes[node]["Job"] == props[box]):
-                    nodesToRemove.append(node)
-
-        for node in nodesToRemove:
-            filteredGraph.remove_node(node)
-
-        return filteredGraph
-
-    elif (filterType == 'range'):
-        # Remove the edges that don't satisfy the range
-        print("Filtering graph to fit sentiment of " + str(filterValue))
-        for edge in graph.edges:
-            edgeAttribute = graph.get_edge_data(*edge)
-            if(edgeAttribute['sentiment'] < filterValue[0] or edgeAttribute['sentiment'] > filterValue[1]):
-                filteredGraph.remove_edge(*edge)
-    
-    return filteredGraph
-
-
-def renderGraph(graph):
-    return generateGraphElements(graph)
-
-
 # Generate random positions for the network nodes
 def generatePositions(graph):
     random.seed(10)
@@ -87,15 +49,69 @@ def generatePositions(graph):
     nx.set_node_attributes(graph, pos, "pos")
 
 
-# Generate visual elements like nodes, edges and hover popups and return the figure
-def generateGraphElements(G):
+# -------------------------------------------------------
+# Graph filtering
+#
+# The functions below filter the given graph by the
+# given values. Every type of filter has got its own
+# function.
+# -------------------------------------------------------
+
+# Filter the graph by the job checkboxes
+def filterGraphJobs(graph, tickedBoxes, possibleJobs):
+    filteredGraph = graph.copy(as_view=False)
+
+    # Remove the nodes that don't satisfy the selection
+    nodesToRemove = []
+
+    # Generate an array of **numbers** of length of job options
+    allBoxes = []
+    for i in range(len(possibleJobs)):
+        allBoxes.append(i)
+
+    untickedBoxes = list(set(allBoxes) - set(tickedBoxes))
+
+    for node in filteredGraph.nodes:
+        # Check every node. If the node has a job that shouldn't be in the graph, remove it.
+        for box in untickedBoxes:
+            if (filteredGraph.nodes[node]["Job"] == possibleJobs[box]):
+                nodesToRemove.append(node)
+
+    for node in nodesToRemove:
+        filteredGraph.remove_node(node)
+
+    return filteredGraph
+
+# Filter the graph by the sentiment range slider
+def filterGraphSentiment(graph, sentimentRange):
+    filteredGraph = graph.copy(as_view=False)
+
+    # Remove the edges that don't satisfy the range
+    for edge in graph.edges:
+        edgeAttribute = graph.get_edge_data(*edge)
+        if(edgeAttribute['sentiment'] < sentimentRange[0] or edgeAttribute['sentiment'] > sentimentRange[1]):
+            sentimentRange.remove_edge(*edge)
+    
+    return filteredGraph
+
+
+# -------------------------------------------------------
+# Graph rendering
+#
+# The function below is responsible for rendering
+# the graph elements into a figure that can be shown on
+# the website.
+# -------------------------------------------------------
+
+# Generate visual elements like nodes, edges and hover popups and return the figure.
+def renderGraph(graph):
     edge_x = []
     edge_y = []
 
     # Initializing positions
-    for edge in G.edges:
-        x0, y0 = G.nodes[edge[0]]['pos']
-        x1, y1 = G.nodes[edge[1]]['pos']
+    for edge in graph.edges:
+        x0, y0 = graph.nodes[edge[0]]['pos']
+        x1, y1 = graph.nodes[edge[1]]['pos']
         edge_x.append(x0)
         edge_x.append(x1)
         edge_x.append(None)
@@ -113,8 +129,8 @@ def generateGraphElements(G):
     # Initializing node positions
     node_x = []
     node_y = []
-    for node in G.nodes():
-        x, y = G.nodes[node]['pos']
+    for node in graph.nodes():
+        x, y = graph.nodes[node]['pos']
         node_x.append(x)
         node_y.append(y)
 
@@ -140,13 +156,13 @@ def generateGraphElements(G):
     # Coloring nodes by the amount of neighbors and adding tooltips
     node_adjacencies = []
     node_text = []
-    for index, adjacencies in enumerate(G.adjacency()):
+    for index, adjacencies in enumerate(graph.adjacency()):
         node, nbrdict = adjacencies
         node_adjacencies.append(len(nbrdict))
         node_text.append(
             'ID: ' + str(node) +
-            '<br>Email: '+ G.nodes[node]["Email"] +
-            '<br>Job: '+ G.nodes[node]["Job"] +
+            '<br>Email: '+ graph.nodes[node]["Email"] +
+            '<br>Job: '+ graph.nodes[node]["Job"] +
             '<br>Connections: ' + str(len(nbrdict))
         )
 
