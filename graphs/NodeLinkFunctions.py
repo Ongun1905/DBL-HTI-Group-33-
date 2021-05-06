@@ -90,7 +90,7 @@ def filterGraphSentiment(graph, sentimentRange):
     for edge in graph.edges:
         edgeAttribute = graph.get_edge_data(*edge)
         if(edgeAttribute['sentiment'] < sentimentRange[0] or edgeAttribute['sentiment'] > sentimentRange[1]):
-            sentimentRange.remove_edge(*edge)
+            filteredGraph.remove_edge(*edge)
     
     return filteredGraph
 
