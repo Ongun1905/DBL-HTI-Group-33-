@@ -28,7 +28,7 @@ jobFromRange = []
 jobToRange = []
 
 # Read CSV and setup NX graph data structure
-mailSet = pd.read_csv("enron-v1.csv", engine='python')
+mailSet = pd.read_csv("graphs/enron-v1.csv", engine='python')
 mailSet['date'] = pd.to_datetime(mailSet['date']) # Filter the date for Dash
 
 # Generate graph from CSV information
@@ -48,37 +48,64 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.title = "Email Network"
 
+####
+styles = {
+    'pre': {
+        'border': 'thin lightgrey solid',
+        'overflowX': 'scroll'
+    }
+}
+
 # Generating Layout
 app.layout = html.Div([
-    dcc.RangeSlider(
-        id='my-range-slider',
-        min=-1,
-        max=1,
-        step=0.01,
-        marks={
-        -1: {'label': '-1: Very Negative Email', 'style': {'color': '#f50'}},
-        0: {'label': '0: Neutral Email'},
-        1: {'label': '1: Very Positive Email', 'style': {'color': '#77b0b1'}},
-        },
-        value=[-1, 1],
-        allowCross=False
+    html.Div(
+        children = [
+            html.Div(
+                children = [
+                    dcc.RangeSlider(
+                        id='my-range-slider',
+                        min=-1,
+                        max=1,
+                        step=0.01,
+                        marks={
+                        -1: {'label': ': Very Negative Email : - 1', 'style': {'color': '#f50'}},
+                        0: {'label': '0: Neutral Email'},
+                        1: {'label': '1: Very Positive Email', 'style': {'color': '#77b0b1'}},
+                        },
+                        value=[-1, 1],
+                        allowCross=False,   
+                    ),
+                    html.Br(),#breaks space between the interactive elements
+                    html.Br(),
+                ],
+                style = {'width': '400px'}
+            ),
+            
+            html.Div(
+                children = [
+                    dcc.Dropdown(
+                        id='jobFrom-dropdown',
+                        options=[
+                            {'label': j, 'value': j} for j in sorted(jobFrom)
+                        ],
+                        multi = True,
+                        placeholder="Select from Job, Nothing = all"
+                    ),
+
+                    dcc.Dropdown(
+                        id='jobTo-dropdown',
+                        options=[
+                            {'label': j, 'value': j} for j in sorted(jobTo)
+                        ],
+                        multi = True,
+                        placeholder="Select to Job, Nothing = all"
+                    ),
+                ],
+                style = {'width': '300px'}
+            )
+        ]    
     ),
-    dcc.Dropdown(
-        id='jobFrom-dropdown',
-        options=[
-            {'label': j, 'value': j} for j in sorted(jobFrom)
-        ],
-        multi = True,
-        placeholder="Select from Job, Nothing = all"
-    ),
-    dcc.Dropdown(
-        id='jobTo-dropdown',
-        options=[
-            {'label': j, 'value': j} for j in sorted(jobTo)
-        ],
-        multi = True,
-        placeholder="Select to Job, Nothing = all"
-    ),
+
     #html.Div(id='output-container-range-slider'),
     html.Div(
         children=[dcc.Graph(id="mail-graph", figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange))]
