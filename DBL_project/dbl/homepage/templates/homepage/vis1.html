@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head> <title>Hello</title> </head>
+</html>
+<body>
+        <div>
+            Hello world
+        </div>
+        {% load plotly_dash %}
+        <div class="{% plotly_class name='SimpleExample' %} card" style ="height: 100%; width:100%"></div>
+        {% plotly_app name="SimpleExample" %}
+</body>
