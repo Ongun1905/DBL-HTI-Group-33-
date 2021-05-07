@@ -13,7 +13,11 @@ def createGraph(input_file):
     mailSet['date'] = pd.to_datetime(mailSet['date']) # Filter the date for Dash
 
     # Generate graph from CSV information
-    mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph() )
+    mailGraph = nx.from_pandas_edgelist(mailSet, 
+                                        'fromId', 'toId', 
+                                        ['fromEmail', 'fromJobtitle', 'toEmail', 
+                                        'toJobtitle', 'messageType', 'sentiment', 'date'],
+                                        create_using = nx.MultiDiGraph())
     G = mailGraph.copy()
 
     jobFrom_set = []

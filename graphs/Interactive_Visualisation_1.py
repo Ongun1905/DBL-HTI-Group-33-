@@ -168,7 +168,8 @@ app.layout = html.Div([
 
     html.Div(
         children=[dcc.Graph(id="mail-graph", 
-        figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes))]
+        figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange,
+                               dateStart, dateEnd, toccSelect, showhideNodes))]
     )
 ])
 
