@@ -96,6 +96,9 @@ def filterGraph(graph, sentimentValue, jobFromValue, jobToValue, mailFromValue, 
             if(filteredGraph.degree(node) == 0):
                 filteredGraph.remove_node(node)
 
+    return drawGraph(filteredGraph)
+
+def drawGraph(filteredGraph):
     edge_x = []
     edge_y = []
 
