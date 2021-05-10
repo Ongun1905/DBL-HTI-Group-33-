@@ -56,6 +56,7 @@ styles = {
 
 # Generating Layout
 app.layout = html.Div([
+####left side component
     html.Div(
         children = [
             html.Div(
@@ -66,7 +67,7 @@ app.layout = html.Div([
                         max=1,
                         step=0.01,
                         marks={
-                        -1: {'label': ': Very Negative Email : - 1', 'style': {'color': '#f50'}},
+                        -1: {'label': '-1: Very Negative Email', 'style': {'color': '#f50'}},
                         0: {'label': '0: Neutral Email'},
                         1: {'label': '1: Very Positive Email', 'style': {'color': '#77b0b1'}},
                         },
@@ -124,53 +125,55 @@ app.layout = html.Div([
                 ],
                 style = {'width': '300px'}
             ),
+            html.Br(),
 
             html.Div(
-                dcc.DatePickerRange(
-                    id='mail-date-range',
-                        min_date_allowed=minDate,
-                        max_date_allowed=maxDate,
-                        initial_visible_month=minDate,
-                        start_date = minDate,
-                        end_date = maxDate,
-                        start_date_placeholder_text="MMM Do, YYYY",
-                        end_date_placeholder_text="MMM Do, YYYY",
-                        first_day_of_week = 2,
-                        display_format='MMM Do, YYYY'
+            dcc.DatePickerRange(
+                id='mail-date-range',
+                    min_date_allowed=minDate,
+                    max_date_allowed=maxDate,
+                    initial_visible_month=minDate,
+                    start_date = minDate,
+                    end_date = maxDate,
+                    start_date_placeholder_text="MMM Do, YYYY",
+                    end_date_placeholder_text="MMM Do, YYYY",
+                    first_day_of_week = 2,
+                    display_format='MMM Do, YYYY'
                 ) 
             ),
 
-            html.Div(
-                dcc.Checklist(
-                    id = 'to-cc-checklist',
-                    options=[
-                        {'label': 'TO', 'value': 'TO'},
-                        {'label': 'CC', 'value': 'CC'}
-                    ],
-                    value=['TO', 'CC'],
-                    labelStyle={'display': 'inline-block'}
-                ) 
+            dcc.Checklist(
+                id = 'to-cc-checklist',
+                options=[
+                    {'label': 'TO', 'value': 'TO'},
+                    {'label': 'CC', 'value': 'CC'}
+                ],
+                value=['TO', 'CC'],
+                labelStyle={'display': 'inline-block'}
             ),
-
-                html.Div(
-                    dcc.RadioItems(
-                    id = 'node-radio-items',
-                    options=[
-                        {'label': 'Show unlinked nodes', 'value': 'True'},
-                        {'label': 'Hide unlinked nodes', 'value': 'False'}
-                    ],
-                    value='True',
-                    labelStyle={'display': 'inline-block'}
-                )
+            
+            dcc.RadioItems(
+                id = 'node-radio-items',
+                options=[
+                    {'label': 'Show unlinked nodes', 'value': 'True'},
+                    {'label': 'Hide unlinked nodes', 'value': 'False'}
+                ],
+                value='True',
+                labelStyle={'display': 'inline-block'}
             )
-        ]    
+        ],
+        style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-left': '4vw', 'margin-top': '3vw'}
     ),
-
+########middle component
     html.Div(
         children=[dcc.Graph(id="mail-graph", 
-        figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes))]
-    )
-])
+        figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes))
+        ],
+        style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-left': '4vw', 'margin-top': '3vw'
+        ,'width': '1200px', 'height': '500px'}
+    ),
+]
+)
 
 @app.callback(
      dash.dependencies.Output('mail-graph', 'figure'),
