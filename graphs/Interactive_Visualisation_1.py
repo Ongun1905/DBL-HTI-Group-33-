@@ -157,7 +157,7 @@ app.layout = html.Div([
                     id = 'node-radio-items',
                     options=[
                         {'label': 'Show unlinked nodes', 'value': 'True'},
-                        {'label': 'Hyde unlinked nodes', 'value': 'False'}
+                        {'label': 'Hide unlinked nodes', 'value': 'False'}
                     ],
                     value='True',
                     labelStyle={'display': 'inline-block'}
