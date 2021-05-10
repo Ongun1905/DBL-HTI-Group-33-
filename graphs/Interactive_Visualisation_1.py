@@ -31,7 +31,7 @@ mailToRange = []
 toccSelect = []
 showhideNodes = True
 
-input_file = "enron-v1.csv"
+input_file = "graphs/enron-v1.csv"
 
 # Set up initial graph with positions and node attributes
 vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph(input_file)
@@ -157,7 +157,7 @@ app.layout = html.Div([
                     id = 'node-radio-items',
                     options=[
                         {'label': 'Show unlinked nodes', 'value': 'True'},
-                        {'label': 'Hyde unlinked nodes', 'value': 'False'}
+                        {'label': 'Hide unlinked nodes', 'value': 'False'}
                     ],
                     value='True',
                     labelStyle={'display': 'inline-block'}
