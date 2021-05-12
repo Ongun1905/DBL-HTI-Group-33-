@@ -5,7 +5,7 @@ import random
 import math
 from datetime import date
 
-#wow
+
 # The overarching function that does all the graph creating
 def createGraph(input_file):
     # Read CSV and setup NX graph data structure
@@ -13,11 +13,7 @@ def createGraph(input_file):
     mailSet['date'] = pd.to_datetime(mailSet['date']) # Filter the date for Dash
 
     # Generate graph from CSV information
-    mailGraph = nx.from_pandas_edgelist(mailSet, 
-                                        'fromId', 'toId', 
-                                        ['fromEmail', 'fromJobtitle', 'toEmail', 
-                                        'toJobtitle', 'messageType', 'sentiment', 'date'],
-                                        create_using = nx.MultiDiGraph())
+    mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph() )
     G = mailGraph.copy()
 
     jobFrom_set = []
@@ -60,6 +56,8 @@ def filterGraph(graph, sentimentValue, jobFromValue, jobToValue, mailFromValue, 
     filteredGraph = graph.copy(as_view=False)
     mailDateStart = pd.to_datetime(mailDateStart)
     mailDateEnd = pd.to_datetime(mailDateEnd)
+
+    #filteredGraph.layout.update(clickmode = 'event+select')
     # Remove the edges that don't satisfy the range
     for edge in graph.edges:
         edgeAttribute = graph.get_edge_data(*edge)
@@ -99,6 +97,7 @@ def filterGraph(graph, sentimentValue, jobFromValue, jobToValue, mailFromValue, 
     return drawGraph(filteredGraph)
 
 def drawGraph(filteredGraph):
+
     edge_x = []
     edge_y = []
 
@@ -163,6 +162,12 @@ def drawGraph(filteredGraph):
     node_trace.marker.color = node_adjacencies
     node_trace.text = node_text
 
+    #node_trace.on_click(update_point(node_trace, filteredGraph))
+    
+        
+
+
+
     # Drawing the graph as a figure
     figure = go.Figure(data=[edge_trace, node_trace],
         layout=go.Layout(
@@ -173,7 +178,7 @@ def drawGraph(filteredGraph):
         margin=dict(b=20,l=5,r=5,t=40),
         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
         yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)))
-    
+    figure.update_layout(clickmode = 'event+select')#on click the selected node is highlighted
     return figure
 
 
@@ -190,3 +195,15 @@ def generatePositions(graph):
     pos = {v: [math.sin(v / nf), math.cos(v / nf)] for v in sorted(graph.nodes)}   # Circular position distribution
 
     nx.set_node_attributes(graph, pos, "pos")
+    
+    
+#Select a certain node and highlight its edges
+def update_point(nodes, figure):
+    c = list(nodes.marker.color)
+    #s = list(nodes.marker.size)
+    for i in nodes.point_inds:
+        c[i] = '#bae2be'
+       # s[i] = 20
+        with figure.batch_update():
+            nodes.marker.color = c
+            #nodes.marker.size = s

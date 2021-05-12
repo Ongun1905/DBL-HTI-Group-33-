@@ -31,7 +31,7 @@ mailToRange = []
 toccSelect = []
 showhideNodes = True
 
-input_file = "enron-v1.csv"
+input_file = "graphs/enron-v1.csv"
 
 # Set up initial graph with positions and node attributes
 vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph(input_file)
@@ -46,6 +46,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.title = "Email Network"
 
+
+
 ####
 styles = {
     'pre': {
@@ -56,6 +58,7 @@ styles = {
 
 # Generating Layout
 app.layout = html.Div([
+####left side component
     html.Div(
         children = [
             html.Div(
@@ -66,7 +69,7 @@ app.layout = html.Div([
                         max=1,
                         step=0.01,
                         marks={
-                        -1: {'label': ': Very Negative Email : - 1', 'style': {'color': '#f50'}},
+                        -1: {'label': '-1: Very Negative Email', 'style': {'color': '#f50'}},
                         0: {'label': '0: Neutral Email'},
                         1: {'label': '1: Very Positive Email', 'style': {'color': '#77b0b1'}},
                         },
@@ -124,54 +127,64 @@ app.layout = html.Div([
                 ],
                 style = {'width': '300px'}
             ),
+            html.Br(),
 
             html.Div(
-                dcc.DatePickerRange(
-                    id='mail-date-range',
-                        min_date_allowed=minDate,
-                        max_date_allowed=maxDate,
-                        initial_visible_month=minDate,
-                        start_date = minDate,
-                        end_date = maxDate,
-                        start_date_placeholder_text="MMM Do, YYYY",
-                        end_date_placeholder_text="MMM Do, YYYY",
-                        first_day_of_week = 2,
-                        display_format='MMM Do, YYYY'
+            dcc.DatePickerRange(
+                id='mail-date-range',
+                    min_date_allowed=minDate,
+                    max_date_allowed=maxDate,
+                    initial_visible_month=minDate,
+                    start_date = minDate,
+                    end_date = maxDate,
+                    start_date_placeholder_text="MMM Do, YYYY",
+                    end_date_placeholder_text="MMM Do, YYYY",
+                    first_day_of_week = 2,
+                    display_format='MMM Do, YYYY'
                 ) 
             ),
 
-            html.Div(
-                dcc.Checklist(
-                    id = 'to-cc-checklist',
-                    options=[
-                        {'label': 'TO', 'value': 'TO'},
-                        {'label': 'CC', 'value': 'CC'}
-                    ],
-                    value=['TO', 'CC'],
-                    labelStyle={'display': 'inline-block'}
-                ) 
+            dcc.Checklist(
+                id = 'to-cc-checklist',
+                options=[
+                    {'label': 'TO', 'value': 'TO'},
+                    {'label': 'CC', 'value': 'CC'}
+                ],
+                value=['TO', 'CC'],
+                labelStyle={'display': 'inline-block'}
             ),
-
-                html.Div(
-                    dcc.RadioItems(
-                    id = 'node-radio-items',
-                    options=[
-                        {'label': 'Show unlinked nodes', 'value': 'True'},
-                        {'label': 'Hide unlinked nodes', 'value': 'False'}
-                    ],
-                    value='True',
-                    labelStyle={'display': 'inline-block'}
-                )
+            
+            dcc.RadioItems(
+                id = 'node-radio-items',
+                options=[
+                    {'label': 'Show unlinked nodes', 'value': 'True'},
+                    {'label': 'Hide unlinked nodes', 'value': 'False'}
+                ],
+                value='True',
+                labelStyle={'display': 'inline-block'}
             )
-        ]    
+        ],
+        style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-left': '4vw', 'margin-top': '3vw'}
     ),
-
+########middle component
     html.Div(
         children=[dcc.Graph(id="mail-graph", 
-        figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange,
-                               dateStart, dateEnd, toccSelect, showhideNodes))]
-    )
-])
+        figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes))
+        ],
+        style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-left': '4vw', 'margin-top': '3vw'
+        ,'width': '1200px', 'height': '500px'}
+    ),
+
+     html.Div([
+        dcc.Markdown("""
+            **Click Data**
+
+            Click on points in the graph.
+            """),
+        html.Pre(id='click-data', style=styles['pre']),
+        ], className='three columns'),
+]
+)
 
 @app.callback(
      dash.dependencies.Output('mail-graph', 'figure'),
@@ -184,6 +197,13 @@ app.layout = html.Div([
       dash.dependencies.Input('mail-date-range', 'end_date'),
       dash.dependencies.Input('to-cc-checklist', 'value'),
       dash.dependencies.Input('node-radio-items', 'value')])
+
+#@app.callback(
+    #dash.dependencies.Output('click-data', 'children'),
+    #dash.dependencies.Input('mail-graph', 'clickData'))
+#def display_click_data(clickData):
+    #print('hello')
+    #return json.dumps(clickData, indent=2)
 
 def update_output(value, jobFromInput, jobToInput, mailFromInput, mailToInput, mailStartDate, mailEndDate, tocc, showhide):
     sentimentRange = value
