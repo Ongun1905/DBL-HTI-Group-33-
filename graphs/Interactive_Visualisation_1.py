@@ -46,6 +46,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.title = "Email Network"
 
+
+
 ####
 styles = {
     'pre': {
@@ -172,6 +174,15 @@ app.layout = html.Div([
         style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-left': '4vw', 'margin-top': '3vw'
         ,'width': '1200px', 'height': '500px'}
     ),
+
+     html.Div([
+        dcc.Markdown("""
+            **Click Data**
+
+            Click on points in the graph.
+            """),
+        html.Pre(id='click-data', style=styles['pre']),
+        ], className='three columns'),
 ]
 )
 
@@ -186,6 +197,13 @@ app.layout = html.Div([
       dash.dependencies.Input('mail-date-range', 'end_date'),
       dash.dependencies.Input('to-cc-checklist', 'value'),
       dash.dependencies.Input('node-radio-items', 'value')])
+
+#@app.callback(
+    #dash.dependencies.Output('click-data', 'children'),
+    #dash.dependencies.Input('mail-graph', 'clickData'))
+#def display_click_data(clickData):
+    #print('hello')
+    #return json.dumps(clickData, indent=2)
 
 def update_output(value, jobFromInput, jobToInput, mailFromInput, mailToInput, mailStartDate, mailEndDate, tocc, showhide):
     sentimentRange = value
