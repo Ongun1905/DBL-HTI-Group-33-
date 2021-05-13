@@ -1,12 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head> <title>Hello</title> </head>
-</html>
-<body>
-        <div>
-            Hello world
-        </div>
+{% extends "homepage/layout.html" %}
+
+{% block nav %}
+{% include "homepage/navbar.html" with active_page='vis1' %}
+{% endblock %}
+
+
+{% block div %}
+<div class="container">
+    <div class="main">
         {% load plotly_dash %}
-        <div class="{% plotly_class name='SimpleExample' %} card" style ="height: 100%; width:100%"></div>
+        <div class="{% plotly_class name='SimpleExample' %} card" style="height: 100%; width:100%"></div>
         {% plotly_app name="SimpleExample" %}
-</body>
+    </div>
+</div>
+{% endblock %}

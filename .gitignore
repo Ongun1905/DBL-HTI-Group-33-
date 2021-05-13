@@ -1,3 +1,4 @@
 # The files & folders below are ignored by Github and are thus not uploaded to the repo
 /venv
 /djangotest
+**/__pycache__/

@@ -1,0 +1,25 @@
+{% extends "homepage/layout.html" %}
+
+{% block title %}
+Visualization 2 | DBL Group 33
+{% endblock %}
+
+{% block nav %}
+{% include "homepage/navbar.html" with active_page='vis2' %}
+{% endblock %}
+
+{% block div %}
+<div class="container">
+    <div class="main">
+        <table>
+            {% for row in matrix %}
+            <tr>
+                {% for cell in row %}
+                <td class="vert hori">{{ cell }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

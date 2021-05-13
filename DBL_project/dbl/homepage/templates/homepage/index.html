@@ -5,33 +5,15 @@ DBL Group 33 | Homepage
 {% endblock %}
 
 {% block nav %}
-	<nav>
-		<ul>
-			<li><a href="#" class="current">Home</a></li>
-			<li><a href="#">Visualisations</a>
-				<ul>
-					<li><a href="{% url 'vis1' %}">Vis 1</a></li>
-					<li><a href="#">Vis 2</a></li>
-				</ul></li>
-			<li><a href="{% url 'about' %}">About</a></li>
-		</ul>
-	</nav>
+{% include "homepage/navbar.html" with active_page='index' %}
 {% endblock %}
 
 {% block div %}
 <div class="container">
 	<div class="main">
-		<p>	            
-			Index page,
-			<br> Blue border is just to let you see how the main div is positioned
-			<br> Only made the about page just for now
-		</p>
-		<div>
-			{% load plotly_dash %}
-			<div class="{% plotly_class name='SimpleExample' %} card" style ="height: 100%; width:100%"></div>
-
-			{% plotly_app name="SimpleExample" ratio=0.55 %}
-		</div>
+		{% load plotly_dash %}
+		<div class="{% plotly_class name='SimpleExample' %} card" style="height: 100%; width:100%"></div>
+		{% plotly_app name="SimpleExample" ratio=0.55 %}
 	</div>
 </div>
 {% endblock %}

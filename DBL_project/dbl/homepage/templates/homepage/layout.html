@@ -3,26 +3,24 @@
 <!DOCTYPE html>
 <html lang="en">
 
-	<head>
-		<title>{% block title %}{% endblock %}</title>
-		<link href="{% static 'homepage/styles.css' %}" type="text/css" rel="stylesheet" >
-	</head>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link href="{% static 'homepage/styles.css' %}" type="text/css" rel="stylesheet">
+</head>
 
 <body>
-	<header>
-			<p>DBL Group 33</p>
-                {% block nav %}
-                {% endblock %}
-	</header>
-	
-	{% block div %}
-    {% endblock %}
-	
-	<footer>
-		<p>&copy 2021 </p>
-		<p>names: ... </p>
-	</footer>
+  <header>
+    <p>DBL Group 33</p>
+    {% block nav %}{% endblock %}
+  </header>
 
+  {% block div %}
+  {% endblock %}
+
+  <footer>
+    <p>&copy; 2021</p>
+    <p>Made by Jelte, Jesse, Johan, Minh, Ongun and Victor</p>
+  </footer>
 </body>
 
 </html>
