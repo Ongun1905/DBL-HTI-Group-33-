@@ -13,5 +13,5 @@ def vis1(request):
     return render(request, "homepage/vis1.html")
 
 def vis2(request):
-    matrix = adjacency_matrix.getMultiMatrix
+    matrix = adjacency_matrix.getNormalizedMultiMatrix(255)
     return render(request, "homepage/vis2.html", {"matrix": matrix})

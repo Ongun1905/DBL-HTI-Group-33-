@@ -6,21 +6,28 @@
 <head>
   <title>{% block title %}{% endblock %}</title>
   <link href="{% static 'homepage/styles.css' %}" type="text/css" rel="stylesheet">
+  <!-- Importing fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <header>
-    <p>DBL Group 33</p>
-    {% block nav %}{% endblock %}
-  </header>
+  <div id="page-container">
+    <div id="content-wrapper">
+      <header>
+        <p><strong>DBL</strong> Group 33</p>
+        {% block nav %}{% endblock %}
+      </header>
 
-  {% block div %}
-  {% endblock %}
+      {% block div %}
+      {% endblock %}
+    </div>
 
-  <footer>
-    <p>&copy; 2021</p>
-    <p>Made by Jelte, Jesse, Johan, Minh, Ongun and Victor</p>
-  </footer>
+    <footer>
+      <p>&copy; 2021</p>
+      <p>Made by Jelte, Jesse, Johan, Minh, Ongun and Victor</p>
+    </footer>
+  </div>
 </body>
 
 </html>

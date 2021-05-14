@@ -11,15 +11,36 @@ Visualization 2 | DBL Group 33
 {% block div %}
 <div class="container">
     <div class="main">
-        <table>
+        <h1>Visualization 2: Adjacency matrix</h1>
+        <p>This visualization displays an adjacency matrix of the input data. Interestingly enough, we see that quite a lot of people emailed themselves, possibly to share files since cloud services didn't exist during the time that this data originates from.</p>
+        <br />
+        <h3>Controls</h3>
+        <form>
+            <div class="field">
+                <p class="title">Matrix size</p>
+                <input id="am-size-slider" class="slider" type="range" value="4" min="2" max="10" step="2" />
+            </div>
+        </form>
+
+        <table class="adjacency-matrix">
             {% for row in matrix %}
             <tr>
                 {% for cell in row %}
-                <td class="vert hori">{{ cell }}</td>
+                <td class="size-4" style="background-color: rgba(101, 204, 169, {{ cell }})"></td>
                 {% endfor %}
             </tr>
             {% endfor %}
         </table>
     </div>
+    <script>
+    const sizeSlider = document.getElementById('am-size-slider')
+    const matrixTableEntries = document.querySelectorAll('.adjacency-matrix td')
+
+    sizeSlider.addEventListener('change', () => {
+        matrixTableEntries.forEach(entry => {
+            entry.className = `size-${sizeSlider.value}`
+        })
+    })
+    </script>
 </div>
 {% endblock %}
