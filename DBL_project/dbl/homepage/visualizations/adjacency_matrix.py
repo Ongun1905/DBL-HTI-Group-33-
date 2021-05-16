@@ -25,7 +25,7 @@ def getMultiMatrix():
   matrix = to_numpy_matrix(mailGraph).tolist()
   return matrix
 
-def getNormalizedMultiMatrix(factor):
+def getNormalizedMultiMatrix(norm):
   mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
   matrix = to_numpy_matrix(mailGraph).tolist()
   
@@ -36,7 +36,7 @@ def getNormalizedMultiMatrix(factor):
       if cell > maxMatrixElement:
         maxMatrixElement = cell
   
-  normalized_matrix = np.multiply((factor / maxMatrixElement), matrix)
+  normalized_matrix = np.multiply((norm / maxMatrixElement), matrix)
   return normalized_matrix
 
 def getMatrix():
