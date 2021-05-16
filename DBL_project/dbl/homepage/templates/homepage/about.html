@@ -1,20 +1,11 @@
 {% extends "homepage/layout.html" %}
 
 {% block title %}
-DBL Group 33 | About
+About | DBL Group 33
 {% endblock %}
+
 {% block nav %}
-	<nav>
-		<ul>
-			<li><a href="{% url 'index' %}">Home</a></li>
-			<li><a href="#">Visualisations</a>
-				<ul>
-					<li><a href="{% url 'vis1' %}">Vis 1</a></li>
-					<li><a href="#">Vis 2</a></li>
-				</ul></li>
-			<li><a href="#" class="current">About</a></li>
-		</ul>
-	</nav>
+{% include "homepage/navbar.html" with active_page='about' %}
 {% endblock %}
 
 {% block div %}

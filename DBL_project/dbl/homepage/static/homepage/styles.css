@@ -1,101 +1,226 @@
-body{
-	color: black;
-	background-color: #363F48; 	 /*softer black*/
-	/*background-color: #2d353c;*/ /*harder black*/
-	
+/* Variables */
+/* CSS also has variables, which can come in handy for frequently occurring values like colors and paddings. */
+/* They can be defined in any block, but it's good practice to declare them in the :root block. */
+/* They can be declared by typing `--var-name: #ffffff;` and they can be used by typing `color: var(--var-name)` */
+:root {
+	--color-black-softest: #485461; /* softer black */
+	--color-black-soft: #363F48; /* softer black */
+	--color-black-hard: #2d353c; /* harder black */
+	--color-black-hardest: #21282e; /* hardest black */
+	--color-green-light: #65cca9; /* light green */
+	--color-green: #29b586; /* medium green */
+	--padding-sides: 15%;
+	--footer-height: 3rem;
 }
-*{
+
+* {
 	margin: 0;
 	padding: 0;
-	font-family: Calibri, helevitica, sans-serif;
+	box-sizing: border-box; /* Changes the behaviour of padding and borders. It makes sure the element doesn't become larger because of it's padding, since the padding is put inside the element. Try commenting out this line to see what it does! The navbar will go "outside of the page" to the right. */
 }
+
+body {
+	color: black;
+	background-color: var(--color-black-hard);
+	font: 17px "Rubik", sans-serif;
+}
+
+/* General font settings */
+h1, h2, h3, h4, h5, h6 { margin-bottom: 0.33em; }
+
 /* I try to keep an order in which position is above, then z-index, width,height, floats and display, padding and margins, fonts and colors.*/
 
 /*Menu						************************************************************************************************************************************************/
 header {
 	position: relative;
 	width: 100%;
-	height: 100px;
+	height: 80px;
+
+	/* Positioning */
+	display: flex;
+	justify-content: space-between; /* Puts the two child elements (website name and nav) as far away from eachother as possible. */
+	align-items: center; /* Vertical align */
+	padding: 0 var(--padding-sides);
 	
 	color: white;
-	background-color: #363F48; 	  /*softer black*/
-	/*background-color: #2d353c;*/	/*harder black*/
+	background-color: var(--color-black-soft);
 }
+
+/* Website name */
+header p {
+	color: var(--color-green-light);
+	font-size: 30px;
+}
+
 header nav {
-	position: absolute;
-	z-index: 100; /*Makes sure dropdown menu is seen as a top layer| higher z-index -> higher layer*/
-	right: 150px;
-	
-	top: 50%; /*vertical align menu*/
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
+	position: relative; /* z-index only works if the position is set to anything other than "static", the default */
+	z-index: 100; /* Makes sure dropdown menu is seen as a top layer| higher z-index -> higher layer */
 }
-header nav ul li{
+header nav > ul > li {
 	position: relative;
-	float: left; /*makes sure list is next to each under and not below as normally*/
-	padding: 0px 5px;
-	list-style: none; /*No bullet points in list*/
+	display: inline-block;
+	margin: 0px 5px;
+	padding: 5px;
 }
-header nav ul li a{
+header nav ul li a {
 	text-decoration: none; /*No line under link as usual*/
 	padding: 5px;
 	font-size: 20px;
 	color: white;
 }
-header nav ul li a:hover {
-	background-color: #65cca9;	/*light green*/
-}
+header nav ul li:hover { background-color: var(--color-green-light); }
 header nav ul li ul {
 	position: absolute;
-	width: 120px;
+	width: 100%;
+	left: 0;
 	display: none;
 	margin-top: 5px; 			/*same 5 as padding in 'li a'*/
-	padding: 10px 0px 10px 0px;
-	background-color: #2d353c;	/*harder black*/
+	background-color: var(--color-black-softest);
+	box-shadow: 1px 4px 8px 0 rgba(0,0,0,0.3);
 }
 header nav ul li:hover ul {
-	display: block;
+	display: block; /* Display submenu's when their list item is hovered */
 }
-header nav ul li ul li:hover{
-	background-color: #65cca9;	/*light green*/
+header nav ul li ul li, header nav ul li ul li a {
+	display: block; /* Set the display type to block to make sure the submenu items take up the full width and height */
 }
-header nav ul li ul li a{
-	padding: 0px 70px 0px 0px;
+header nav ul li ul li a {
+  padding: 5px 12px; /* Adding a bit of padding to the left and the right of elements in submenus */
 }
-header nav ul li ul li a:hover{
-	background-color: #65cca9;	/*light green*/
-}
-.current {						/*Current page highlighthed in menu*/
-	background-color: #65cca9;	/*light green*/
+
+/* Current page highlighthed in menu */
+.current {
+	background-color: var(--color-green-light);
 }
 /*End Menu						************************************************************************************************************************************************/
-
-
-header p {
-	line-height: 100px;
-	margin-left: 20px;
-	color: #65cca9; 			/*light green*/
-	font-size: 30px;
-}
 
 .container {
 	position: relative;
 	z-index: 10;
-	height: 600px;
 	display: flex;
 	justify-content: center;
 	
-	color: #65cca9;				   /*light green*/
-	/*background-color: #363F48;*/   /*softer black*/
-	background-color: #2d353c;	   /*harder black*/
-	/*background-color: #D3D3D3;*/   /*white-ish*/
+	color: #fff;
+	background-color: var(--color-black-hard);
 }
+.container h1, h2, h3, strong, bold { color: #65cca9; }
 .container .main {
-	width: 60%;
-	border: 1px solid blue;
+	width: 100%;
+	padding: 2rem var(--padding-sides);
 }
+
+
+/* Make the footer stay at the bottom of the page */
+#page-container { position: relative; min-height: 100vh; }
+#content-wrapper { padding-bottom: var(--footer-height); }
+
 footer {
-	color: #65cca9;				  /*light green*/
-	background-color: #363F48;	  /*softer black*/
-	/*background-color: #2d353c;*/	/*harder black*/
+	/* Final 4 lines of forcing the footer to stay at the bottom of the page */
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: var(--footer-height);
+
+	/* Positioning the elements in the footer */
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	/* Adding the same side padding as the rest of the page */
+	padding: 0 var(--padding-sides);
+
+	color: #ccc;
+	background-color: var(--color-black-soft);
 }
+
+
+
+/* ------------------------------
+Reusable components
+------------------------------ */
+.button {
+	display: inline-block;
+	padding: 8px 12px;
+	text-decoration: none;
+	color: #fff;
+	background-color: var(--color-green-light);
+	border: 2px solid var(--color-green-light);
+	border-radius: 4px;
+	transition: background-color 200ms ease, border-color 200ms ease;
+}
+.button:hover {
+	background-color: var(--color-green);
+	border-color: var(--color-green);
+}
+.button.outline {
+	background-color: transparent;
+}
+.button.outline:hover {
+	background-color: var(--color-green);
+}
+
+.slider {
+	-webkit-appearance: none;
+	width: 100%;
+  height: 25px;
+	background-color: var(--color-black-softest);
+	outline: none;
+	opacity: 0.7;
+	transition: opactiy 200ms ease;
+}
+.slider:hover {
+	opacity: 1;
+}
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 25px;
+	height: 25px;
+	cursor: pointer;
+	background: var(--color-green-light);
+}
+
+
+/* ------------------------------
+Homepage row layout design
+------------------------------ */
+.row-layout {
+	position: relative;
+	padding: 2rem;
+	background-color: var(--color-black-softest);
+	border-radius: 1rem;
+	overflow: hidden;
+}
+.row-layout + .row-layout { margin-top: 1rem; }
+.row-layout .button { margin-top: 1rem; }
+.row-layout .button + .button {
+	margin-left: 8px; /* Any buttons that are preceded by another button get a left margin */
+}
+.row-layout .side-img {
+	position: absolute;
+	right: -20px;
+	top: -20px;
+	max-height: 125%;
+	opacity: 0.5;
+}
+.row-layout p { max-width: 80%; }
+
+
+/* ------------------------------
+Adjacency matrix styling
+------------------------------ */
+.adjacency-matrix {
+	margin-top: 1rem;
+	overflow: auto;
+	border-collapse: collapse;
+	background-color: var(--color-black-soft);
+}
+
+.adjacency-matrix td.size-2 { width: 2px; height: 2px; }
+.adjacency-matrix td.size-4 { width: 4px; height: 4px; }
+.adjacency-matrix td.size-6 { width: 6px; height: 6px; }
+.adjacency-matrix td.size-8 { width: 8px; height: 8px; }
+.adjacency-matrix td.size-10 { width: 10px; height: 10px; }
+
+.field .title { margin-bottom: 4px; }
+.field { max-width: 300px; }
