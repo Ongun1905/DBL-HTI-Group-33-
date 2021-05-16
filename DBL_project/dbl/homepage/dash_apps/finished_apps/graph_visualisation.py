@@ -1,22 +1,12 @@
-# Import settings to allow BASE_DIR to be used
-from django.conf import settings
-
 # Import Node Link functions from another Python file
 import NodeLinkFunctions as nlf
 
 # Make sure you have plotly and networkx installed before running this code!
 import pandas as pd # General data handling
 import networkx as nx # Handling network graphs
-import random
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.graph_objs as go
-from colour import Color
-from datetime import date
-from textwrap import dedent as d
-import json
-import math
 
 # -------------------------------------------------------
 # Visualisation 1
@@ -34,10 +24,8 @@ mailToRange = []
 toccSelect = []
 showhideNodes = True
 
-input_file = "DBL_project\dbl\enron-v1.csv"
-
 # Set up initial graph with positions and node attributes
-vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph(input_file)
+vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph()
 
 dateStart = minDate 
 dateEnd = maxDate

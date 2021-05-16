@@ -1,3 +1,6 @@
+# Import settings to allow BASE_DIR to be used
+from django.conf import settings
+
 import networkx as nx # Handling network graphs
 import plotly.graph_objs as go # Graph drawing imports
 import pandas as pd
@@ -7,9 +10,9 @@ from datetime import date
 
 
 # The overarching function that does all the graph creating
-def createGraph(input_file):
+def createGraph():
     # Read CSV and setup NX graph data structure
-    mailSet = pd.read_csv(input_file, engine='python')
+    mailSet = pd.read_csv(settings.BASE_DIR / 'enron-v1.csv', engine='python')
     mailSet['date'] = pd.to_datetime(mailSet['date']) # Filter the date for Dash
 
     # Generate graph from CSV information
