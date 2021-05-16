@@ -1,3 +1,6 @@
+# Import settings to allow BASE_DIR to be used
+from django.conf import settings
+
 # Import functions for adjacency matrices
 from networkx.algorithms.clique import enumerate_all_cliques
 from networkx.linalg.graphmatrix import adjacency_matrix
@@ -15,7 +18,7 @@ import numpy as np
 # -------------------------------------------------------
 
 # Read CSV and setup NX graph data structure
-mailSet = pd.read_csv("enron-v1.csv", engine='python')
+mailSet = pd.read_csv(settings.BASE_DIR / 'enron-v1.csv', engine='python')
 
 def getMultiMatrix():
   mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
