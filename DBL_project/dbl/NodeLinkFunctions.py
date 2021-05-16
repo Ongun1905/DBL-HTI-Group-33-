@@ -1,40 +1,63 @@
 import networkx as nx # Handling network graphs
 import plotly.graph_objs as go # Graph drawing imports
+import pandas as pd
 import random
 import math
+from datetime import date
 
 
 # The overarching function that does all the graph creating
-def createGraph(graph):
-    G = graph.copy()
+def createGraph(input_file):
+    # Read CSV and setup NX graph data structure
+    mailSet = pd.read_csv(input_file, engine='python')
+    mailSet['date'] = pd.to_datetime(mailSet['date']) # Filter the date for Dash
+
+    # Generate graph from CSV information
+    mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph() )
+    G = mailGraph.copy()
 
     jobFrom_set = []
     jobTo_set = []
+    mailFrom_set = []
+    mailTo_set = []
+    minDate = date.max
+    maxDate = date.min
+
 
     # Efficiently adding attributes to the nodes in the graph
-    for edge in G.edges:        
+    for edge in G.edges:    
+        edgeAttribute = G.get_edge_data(*edge)
+        if(edgeAttribute['date'] < minDate):
+            minDate = edgeAttribute['date']
+        if(edgeAttribute['date'] > maxDate):
+            maxDate = edgeAttribute['date']  
         if (edge[2] == 0):
-            edgeAttribute = G.get_edge_data(*edge)
-        
-        if(G.nodes[edge[0]].get('Email') is None):
-            G.nodes[edge[0]]['Email'] = edgeAttribute['fromEmail']
-            G.nodes[edge[0]]['Job'] = edgeAttribute['fromJobtitle']
+            if(G.nodes[edge[0]].get('Email') is None):
+                G.nodes[edge[0]]['Email'] = edgeAttribute['fromEmail']
+                G.nodes[edge[0]]['Job'] = edgeAttribute['fromJobtitle']
+            if(G.nodes[edge[1]].get('Email') is None):
+                G.nodes[edge[1]]['Email'] = edgeAttribute['toEmail']
+                G.nodes[edge[1]]['Job'] = edgeAttribute['toJobtitle']
             if(edgeAttribute['fromJobtitle'] not in jobFrom_set):
                 jobFrom_set = jobFrom_set + [edgeAttribute['fromJobtitle']]
-        if(G.nodes[edge[1]].get('Email') is None):
-            G.nodes[edge[1]]['Email'] = edgeAttribute['toEmail']
-            G.nodes[edge[1]]['Job'] = edgeAttribute['toJobtitle']
             if(edgeAttribute['toJobtitle'] not in jobTo_set):
                 jobTo_set = jobTo_set + [edgeAttribute['toJobtitle']]
+            if(edgeAttribute['fromEmail'] not in mailFrom_set):
+                mailFrom_set = mailFrom_set + [edgeAttribute['fromEmail']]
+            if(edgeAttribute['toEmail'] not in mailTo_set):
+                mailTo_set = mailTo_set + [edgeAttribute['toEmail']]
     
     generatePositions(G)
 
-    return G, jobFrom_set, jobTo_set;
+    return G, jobFrom_set, jobTo_set, mailFrom_set, mailTo_set, minDate, maxDate;
 
 
-def filterGraph(graph, sentimentValue, jobFromValue, jobToValue):
-    # The `props` parameter is a so-called "overloading argument". That means that you can pass extra properties into the function that will end up in this `props` parameter.
+def filterGraph(graph, sentimentValue, jobFromValue, jobToValue, mailFromValue, mailToValue, mailDateStart, mailDateEnd, toccSelect, showhide):
     filteredGraph = graph.copy(as_view=False)
+    mailDateStart = pd.to_datetime(mailDateStart)
+    mailDateEnd = pd.to_datetime(mailDateEnd)
+
+    #filteredGraph.layout.update(clickmode = 'event+select')
     # Remove the edges that don't satisfy the range
     for edge in graph.edges:
         edgeAttribute = graph.get_edge_data(*edge)
@@ -49,9 +72,32 @@ def filterGraph(graph, sentimentValue, jobFromValue, jobToValue):
             flag  = True
             if(edgeAttribute['toJobtitle'] in jobToValue):
                 flag = False
+        if(not flag and mailFromValue):
+            flag = True
+            if(edgeAttribute['fromEmail'] in mailFromValue):
+                flag = False
+        if(not flag and mailToValue):
+            flag  = True
+            if(edgeAttribute['toEmail'] in mailToValue):
+                flag = False
+        if(edgeAttribute['date'] < mailDateStart or edgeAttribute['date'] > mailDateEnd):
+            flag = True
+        if(not flag and toccSelect):
+            flag = True
+            if(edgeAttribute['messageType'] in toccSelect):
+                flag = False
         if(flag):
             filteredGraph.remove_edge(*edge)
     
+    if(showhide == 'False'):
+        for node in graph.nodes:
+            if(filteredGraph.degree(node) == 0):
+                filteredGraph.remove_node(node)
+
+    return drawGraph(filteredGraph)
+
+def drawGraph(filteredGraph):
+
     edge_x = []
     edge_y = []
 
@@ -116,6 +162,12 @@ def filterGraph(graph, sentimentValue, jobFromValue, jobToValue):
     node_trace.marker.color = node_adjacencies
     node_trace.text = node_text
 
+    #node_trace.on_click(update_point(node_trace, filteredGraph))
+    
+        
+
+
+
     # Drawing the graph as a figure
     figure = go.Figure(data=[edge_trace, node_trace],
         layout=go.Layout(
@@ -126,7 +178,7 @@ def filterGraph(graph, sentimentValue, jobFromValue, jobToValue):
         margin=dict(b=20,l=5,r=5,t=40),
         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
         yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)))
-    
+    figure.update_layout(clickmode = 'event+select')#on click the selected node is highlighted
     return figure
 
 
@@ -143,3 +195,15 @@ def generatePositions(graph):
     pos = {v: [math.sin(v / nf), math.cos(v / nf)] for v in sorted(graph.nodes)}   # Circular position distribution
 
     nx.set_node_attributes(graph, pos, "pos")
+    
+    
+#Select a certain node and highlight its edges
+def update_point(nodes, figure):
+    c = list(nodes.marker.color)
+    #s = list(nodes.marker.size)
+    for i in nodes.point_inds:
+        c[i] = '#bae2be'
+       # s[i] = 20
+        with figure.batch_update():
+            nodes.marker.color = c
+            #nodes.marker.size = s

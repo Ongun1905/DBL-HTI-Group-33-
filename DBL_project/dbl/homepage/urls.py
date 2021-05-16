@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from homepage.dash_apps.finished_apps import simple_example
+from homepage.dash_apps.finished_apps import graph_visualisation
 
 urlpatterns = [
     path("", views.index, name="index"),

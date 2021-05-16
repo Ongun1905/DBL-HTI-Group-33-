@@ -1,3 +1,6 @@
+# Import settings to allow BASE_DIR to be used
+from django.conf import settings
+
 # Import Node Link functions from another Python file
 import NodeLinkFunctions as nlf
 
@@ -31,7 +34,7 @@ mailToRange = []
 toccSelect = []
 showhideNodes = True
 
-input_file = "enron-v1.csv"
+input_file = "DBL_project\dbl\enron-v1.csv"
 
 # Set up initial graph with positions and node attributes
 vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph(input_file)
@@ -43,10 +46,10 @@ dateEnd = maxDate
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 # Initialise Dash app
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+#app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+from django_plotly_dash import DjangoDash
+app = DjangoDash('GraphVisualisation')
 app.title = "Email Network"
-
-
 
 ####
 styles = {
