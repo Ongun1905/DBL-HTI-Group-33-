@@ -155,15 +155,14 @@ app.layout = html.Div([
                 labelStyle={'display': 'inline-block'}
             )
         ],
-        style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-left': '4vw', 'margin-top': '3vw'}
+        style={'display': 'inline-block', 'vertical-align': 'middle'}
     ),
 ########middle component
     html.Div(
         children=[dcc.Graph(id="mail-graph", 
         figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes))
         ],
-        style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-left': '4vw', 'margin-top': '3vw'
-        ,'width': '1200px', 'height': '500px'}
+        style={'display': 'inline-block', 'vertical-align': 'middle','width': '1200px', 'height': '500px'}
     ),
 
      html.Div([

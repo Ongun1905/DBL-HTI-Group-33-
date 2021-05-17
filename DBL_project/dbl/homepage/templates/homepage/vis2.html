@@ -18,24 +18,42 @@ Visualization 2 | DBL Group 33
         <form>
             <div class="field">
                 <p class="title">Matrix size</p>
-                <input id="am-size-slider" class="slider" type="range" value="4" min="2" max="10" step="2" />
+                <input id="am-size-slider" class="slider" type="range" value="10" min="2" max="18" step="2" />
             </div>
         </form>
 
         <table class="adjacency-matrix">
-            {% for row in matrix %}
-            <tr>
-                {% for cell in row %}
-                <td class="size-4" style="background-color: rgba(101, 204, 169, {{ cell }})"></td>
+            <thead>
+                <tr>
+                    <th class="vertical-table-header"><span>x</span></th>
+                    <!-- ze = zippedElement, refers to the way the adj_matrix is created and stored in views.py -->
+                    {% for ze in adj_matrix %}
+                    <th class="vertical-table-header"><span>{{ ze.1.email }}</span></th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for ze in adj_matrix_2 %}
+                <tr>
+                    <th>{{ ze.1.email  }}</th>
+                    {% for cell in ze.0 %}
+                    <td class="size-16" style="background-color: rgba(101, 204, 169, {{ cell }})"></td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
-            </tr>
-            {% endfor %}
+            </tbody>
         </table>
     </div>
     <script>
+    // Get the slider and table elements
     const sizeSlider = document.getElementById('am-size-slider')
     const matrixTableEntries = document.querySelectorAll('.adjacency-matrix td')
 
+    // When the slider value changes, resize all td elements by setting their class
+    //
+    // Example:
+    // Let's say the slider has got the value 4. This results in every td element getting the class="size-4"
+    // In CSS, all elements with the class "size-4" get a width of 4px and a height of 4px
     sizeSlider.addEventListener('change', () => {
         matrixTableEntries.forEach(entry => {
             entry.className = `size-${sizeSlider.value}`
