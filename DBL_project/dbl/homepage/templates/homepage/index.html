@@ -12,6 +12,12 @@ DBL Group 33 | Homepage
 {% block div %}
 <div class="container">
 	<div class="main">
+		<h2> Upload</h2>
+        <form method="post" enctype="multipart/form-data">
+        	{% csrf_token%}
+        	<input type="file" name="document">
+        	<button type="submit"> Upload file </button>
+        </form>
 		<section class="row-layout">
 			<h2>Visualization 1: Node-link diagram</h2>
 			<p>This visualization displays a node-link diagram of the network graph, made using Plotly and Dash.</p>
