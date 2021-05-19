@@ -176,6 +176,9 @@ def drawGraph(filteredGraph):
         layout=go.Layout(
         title='Network Graph Visualisation',
         titlefont_size=16,
+        plot_bgcolor='#363F48',
+        paper_bgcolor='#363F48',
+        font_color='#65cca9',
         showlegend=False,
         hovermode='closest',
         margin=dict(b=20,l=5,r=5,t=40),

@@ -224,3 +224,10 @@ Adjacency matrix styling
 
 .field .title { margin-bottom: 4px; }
 .field { max-width: 300px; }
+
+/* ------------------------------
+node link styling
+------------------------------ */
+.test{
+	overflow: hidden;
+}

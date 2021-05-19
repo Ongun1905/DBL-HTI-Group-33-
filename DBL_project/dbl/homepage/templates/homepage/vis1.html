@@ -8,8 +8,10 @@
 {% block div %}
 <div class="container">
     <div class="main">
-        {% load plotly_dash %}
-        {% plotly_app name="GraphVisualisation" ratio=0.55 %}
+        <div class="test">
+            {% load plotly_dash %}
+            {% plotly_app name="GraphVisualisation" ratio=1.0 %}
+        </div>
     </div>
 </div>
 {% endblock %}
