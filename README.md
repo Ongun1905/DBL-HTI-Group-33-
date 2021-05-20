@@ -6,7 +6,7 @@
 <br>
 
 # Usage
-In order to run the webapp, there's a few steps that need to be followed. Using a Python virtual environment is recommended but not required.
+In order to run the webapp, there's a few steps that need to be followed. Using a Python virtual environment is recommended<sup>1</sup> but not required.
 
 ## Installation
 ### <a name="python-venv-setup"></a> Python virtual environment setup
@@ -37,3 +37,5 @@ Quit the server with CTRL-BREAK.
 ```
 
 Follow the link in the log (http://127.0.0.1:8000/) to view the webapp in action!
+<hr>
+1. Using a virtual environment is recommended since this webapp uses specific versions of certain packages. Using a virtual environment isolates Python files on a per-project basis, which ensures that no package version conflicts can occur.
