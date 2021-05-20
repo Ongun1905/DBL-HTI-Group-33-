@@ -18,26 +18,33 @@ Visualization 2 | DBL Group 33
         <form>
             <div class="field">
                 <p class="title">Matrix size</p>
-                <input id="am-size-slider" class="slider" type="range" value="10" min="2" max="18" step="2" />
+                <input type="range" id="am-size-slider" class="range-slider" value="6" min="2" max="10" step="2" />
+            </div>
+            <div class="field">
+                <p class="title">Display names</p>
+                <label class="switch">
+                    <input type="checkbox" id="am-toggle-names" checked>
+                    <span class="switch-slider"></span>
+                </label>
             </div>
         </form>
 
-        <table class="adjacency-matrix">
-            <thead>
+        <table class="adjacency-matrix names" id="adjacency-matrix">
+            <thead class="visible">
                 <tr>
-                    <th class="vertical-table-header"><span>x</span></th>
+                    <th><span>x</span></th>
                     <!-- ze = zippedElement, refers to the way the adj_matrix is created and stored in views.py -->
                     {% for ze in adj_matrix %}
-                    <th class="vertical-table-header"><span>{{ ze.1.email }}</span></th>
+                    <th><span>{{ ze.1.email }}</span></th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
                 {% for ze in adj_matrix_2 %}
                 <tr>
-                    <th>{{ ze.1.email  }}</th>
+                    <th class="visible">{{ ze.1.email  }}</th>
                     {% for cell in ze.0 %}
-                    <td class="size-16" style="background-color: rgba(101, 204, 169, {{ cell }})"></td>
+                    <td class="size-6" style="background-color: rgba(101, 204, 169, {{ cell }})"></td>
                     {% endfor %}
                 </tr>
                 {% endfor %}
@@ -46,6 +53,12 @@ Visualization 2 | DBL Group 33
     </div>
     <script>
     // Get the slider and table elements
+    const adjacencyMatrix = document.getElementById('adjacency-matrix')
+    const topHeader = document.querySelector('.adjacency-matrix thead')
+    const topHeaderElements = document.querySelectorAll('.adjacency-matrix thead th:not(:first-child)')
+    const leftHeaderElements = document.querySelectorAll('.adjacency-matrix tbody th')
+    const toggleNamesElement = document.getElementById('am-toggle-names')
+
     const sizeSlider = document.getElementById('am-size-slider')
     const matrixTableEntries = document.querySelectorAll('.adjacency-matrix td')
 
@@ -59,6 +72,31 @@ Visualization 2 | DBL Group 33
             entry.className = `size-${sizeSlider.value}`
         })
     })
+
+    toggleNamesElement.addEventListener('click', () => {
+        // Toggle the names to become visible
+        if (toggleNamesElement.checked) {
+            // Fix AM styling
+            if (!adjacencyMatrix.classList.contains('names')) adjacencyMatrix.classList.add('names')
+
+            // Add the names
+            if (!topHeader.classList.contains('visible')) topHeader.classList.add('visible')
+            leftHeaderElements.forEach(el => {
+                if (!el.classList.contains('visible')) el.classList.add('visible')
+            })
+        } else {
+            // Fix AM styling
+            if (adjacencyMatrix.classList.contains('names')) adjacencyMatrix.classList.remove('names')
+
+            // Remove the names
+            if (topHeader.classList.contains('visible')) topHeader.classList.remove('visible')
+            leftHeaderElements.forEach(el => {
+                if (el.classList.contains('visible')) el.classList.remove('visible')
+            })
+        }
+    })
+
+    
     </script>
 </div>
 {% endblock %}
