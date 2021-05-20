@@ -138,6 +138,7 @@ footer {
 /* ------------------------------
 Reusable components
 ------------------------------ */
+/* Button */
 .button {
 	display: inline-block;
 	padding: 8px 12px;
@@ -159,7 +160,8 @@ Reusable components
 	background-color: var(--color-green);
 }
 
-.slider {
+/* Range slider */
+.range-slider {
 	-webkit-appearance: none;
 	width: 100%;
   height: 25px;
@@ -168,10 +170,10 @@ Reusable components
 	opacity: 0.7;
 	transition: opactiy 200ms ease;
 }
-.slider:hover {
+.range-slider:hover {
 	opacity: 1;
 }
-.slider::-webkit-slider-thumb {
+.range-slider::-webkit-slider-thumb {
 	-webkit-appearance: none;
 	appearance: none;
 	width: 25px;
@@ -179,6 +181,59 @@ Reusable components
 	cursor: pointer;
 	background: var(--color-green-light);
 }
+
+/* Toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .switch-slider {
+  background-color: var(--color-green);
+}
+
+input:focus + .switch-slider {
+  box-shadow: 0 0 1px var(--color-green);
+}
+
+input:checked + .switch-slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
 
 
 /* ------------------------------
@@ -210,20 +265,73 @@ Homepage row layout design
 Adjacency matrix styling
 ------------------------------ */
 .adjacency-matrix {
-	margin-top: 1rem;
-	overflow: auto;
-	border-collapse: collapse;
+	margin-top: 2rem;
+	border-collapse: separate; /* Don't collapse for header borders */
+  border-spacing: 0;
 	background-color: var(--color-black-soft);
 }
+.adjacency-matrix.names { display: block; overflow: scroll; max-height: 600px; max-width: calc(100vw - 2 * var(--padding-sides)) }
+.adjacency-matrix.names tbody tr:nth-child(even) {
+	background-color: var(--color-black-hard);
+}
+
+/* Set up the adjacency matrix for removing headers */
+.adjacency-matrix thead:not(.visible) { display: none; }
+.adjacency-matrix tbody th:not(.visible) { display: none; padding: 0; }
+
+.adjacency-matrix thead th {
+	padding: 4px 8px;
+	position: sticky;
+	top: 0;
+	background-color: var(--color-black-softest);
+	z-index: 1;
+	border-bottom: 2px solid #839ab1;
+}
+
+.adjacency-matrix tbody th {
+	position: sticky;
+	left: 0;
+	padding: 4px 8px;
+	text-align: left;
+	border-right: 2px solid #839ab1;
+	background-color: var(--color-black-softest);
+}
+
+.adjacency-matrix th { font-size: 14px; }
+
 
 .adjacency-matrix td.size-2 { width: 2px; height: 2px; }
 .adjacency-matrix td.size-4 { width: 4px; height: 4px; }
 .adjacency-matrix td.size-6 { width: 6px; height: 6px; }
 .adjacency-matrix td.size-8 { width: 8px; height: 8px; }
 .adjacency-matrix td.size-10 { width: 10px; height: 10px; }
+.adjacency-matrix td.size-12 { width: 12px; height: 12px; }
+.adjacency-matrix td.size-14 { width: 14px; height: 14px; }
+.adjacency-matrix td.size-16 { width: 16px; height: 16px; }
+.adjacency-matrix td.size-18 { width: 18px; height: 18px; }
+
+/* Vertical table header experiments */
+.vertical-table-header {
+	text-align: center;
+	white-space: nowrap;
+	transform-origin: 50% 50%;
+	transform: rotate(90deg);
+}
+.vertical-table-header span {
+	display: inline-block;
+	margin: 0 -100%;
+}
+.vertical-table-header span::before {
+	content: '';
+	display: inline-block;
+	width: 0;
+	padding-top: 150%;
+	vertical-align: middle;
+}
 
 .field .title { margin-bottom: 4px; }
 .field { max-width: 300px; }
+.field + .field { margin-top: 1rem; }
 
 /* ------------------------------
 node link styling

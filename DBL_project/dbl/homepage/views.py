@@ -18,6 +18,7 @@ def vis1(request):
     return render(request, "homepage/vis1.html")
 
 def vis2(request):
-    matrix = adjacency_matrix.getNormalizedMultiMatrix(255)
-    return render(request, "homepage/vis2.html", {"matrix": matrix})
-
+    normalizedMatrix, nodeInfo = adjacency_matrix.getNormalizedMultiMatrix(255)
+    zippedMatrix = zip(normalizedMatrix, nodeInfo)
+        
+    return render(request, "homepage/vis2.html", {"adj_matrix": zip(normalizedMatrix, nodeInfo), "adj_matrix_2": zip(normalizedMatrix, nodeInfo)})

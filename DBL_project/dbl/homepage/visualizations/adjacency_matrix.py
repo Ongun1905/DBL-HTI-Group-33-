@@ -1,4 +1,5 @@
 # Import settings to allow BASE_DIR to be used
+from typing import Generator
 from django.conf import settings
 
 # Import functions for adjacency matrices
@@ -28,6 +29,25 @@ def getMultiMatrix():
 def getNormalizedMultiMatrix(norm):
   mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
   matrix = to_numpy_matrix(mailGraph).tolist()
+  G = mailGraph.copy()
+
+  # Efficiently adding attributes to the nodes in the graph
+  for edge in G.edges:
+    edgeAttribute = G.get_edge_data(*edge)
+    if (edge[2] == 0):
+      if(G.nodes[edge[0]].get('Email') is None):
+        G.nodes[edge[0]]['Email'] = edgeAttribute['fromEmail']
+        G.nodes[edge[0]]['Job'] = edgeAttribute['fromJobtitle']
+      if(G.nodes[edge[1]].get('Email') is None):
+        G.nodes[edge[1]]['Email'] = edgeAttribute['toEmail']
+        G.nodes[edge[1]]['Job'] = edgeAttribute['toJobtitle']
+
+  nodeInfo = []
+  for node in G.nodes:
+    nodeInfo.append({
+      "email": G.nodes[node]['Email'],
+      "job": G.nodes[node]['Job']
+    })
   
 
   maxMatrixElement = 0
@@ -36,8 +56,8 @@ def getNormalizedMultiMatrix(norm):
       if cell > maxMatrixElement:
         maxMatrixElement = cell
   
-  normalized_matrix = np.multiply((norm / maxMatrixElement), matrix)
-  return normalized_matrix
+  normalizedMatrix = np.multiply((norm / maxMatrixElement), matrix)
+  return normalizedMatrix, nodeInfo
 
 def getMatrix():
   mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.DiGraph())
