@@ -6,13 +6,11 @@
 <br>
 
 # Usage
-In order to run the webapp, there's a few steps that need to be followed. Using a Python virtual environment is recommended<sup>1</sup> but not required.
+In order to run the webapp, there's a few steps that need to be followed. Using a Python virtual environment is recommended<sup>1</sup> but not required. If you don't want to use an virtual environment, skip the "(Optional) Python virtual environment setup" step.
 
 ## Installation
-### <a name="python-venv-setup"></a> Python virtual environment setup
-1. Open up a console and navigate to the root of this repository
-2. Create a new virtual environment by entering `python -m venv venv`. This will create a virtual environment with the name "venv" in the repository root.
-3. Start the virtual environment by entering `venv\Scripts\activate.bat`
+### <a name="python-venv-setup"></a> (Optional) Python virtual environment setup
+Install the `virtualenv` package and create a virtual environment. Both are explained in [this guide](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) for Windows, macOS and Linux. Make sure to activate the virtual environment before continuing to the next steps!
 
 For more information about virtual environments in Python, you can read the [documentation](https://docs.python.org/3/tutorial/venv.html).
 
@@ -20,7 +18,7 @@ For more information about virtual environments in Python, you can read the [doc
 1. Open up a console and navigate to the root of this repository
 2. Install the required packages for the webapp using `pip install -r requirements.txt`
 
-## Starting the webapp
+## Starting the webapp on a local server
 1. Open up a console and navigate to the root of this repository
 2. Enter `python DBL_Project/dbl/manage.py runserver`
 
