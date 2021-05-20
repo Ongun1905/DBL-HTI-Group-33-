@@ -13,6 +13,15 @@ DBL Group 33 | Homepage
 <div class="container">
 	<div class="main">
 		<section class="row-layout">
+			<h2> Upload </h2>
+			<p>You can upload your .csv data set here, which will then be visualized in several different types of visualizations.</p>
+			<form method="post" enctype="multipart/form-data">
+				{% csrf_token%}
+				<input type="file" name="document" class="button">
+				<button type="submit" class="button"> Upload file </button>
+			</form>
+		</section>
+		<section class="row-layout">
 			<h2>Visualization 1: Node-link diagram</h2>
 			<p>This visualization displays a node-link diagram of the network graph, made using Plotly and Dash.</p>
 			<a class="button" href="/vis1">Go to visualization 1</a>

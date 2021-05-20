@@ -70,7 +70,7 @@ app.layout = html.Div([
                     html.Br(),#breaks space between the interactive elements
                     html.Br(),
                 ],
-                style = {'width': '400px'}
+                style = {'width': '350px', 'margin-left':'35px'}
             ),
             
             html.Div(
@@ -155,14 +155,15 @@ app.layout = html.Div([
                 labelStyle={'display': 'inline-block'}
             )
         ],
-        style={'display': 'inline-block', 'vertical-align': 'middle'}
+        style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw', 'background-color': '#363F48', 'width':'500px'}
     ),
 ########middle component
     html.Div(
         children=[dcc.Graph(id="mail-graph", 
         figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes))
         ],
-        style={'display': 'inline-block', 'vertical-align': 'middle','width': '1200px', 'height': '500px'}
+        style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw'
+        ,'width': '90%', 'height': '500px'}
     ),
 
      html.Div([
@@ -171,9 +172,9 @@ app.layout = html.Div([
 
             Click on points in the graph.
             """),
-        html.Pre(id='click-data', style=styles['pre']),
-        ], className='three columns'),
-]
+        html.Pre(id='click-data'),
+        ], className='three columns', style={'color':'#65cca9'})
+], style={'display':'flex', 'flex-direction':'column','align-items':'center'}
 )
 
 @app.callback(

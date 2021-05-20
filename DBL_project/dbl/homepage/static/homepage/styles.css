@@ -332,3 +332,10 @@ Adjacency matrix styling
 .field .title { margin-bottom: 4px; }
 .field { max-width: 300px; }
 .field + .field { margin-top: 1rem; }
+
+/* ------------------------------
+node link styling
+------------------------------ */
+.test{
+	overflow: hidden;
+}
