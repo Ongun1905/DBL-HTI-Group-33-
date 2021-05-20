@@ -6,7 +6,7 @@
 <br>
 
 # Usage
-In order to run the webapp, there's a few steps that need to be followed. Using a Python virtual environment is recommended<sup>1</sup> but not required. If you don't want to use an virtual environment, skip the "(Optional) Python virtual environment setup" step.
+To run the web app, there are a few steps that need to be followed. Using a Python virtual environment is recommended<sup>1</sup> but not required. If you don't want to use a virtual environment, skip the "(Optional) Python virtual environment setup" step.
 
 ## Installation
 ### <a name="python-venv-setup"></a> (Optional) Python virtual environment setup
@@ -16,9 +16,9 @@ For more information about virtual environments in Python, you can read the [doc
 
 ### Installing the required packages
 1. Open up a console and navigate to the root of this repository
-2. Install the required packages for the webapp using `pip install -r requirements.txt`
+2. Install the required packages for the web app using `pip install -r requirements.txt`
 
-## Starting the webapp on a local server
+## Starting the web app on a local server
 1. Open up a console and navigate to the root of this repository
 2. Enter `python DBL_Project/dbl/manage.py runserver`
 
@@ -34,6 +34,6 @@ Starting ASGI/Channels version 3.0.3 development server at http://127.0.0.1:8000
 Quit the server with CTRL-BREAK.
 ```
 
-Follow the link in the log (http://127.0.0.1:8000/) to view the webapp in action!
+Follow the link in the console output (http://127.0.0.1:8000/) to view the web app in action!
 <hr>
-1. Using a virtual environment is recommended since this webapp uses specific versions of certain packages. Using a virtual environment isolates Python files on a per-project basis, which ensures that no package version conflicts can occur.
+1. Using a virtual environment is recommended since this web app uses specific versions of certain packages. Using a virtual environment isolates Python files on a per-project basis, which ensures that no package version conflicts can occur.
