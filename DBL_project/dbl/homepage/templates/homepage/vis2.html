@@ -1,5 +1,7 @@
 {% extends "homepage/layout.html" %}
 
+{% load filters %}
+
 {% block title %}
 Visualization 2 | DBL Group 33
 {% endblock %}
@@ -33,18 +35,21 @@ Visualization 2 | DBL Group 33
             <thead class="visible">
                 <tr>
                     <th><span>x</span></th>
-                    <!-- ze = zippedElement, refers to the way the adj_matrix is created and stored in views.py -->
-                    {% for ze in adj_matrix %}
-                    <th><span>{{ ze.1.email }}</span></th>
+                    {% for nodeDataTopHeader in nodeData %}
+                    <th><span>{{ nodeDataTopHeader.id }}</span></th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
-                {% for ze in adj_matrix_2 %}
+                {% for matrixRow, normMatrixRow, nodeDataLeftHeader in zippedMatrixData %}
                 <tr>
-                    <th class="visible">{{ ze.1.email  }}</th>
-                    {% for cell in ze.0 %}
-                    <td class="size-6" style="background-color: rgba(101, 204, 169, {{ cell }})"></td>
+                    <th class="visible">{{ nodeDataLeftHeader.id  }}</th>
+                    {% for matrixCell in matrixRow %}
+                        <td class="size-6 matrix-data-element" style="background-color: rgba(101, 204, 169, {{ normMatrixRow|index:forloop.counter0 }})">
+                            {% if matrixCell > 0 %}
+                            {{ matrixCell }}
+                            {% endif %}
+                        </td>
                     {% endfor %}
                 </tr>
                 {% endfor %}
@@ -60,7 +65,7 @@ Visualization 2 | DBL Group 33
     const toggleNamesElement = document.getElementById('am-toggle-names')
 
     const sizeSlider = document.getElementById('am-size-slider')
-    const matrixTableEntries = document.querySelectorAll('.adjacency-matrix td')
+    const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
 
     // When the slider value changes, resize all td elements by setting their class
     //
@@ -94,6 +99,14 @@ Visualization 2 | DBL Group 33
                 if (el.classList.contains('visible')) el.classList.remove('visible')
             })
         }
+    })
+
+
+    // Click interaction
+    matrixTableEntries.forEach(entry => {
+        entry.addEventListener('click', () => {
+            alert('The click interaction is not yet set up!')
+        })
     })
 
     

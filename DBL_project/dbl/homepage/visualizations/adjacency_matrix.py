@@ -10,6 +10,7 @@ from networkx.convert_matrix import to_numpy_matrix
 import pandas as pd # General data handling
 import networkx as nx # Handling network graphs
 import numpy as np
+import math
 
 # -------------------------------------------------------
 # Visualization 2
@@ -22,16 +23,13 @@ import numpy as np
 mailSet = pd.read_csv(settings.BASE_DIR / 'enron-v1.csv', engine='python')
 
 def getMultiMatrix():
+  # Generate matrix from CSV and create a numpy matrix
   mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
-  matrix = to_numpy_matrix(mailGraph).tolist()
-  return matrix
+  matrix = to_numpy_matrix(mailGraph).astype(int).tolist()
 
-def getNormalizedMultiMatrix(norm):
-  mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
-  matrix = to_numpy_matrix(mailGraph).tolist()
+
+  # Get node info
   G = mailGraph.copy()
-
-  # Efficiently adding attributes to the nodes in the graph
   for edge in G.edges:
     edgeAttribute = G.get_edge_data(*edge)
     if (edge[2] == 0):
@@ -42,24 +40,45 @@ def getNormalizedMultiMatrix(norm):
         G.nodes[edge[1]]['Email'] = edgeAttribute['toEmail']
         G.nodes[edge[1]]['Job'] = edgeAttribute['toJobtitle']
 
+  # Store the node info in a list
   nodeInfo = []
   for node in G.nodes:
     nodeInfo.append({
+      "id": node,
       "email": G.nodes[node]['Email'],
       "job": G.nodes[node]['Job']
     })
-  
 
+  # Return the numpy matrix and the nodes with their corresponding email and job
+  return matrix, nodeInfo
+
+def getNormalizedMultiMatrix(norm):
+  mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
+  matrix = to_numpy_matrix(mailGraph).tolist()
+
+  # Finding the max matrix element for linear normalization
   maxMatrixElement = 0
   for row in matrix:
     for cell in row:
       if cell > maxMatrixElement:
         maxMatrixElement = cell
   
-  normalizedMatrix = np.multiply((norm / maxMatrixElement), matrix)
-  return normalizedMatrix, nodeInfo
+  # Linear normalization between 0 and norm
+  # normalizedMatrix = np.multiply((norm / maxMatrixElement), matrix)
+
+  # Logarithmic normalization between 0 and norm
+  normalizedMatrix = np.vectorize(vectorizedNormalizing)(matrix, norm, maxMatrixElement)
+
+  return normalizedMatrix
 
 def getMatrix():
   mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.DiGraph())
   matrix = to_numpy_matrix(mailGraph).tolist()
   return matrix
+
+
+
+# Normalization mathematics
+def vectorizedNormalizing(z, norm, max):
+  # This can be any arbitrary mathematical function
+  return norm * math.log(1 + z, max + 1)

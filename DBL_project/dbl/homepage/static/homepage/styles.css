@@ -271,9 +271,6 @@ Adjacency matrix styling
 	background-color: var(--color-black-soft);
 }
 .adjacency-matrix.names { display: block; overflow: scroll; max-height: 600px; max-width: calc(100vw - 2 * var(--padding-sides)) }
-.adjacency-matrix.names tbody tr:nth-child(even) {
-	background-color: var(--color-black-hard);
-}
 
 /* Set up the adjacency matrix for removing headers */
 .adjacency-matrix thead:not(.visible) { display: none; }
@@ -299,6 +296,11 @@ Adjacency matrix styling
 
 .adjacency-matrix th { font-size: 14px; }
 
+
+.adjacency-matrix .matrix-data-element {
+	text-align: center;
+	cursor: pointer;
+}
 
 .adjacency-matrix td.size-2 { width: 2px; height: 2px; }
 .adjacency-matrix td.size-4 { width: 4px; height: 4px; }
