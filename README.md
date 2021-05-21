@@ -35,5 +35,10 @@ Quit the server with CTRL-BREAK.
 ```
 
 Follow the link in the console output (http://127.0.0.1:8000/) to view the web app in action!
+
+# Feature explanation
+This tool is a web-based network visualization application. It contains 2 visualizations: A node-link diagram and an adjacency matrix. The beginnings of a data upload tool can be seen on the frontpage, but the source code still uses a static file in the source directory.
+
+
 <hr>
 1. Using a virtual environment is recommended since this web app uses specific versions of certain packages. Using a virtual environment isolates Python files on a per-project basis, which ensures that no package version conflicts can occur.
