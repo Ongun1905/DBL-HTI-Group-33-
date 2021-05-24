@@ -61,7 +61,7 @@ app.layout = html.Div([
                         step=0.01,
                         marks={
                         -1: {'label': '-1: Very Negative Email', 'style': {'color': '#f50'}},
-                        0: {'label': '0: Neutral Email'},
+                        0: {'label': '0: Neutral Email', 'style': {'color': '#ffffff'}},
                         1: {'label': '1: Very Positive Email', 'style': {'color': '#77b0b1'}},
                         },
                         value=[-1, 1],
@@ -130,7 +130,7 @@ app.layout = html.Div([
                     end_date = maxDate,
                     start_date_placeholder_text="MMM Do, YYYY",
                     end_date_placeholder_text="MMM Do, YYYY",
-                    first_day_of_week = 2,
+                    first_day_of_week = 1,
                     display_format='MMM Do, YYYY'
                 ) 
             ),
@@ -142,7 +142,8 @@ app.layout = html.Div([
                     {'label': 'CC', 'value': 'CC'}
                 ],
                 value=['TO', 'CC'],
-                labelStyle={'display': 'inline-block'}
+                labelStyle={'display': 'inline-block'},
+                style={'color':'#65cca9'}
             ),
             
             dcc.RadioItems(
@@ -152,8 +153,12 @@ app.layout = html.Div([
                     {'label': 'Hide unlinked nodes', 'value': 'False'}
                 ],
                 value='True',
-                labelStyle={'display': 'inline-block'}
-            )
+                labelStyle={'display': 'inline-block'},
+                style={'color':'#65cca9'}
+            ),
+
+            html.Button(id='submit-button-state', n_clicks=0, children='Update Graph'),
+            html.Div(id='output-state')
         ],
         style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw', 'background-color': '#363F48', 'width':'500px'}
     ),
@@ -179,15 +184,16 @@ app.layout = html.Div([
 
 @app.callback(
      dash.dependencies.Output('mail-graph', 'figure'),
-     [dash.dependencies.Input('my-range-slider', 'value'), 
-      dash.dependencies.Input('jobFrom-dropdown', 'value'), 
-      dash.dependencies.Input('jobTo-dropdown', 'value'), 
-      dash.dependencies.Input('mailFrom-dropdown', 'value'), 
-      dash.dependencies.Input('mailTo-dropdown', 'value'), 
-      dash.dependencies.Input('mail-date-range', 'start_date'),
-      dash.dependencies.Input('mail-date-range', 'end_date'),
-      dash.dependencies.Input('to-cc-checklist', 'value'),
-      dash.dependencies.Input('node-radio-items', 'value')])
+     [dash.dependencies.Input('submit-button-state', 'n_clicks'),
+      dash.dependencies.State('my-range-slider', 'value'), 
+      dash.dependencies.State('jobFrom-dropdown', 'value'), 
+      dash.dependencies.State('jobTo-dropdown', 'value'), 
+      dash.dependencies.State('mailFrom-dropdown', 'value'), 
+      dash.dependencies.State('mailTo-dropdown', 'value'), 
+      dash.dependencies.State('mail-date-range', 'start_date'),
+      dash.dependencies.State('mail-date-range', 'end_date'),
+      dash.dependencies.State('to-cc-checklist', 'value'),
+      dash.dependencies.State('node-radio-items', 'value')])
 
 #@app.callback(
     #dash.dependencies.Output('click-data', 'children'),
@@ -196,7 +202,7 @@ app.layout = html.Div([
     #print('hello')
     #return json.dumps(clickData, indent=2)
 
-def update_output(value, jobFromInput, jobToInput, mailFromInput, mailToInput, mailStartDate, mailEndDate, tocc, showhide):
+def update_output(n_clicks, value, jobFromInput, jobToInput, mailFromInput, mailToInput, mailStartDate, mailEndDate, tocc, showhide):
     sentimentRange = value
     jobFromRange = jobFromInput
     jobToRange = jobToInput
