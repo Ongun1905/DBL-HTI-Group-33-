@@ -2,13 +2,20 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .visualizations import adjacency_matrix
 from django.core.files.storage import FileSystemStorage
+import os
 
 # Create your views here.
 def index(request): 
     if request.method == 'POST':
         uploaded_file = request.FILES['document']
         fs = FileSystemStorage()
-        fs.save("enron-v1.csv", uploaded_file)
+        if uploaded_file.name in os.listdir('media'):
+            name = os.listdir('media')[-1][:-4] + '1.csv'
+        else:
+            name = uploaded_file.name
+        filename = fs.save(name, uploaded_file)
+        uploaded_file_url = fs.url(filename)
+        return render(request, "homepage/index.html", {"uploaded_file_url":"uploaded file: " + filename} )
     return render(request, "homepage/index.html")
 
 def about(request):

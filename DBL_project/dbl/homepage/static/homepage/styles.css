@@ -336,6 +336,9 @@ Adjacency matrix styling
 /* ------------------------------
 node link styling
 ------------------------------ */
-.test{
+.nodeLinkGraph{
+	margin-top: 3rem;
 	overflow: hidden;
+	border: 10px solid #65cca9;
+	border-radius: 20px;
 }
