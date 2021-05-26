@@ -57,6 +57,7 @@ def createGraph(filename):
 
 
 def filterGraph(graph, sentimentValue, jobFromValue, jobToValue, mailFromValue, mailToValue, mailDateStart, mailDateEnd, toccSelect, showhide):
+    global filteredGraph
     filteredGraph = graph.copy(as_view=False)
     mailDateStart = pd.to_datetime(mailDateStart)
     mailDateEnd = pd.to_datetime(mailDateEnd)
