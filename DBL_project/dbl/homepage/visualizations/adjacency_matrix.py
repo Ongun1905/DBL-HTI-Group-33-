@@ -42,14 +42,13 @@ def getNormalizedMultiMatrix(norm):
       #if(G.nodes[edge[1]].get('Email') is None):
        # G.nodes[edge[1]]['Email'] = edgeAttribute['toEmail']
        # G.nodes[edge[1]]['Job'] = edgeAttribute['toJobtitle']
-  G = nlf.filteredGraph.copy()
-  matrix = to_numpy_matrix(G).tolist()
+  matrix = to_numpy_matrix(nlf.filteredGraph).tolist()
 
   nodeInfo = []
-  for node in G.nodes:
+  for node in nlf.filteredGraph.nodes:
     nodeInfo.append({
-      "email": G.nodes[node]['Email'],
-      "job": G.nodes[node]['Job']
+      "email": nlf.filteredGraph.nodes[node]['Email'],
+      "job": nlf.filteredGraph.nodes[node]['Job']
     })
   
 
