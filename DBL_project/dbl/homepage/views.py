@@ -1,3 +1,6 @@
+# Import settings to allow BASE_DIR to be used
+from django.conf import settings
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from .visualizations import adjacency_matrix
@@ -9,8 +12,8 @@ def index(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['document']
         fs = FileSystemStorage()
-        if uploaded_file.name in os.listdir('media'):
-            name = os.listdir('media')[-1][:-4] + '1.csv'
+        if uploaded_file.name in os.listdir(settings.BASE_DIR / 'media'):
+            name = os.listdir(settings.BASE_DIR / 'media')[-1][:-4] + '1.csv'
         else:
             name = uploaded_file.name
         filename = fs.save(name, uploaded_file)
