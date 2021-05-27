@@ -17,7 +17,7 @@ DBL Group 33 | Homepage
 			<p>You can upload your .csv data set here, which will then be visualized in several different types of visualizations.</p>
 			<form method="post" enctype="multipart/form-data">
 				{% csrf_token%}
-				<input type="file" name="document" class="button">
+				{{form}}
 				<button type="submit" class="button"> Upload file </button>
 			</form>
 			<p>{{uploaded_file_url}}</p>
