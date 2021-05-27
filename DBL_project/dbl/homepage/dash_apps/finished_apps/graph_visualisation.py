@@ -1,6 +1,9 @@
 # Import Node Link functions from another Python file
 import NodeLinkFunctions as nlf
 
+# Import settings to allow BASE_DIR to be used
+from django.conf import settings
+
 # Make sure you have plotly and networkx installed before running this code!
 import pandas as pd # General data handling
 import networkx as nx # Handling network graphs
@@ -155,7 +158,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                             dcc.Dropdown(
                                 id='fileDropDown',
                                 options=[
-                                    {'label': j, 'value': j} for j in os.listdir('media')
+                                    {'label': j, 'value': j} for j in os.listdir(settings.BASE_DIR / 'media')
                                 ],
                                 value = "enron-v1.csv",
                                 placeholder="slect dataset from uploaded files"

@@ -13,7 +13,7 @@ from datetime import date
 def createGraph(filename):
     # Read CSV and setup NX graph data structure
     #mailSet = pd.read_csv(settings.BASE_DIR / 'enron-v1.csv', engine='python')
-    mailSet = pd.read_csv('media/' + str(filename), engine='python')
+    mailSet = pd.read_csv(settings.BASE_DIR / 'media' / str(filename), engine='python')
     mailSet['date'] = pd.to_datetime(mailSet['date']) # Filter the date for Dash
 
     # Generate graph from CSV information
