@@ -124,7 +124,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                             end_date_placeholder_text="MMM Do, YYYY",
                             first_day_of_week = 1,
                             display_format='MMM Do, YYYY',
-                        ), style={'width':'100%', 'margin-left':'18%'} # does not work somehow
+                        ), style={'width':'100%', 'margin-left':'21.5%'} # does not work somehow
                 ),
                 html.Br(),
                 dcc.Checklist(
@@ -135,7 +135,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                     ],
                     value=['TO', 'CC'],
                     labelStyle={'display': 'inline-block'},
-                    style={'color':'#65cca9', 'margin-left':'40%'}
+                    style={'color':'#65cca9', 'margin-left':'41.75%'}
                 ), 
                 dcc.RadioItems(
                     id = 'node-radio-items',
@@ -145,7 +145,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                     ],
                     value='True',
                     labelStyle={'display': 'inline-block'},
-                    style={'color':'#65cca9', 'margin-left':'16%'}
+                    style={'color':'#65cca9', 'margin-left':'18%'}
                 ),
                 html.Button(id='submit-button-state', n_clicks=0, children='Update Graph', style={'width': '90%', 'margin-left':'5%'}),
                 html.Div(id='output-state')
