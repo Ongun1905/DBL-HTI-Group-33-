@@ -90,7 +90,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                             multi = True,
                             placeholder="Select to Job, Nothing = all"
                         )
-                    ], style = {'width': '60%'}
+                    ], style = {'width': '100%'}
                 ),
                 html.Div(children = [
                         dcc.Dropdown(
@@ -109,7 +109,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                             multi = True,
                             placeholder="Select to Email, Nothing = all"
                         )
-                    ], style = {'width': '60%'}
+                    ], style = {'width': '100%'}
                 ),
                 html.Br(),
                 html.Div(
@@ -124,8 +124,9 @@ html.Div(children = [ #top compontent - containes two subdivs
                             end_date_placeholder_text="MMM Do, YYYY",
                             first_day_of_week = 1,
                             display_format='MMM Do, YYYY',
-                        ), style={'width':'60%'} # does not work somehow
+                        ), style={'width':'100%', 'margin-left':'18%'} # does not work somehow
                 ),
+                html.Br(),
                 dcc.Checklist(
                     id = 'to-cc-checklist',
                     options=[
@@ -134,8 +135,8 @@ html.Div(children = [ #top compontent - containes two subdivs
                     ],
                     value=['TO', 'CC'],
                     labelStyle={'display': 'inline-block'},
-                    style={'color':'#65cca9'}
-                ),
+                    style={'color':'#65cca9', 'margin-left':'40%'}
+                ), 
                 dcc.RadioItems(
                     id = 'node-radio-items',
                     options=[
@@ -144,11 +145,11 @@ html.Div(children = [ #top compontent - containes two subdivs
                     ],
                     value='True',
                     labelStyle={'display': 'inline-block'},
-                    style={'color':'#65cca9'}
+                    style={'color':'#65cca9', 'margin-left':'16%'}
                 ),
-                html.Button(id='submit-button-state', n_clicks=0, children='Update Graph', style={'width': '60%'}),
+                html.Button(id='submit-button-state', n_clicks=0, children='Update Graph', style={'width': '90%', 'margin-left':'5%'}),
                 html.Div(id='output-state')
-            ], style={'display': 'flex', 'flex-direction': 'column','justify-content':'space-around', 'background-color': '#363F48', 'width':'45%', 'height':'400px', 'border-radius':'1rem'}
+            ], style={'display': 'flex', 'flex-direction': 'column','justify-content':'space-around', 'background-color': '#363F48', 'width':'48.5%', 'height':'400px', 'border-radius':'1rem'}
         ),
         
         html.Div(children=[ #top right component - uploading dropdown +text
@@ -177,7 +178,7 @@ html.Div(children = [ #top compontent - containes two subdivs
 
                         '''), 
                     html.Pre(id='click-data')
-                ], className='three columns', style={'color':'#65cca9', 'background':'#363F48', 'width':'45%', 'height':'400px', 'display':'flex','justify-content':'flex-start','flex-direction':'column', 'border-radius':'1rem'})
+                ], className='three columns', style={'color':'#65cca9', 'background':'#363F48', 'width':'48.5%', 'height':'400px', 'display':'flex','justify-content':'flex-start','flex-direction':'column', 'border-radius':'1rem'})
 ], style={'display':'flex','flex-direction':'row','justify-content':'space-between', 'width':'100%', 'align-items':'center'}
 ),
 
