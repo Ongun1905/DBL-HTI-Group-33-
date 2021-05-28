@@ -54,7 +54,7 @@ header p {
 
 header nav {
 	position: relative; /* z-index only works if the position is set to anything other than "static", the default */
-	z-index: 100; /* Makes sure dropdown menu is seen as a top layer| higher z-index -> higher layer */
+	z-index: 10; /* Makes sure dropdown menu is seen as a top layer| higher z-index -> higher layer */
 }
 header nav > ul > li {
 	position: relative;
@@ -96,7 +96,7 @@ header nav ul li ul li a {
 
 .container {
 	position: relative;
-	z-index: 10;
+	z-index: 1;
 	display: flex;
 	justify-content: center;
 	
@@ -287,6 +287,7 @@ Adjacency matrix styling
 
 .adjacency-matrix tbody th {
 	position: sticky;
+	z-index: 1;
 	left: 0;
 	padding: 4px 8px;
 	text-align: left;

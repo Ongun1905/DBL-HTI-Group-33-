@@ -69,8 +69,12 @@ Visualization 2 | DBL Group 33
 
     // Matrix cell interactions
     matrixTableEntries.forEach(entry => {
-        entry.addEventListener('mouseenter', (e) => enterCell(e, entry, nodeInfo))
-        entry.addEventListener('mouseout', (e) => exitCell(e))
+        // Hover interactions
+        entry.addEventListener('mouseenter', () => enterCell(entry, nodeInfo))
+        entry.addEventListener('mouseout', () => exitCell())
+
+        // Click interactions
+        entry.addEventListener('click', () => clickCell(entry, nodeInfo))
     })
 
     // Control interactions
