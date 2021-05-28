@@ -23,16 +23,13 @@ function enterCell(e, matrixCell, nodeInfo) {
   `
 
   // Move the popup to the matrix cell
-  edgeInfoPopup.style.left = matrixCell.offsetLeft + matrixCell.offsetWidth / 2 + 'px' // offsetWidth is to put it in the horizontal middle
-  edgeInfoPopup.style.top = matrixCell.offsetTop - 80 + 'px' // -80 is to account for the navbar
-  edgeInfoPopup.style.transform = `translate(-50%, calc(-50% - ${matrixCell.offsetHeight / 2 + 'px'} - 16px))`
+  const cellRect = matrixCell.getBoundingClientRect()
+  edgeInfoPopup.style.left = cellRect.left + matrixCell.offsetWidth / 2 + 'px' // offsetWidth / 2 horizontally centers the popup
+  edgeInfoPopup.style.top = cellRect.top - 80 + window.scrollY + 'px' // -80 is to account for the navbar, window.scrollY to prevent positioning issues
+  edgeInfoPopup.style.transform = `translate(-50%, calc(-100% - ${matrixCell.offsetHeight / 2 + 'px'}))`
 
   // Display popup
   edgeInfoPopup.classList.add('show')
-
-  // Console log for debugging
-  console.log(`You hovered the cell at (x, y) = (${columnId}, ${headerId})`)
-  console.log(`This cell represents all emails from ${nodeInfo[columnId].id} (${nodeInfo[columnId].email}) to ${nodeInfo[headerId].id} (${nodeInfo[headerId].email})`)
 }
 
 
