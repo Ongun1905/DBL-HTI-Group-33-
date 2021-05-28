@@ -5,8 +5,10 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .visualizations import adjacency_matrix
 from django.core.files.storage import FileSystemStorage
-import os
 from django import forms
+from django.core.serializers import serialize
+import os
+import json
 
 class UploadFileForm(forms.Form):
     file = forms.FileField()
@@ -39,7 +41,16 @@ def vis1(request):
     return render(request, "homepage/vis1.html")
 
 def vis2(request):
-    normalizedMatrix, nodeInfo = adjacency_matrix.getNormalizedMultiMatrix(255)
-    zippedMatrix = zip(normalizedMatrix, nodeInfo)
+    # Fetch data from the adjacency matrix vis file
+    matrix, nodeInfo, edges = adjacency_matrix.getMultiMatrix()
+    normalizedMatrix = adjacency_matrix.getNormalizedMultiMatrix(1)
+
+    # Create the data object to pass to the view
+    matrixDataObject = {
+        # Combine the data ("zipping" the data) to allow iterating over multiple lists asynchronously
+        "zippedMatrixData": zip(matrix, normalizedMatrix, nodeInfo),
+        "edgeData": json.dumps(edges),
+        "nodeData": nodeInfo
+    }
         
-    return render(request, "homepage/vis2.html", {"adj_matrix": zip(normalizedMatrix, nodeInfo), "adj_matrix_2": zip(normalizedMatrix, nodeInfo)})
+    return render(request, "homepage/vis2.html", matrixDataObject)
