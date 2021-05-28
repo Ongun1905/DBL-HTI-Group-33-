@@ -10,9 +10,10 @@ from datetime import date
 
 
 # The overarching function that does all the graph creating
-def createGraph():
+def createGraph(filename):
     # Read CSV and setup NX graph data structure
-    mailSet = pd.read_csv(settings.BASE_DIR / 'enron-v1.csv', engine='python')
+    #mailSet = pd.read_csv(settings.BASE_DIR / 'enron-v1.csv', engine='python')
+    mailSet = pd.read_csv(settings.BASE_DIR / 'media' / str(filename), engine='python')
     mailSet['date'] = pd.to_datetime(mailSet['date']) # Filter the date for Dash
 
     # Generate graph from CSV information
@@ -56,6 +57,7 @@ def createGraph():
 
 
 def filterGraph(graph, sentimentValue, jobFromValue, jobToValue, mailFromValue, mailToValue, mailDateStart, mailDateEnd, toccSelect, showhide):
+    global filteredGraph
     filteredGraph = graph.copy(as_view=False)
     mailDateStart = pd.to_datetime(mailDateStart)
     mailDateEnd = pd.to_datetime(mailDateEnd)

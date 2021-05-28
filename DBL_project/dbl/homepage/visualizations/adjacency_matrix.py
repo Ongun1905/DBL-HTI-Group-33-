@@ -11,6 +11,7 @@ import pandas as pd # General data handling
 import networkx as nx # Handling network graphs
 import numpy as np
 import math
+import NodeLinkFunctions as nlf
 
 # -------------------------------------------------------
 # Visualization 2
@@ -20,33 +21,37 @@ import math
 # -------------------------------------------------------
 
 # Read CSV and setup NX graph data structure
-mailSet = pd.read_csv(settings.BASE_DIR / 'enron-v1.csv', engine='python')
+#mailSet = pd.read_csv(settings.BASE_DIR / 'enron-v1.csv', engine='python')
 
-def getMultiMatrix():
-  # Generate matrix from CSV and create a numpy matrix
-  mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
-  matrix = to_numpy_matrix(mailGraph).astype(int).tolist()
+#def getMultiMatrix():
+ # mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
+ # matrix = to_numpy_matrix(mailGraph).tolist()
+ # return matrix
 
+def getNormalizedMultiMatrix(norm):
+ # mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
+ # matrix = to_numpy_matrix(mailGraph).tolist()
+ # G = mailGraph.copy()
 
-  # Get node info
-  G = mailGraph.copy()
-  for edge in G.edges:
-    edgeAttribute = G.get_edge_data(*edge)
-    if (edge[2] == 0):
-      if(G.nodes[edge[0]].get('Email') is None):
-        G.nodes[edge[0]]['Email'] = edgeAttribute['fromEmail']
-        G.nodes[edge[0]]['Job'] = edgeAttribute['fromJobtitle']
-      if(G.nodes[edge[1]].get('Email') is None):
-        G.nodes[edge[1]]['Email'] = edgeAttribute['toEmail']
-        G.nodes[edge[1]]['Job'] = edgeAttribute['toJobtitle']
+  # Efficiently adding attributes to the nodes in the graph
+  #for edge in G.edges:
+   # edgeAttribute = G.get_edge_data(*edge)
+   # if (edge[2] == 0):
+    #  if(G.nodes[edge[0]].get('Email') is None):
+     #   G.nodes[edge[0]]['Email'] = edgeAttribute['fromEmail']
+      #  G.nodes[edge[0]]['Job'] = edgeAttribute['fromJobtitle']
+      #if(G.nodes[edge[1]].get('Email') is None):
+       # G.nodes[edge[1]]['Email'] = edgeAttribute['toEmail']
+       # G.nodes[edge[1]]['Job'] = edgeAttribute['toJobtitle']
+  matrix = to_numpy_matrix(nlf.filteredGraph).tolist()
 
   # Store the node info in a list
   nodeInfo = []
-  for node in G.nodes:
+  for node in nlf.filteredGraph.nodes:
     nodeInfo.append({
       "id": node,
-      "email": G.nodes[node]['Email'],
-      "job": G.nodes[node]['Job']
+      "email": nlf.filteredGraph.nodes[node]['Email'],
+      "job": nlf.filteredGraph.nodes[node]['Job']
     })
 
   # Return the numpy matrix and the nodes with their corresponding email and job
