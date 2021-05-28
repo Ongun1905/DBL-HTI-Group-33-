@@ -43,3 +43,6 @@ def vis2(request):
     zippedMatrix = zip(normalizedMatrix, nodeInfo)
         
     return render(request, "homepage/vis2.html", {"adj_matrix": zip(normalizedMatrix, nodeInfo), "adj_matrix_2": zip(normalizedMatrix, nodeInfo)})
+
+def vis_combined(request): 
+    return render(request, "homepage/vis_combined.html")
