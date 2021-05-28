@@ -25,6 +25,7 @@ import NodeLinkFunctions as nlf
 
 def getMultiMatrix():
   matrix = to_numpy_matrix(nlf.filteredGraph).astype(int).tolist()
+  edgeData = without_keys(list(nlf.filteredGraph.edges(data=True))[0][2], {'date'})
 
   # Store the node info in a list
   nodeInfo = []
@@ -36,7 +37,7 @@ def getMultiMatrix():
       })
 
   # Return the numpy matrix and the nodes with their corresponding email and job
-  return matrix, nodeInfo
+  return matrix, nodeInfo, edgeData
 
 def getNormalizedMultiMatrix(norm):
   matrix = to_numpy_matrix(nlf.filteredGraph).astype(int).tolist()
@@ -62,3 +63,7 @@ def getNormalizedMultiMatrix(norm):
 def vectorizedNormalizing(z, norm, max):
   # This can be any arbitrary mathematical function
   return norm * math.log(1 + z, max + 1)
+
+# List comprehension object key exclusion
+def without_keys(d, keys):
+  return {x: d[x] for x in d if x not in keys}

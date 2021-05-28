@@ -20,13 +20,16 @@ function enterCell(matrixCell, nodeInfo) {
     <p>ID: ${nodeInfo[headerId].id}</p>
     <p>Email: ${nodeInfo[headerId].email}</p>
     <p>Job title: ${nodeInfo[headerId].job}</p>
+    <br />
+    <p><strong>Edge data</strong></p>
+    <p>Average sentiment: -</p>
   `
 
   // Move the popup to the matrix cell
   const cellRect = matrixCell.getBoundingClientRect()
   edgeInfoPopup.style.left = cellRect.left + matrixCell.offsetWidth / 2 + 'px' // offsetWidth / 2 horizontally centers the popup
   edgeInfoPopup.style.top = cellRect.top - 80 + window.scrollY + 'px' // -80 is to account for the navbar, window.scrollY to prevent positioning issues
-  edgeInfoPopup.style.transform = `translate(-50%, calc(-100% - ${matrixCell.offsetHeight / 2 + 'px'}))`
+  edgeInfoPopup.style.transform = `translate(-50%, calc(-100% - ${matrixCell.offsetHeight / 2 + 'px'} + 4px))`
 
   // Display popup
   edgeInfoPopup.classList.add('show')
@@ -47,20 +50,46 @@ function exitCell() {
  * Opens a modal that displays all of the emails in a list
  * @param {HTMLElement} matrixCell The cell that was hovered
  * @param {Array.<Object>} nodeInfo An array of node objects
+ * @param {Array.<Array.<Number>>} edgeData An array of arrays, containing the edge data
  */
-function clickCell(matrixCell, nodeInfo) {
+function clickCell(matrixCell, nodeInfo, edgeData) {
   // Get the header & column id
   const headerId = getNodeIndex(matrixCell) - 1
   const columnId = getNodeIndex(matrixCell.closest("tr"))
 
+  console.log(edgeData[0])
+
+  const edgesHTML = [`<tr>
+            <td>Email #1</td>
+            <td>0.918</td>
+            <td>2000-08-13</td>
+          </tr>`]
+
   openModal(`
-    <h1>Hello world!</h1>
+    <h1>Emails from ${nodeInfo[columnId].id} to ${nodeInfo[headerId].id}</h1>
     <div class="modal-body">
-      <p>This is called a "modal" — A fullscreen popup that darkens the background and is intended to grab the user's full attention.</p>
+      <p><strong>Sender</strong></p>
+      <p>ID: ${nodeInfo[columnId].id}</p>
+      <p>Email: ${nodeInfo[columnId].email}</p>
+      <p>Job title: ${nodeInfo[columnId].job}</p>
       <br />
-      <p>In the case that there are multiple emails between people, it's difficult to display all of them in the hover popup. The concept idea of this modal is to host a table with all of the emails between these 2 people and their corresponding sentiment value.</p>
+      <p><strong>Receiver</strong></p>
+      <p>ID: ${nodeInfo[headerId].id}</p>
+      <p>Email: ${nodeInfo[headerId].email}</p>
+      <p>Job title: ${nodeInfo[headerId].job}</p>
       <br />
-      <p>This modal already has access to nodeInfo data! It knows that the cell you pressed corresponds to the sender ${nodeInfo[columnId].id} and the receiver ${nodeInfo[headerId].id}.
+      <table class="email-list">
+        <thead>
+          <tr>
+            <th>Email number</th>
+            <th>Sentiment</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${edgesHTML.join('')}
+        </tbody>
+      </table>
     </div>
   `)
 
@@ -76,7 +105,6 @@ function clickCell(matrixCell, nodeInfo) {
  * @param {Array.<Object>} nodeInfo An array of node objects
  */
 function toggleEmails(state, nodeInfo) {
-  const topHeader = document.querySelector('.adjacency-matrix thead')
   const topHeaderElements = document.querySelectorAll('.adjacency-matrix thead th:not(:first-child) span')
   const leftHeaderElements = document.querySelectorAll('.adjacency-matrix tbody th')
 

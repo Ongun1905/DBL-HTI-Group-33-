@@ -51,7 +51,8 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  max-width: 550px;
+  width: 600px;
+  max-width: 1000px;
   padding: 3em 4em;
   color: #fff;
   background-color: var(--color-black-hard);
@@ -60,9 +61,10 @@
   z-index: 11;
   transition: opacity 300ms ease;
 }
+.modal-content, .modal-body { width: 100%; }
+.modal.show { opacity: 1; }
 
 .modal .modal-body { color: rgba(255, 255, 255, 0.68); }
-.modal.show { opacity: 1; }
 
 
 /**

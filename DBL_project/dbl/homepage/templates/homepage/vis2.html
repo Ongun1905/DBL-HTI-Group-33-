@@ -20,10 +20,6 @@ Visualization 2 | DBL Group 33
         <h3>Controls</h3>
         <form>
             <div class="field">
-                <p class="title">Matrix size</p>
-                <input type="range" id="am-size-slider" class="range-slider" value="6" min="2" max="10" step="2" />
-            </div>
-            <div class="field">
                 <p class="title">Display email in header</p>
                 <label class="switch">
                     <input type="checkbox" id="am-toggle-emails">
@@ -32,30 +28,33 @@ Visualization 2 | DBL Group 33
             </div>
         </form>
 
-        <table class="adjacency-matrix names" id="adjacency-matrix">
-            <thead class="visible">
-                <tr>
-                    <th><span>x</span></th>
-                    {% for nodeDataTopHeader in nodeData %}
-                    <th><span>{{ nodeDataTopHeader.id }}</span></th>
+        <div class="am-wrapper">
+            <div class="circle"></div>
+            <table class="adjacency-matrix names" id="adjacency-matrix">
+                <thead class="visible">
+                    <tr>
+                        <th><span>x</span></th>
+                        {% for nodeDataTopHeader in nodeData %}
+                        <th><span>{{ nodeDataTopHeader.id }}</span></th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for matrixRow, normMatrixRow, nodeDataLeftHeader in zippedMatrixData %}
+                    <tr>
+                        <th class="visible">{{ nodeDataLeftHeader.id  }}</th>
+                        {% for matrixCell in matrixRow %}
+                            <td class="matrix-data-element" style="background-color: rgba(101, 204, 169, {{ normMatrixRow|index:forloop.counter0 }})">
+                                {% if matrixCell > 0 %}
+                                <span>{{ matrixCell }}</span>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
                     {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for matrixRow, normMatrixRow, nodeDataLeftHeader in zippedMatrixData %}
-                <tr>
-                    <th class="visible">{{ nodeDataLeftHeader.id  }}</th>
-                    {% for matrixCell in matrixRow %}
-                        <td class="size-6 matrix-data-element" style="background-color: rgba(101, 204, 169, {{ normMatrixRow|index:forloop.counter0 }})">
-                            {% if matrixCell > 0 %}
-                            <span>{{ matrixCell }}</span>
-                            {% endif %}
-                        </td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
         <div class="edge-info-popup"></div>
     </div>
     <script src="{% static "homepage/am.js" %}"></script>
@@ -63,9 +62,11 @@ Visualization 2 | DBL Group 33
     // Initialize variables
     const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
     const inputToggleEmails = document.getElementById('am-toggle-emails')
+    const amWrapper = document.querySelector('.am-wrapper')
 
     // Fetch Django variables into JS variables
     const nodeInfo = {{ nodeData| safe }}
+    const edgeData = {{ edgeData| safe }}
 
     // Matrix cell interactions
     matrixTableEntries.forEach(entry => {
@@ -74,11 +75,13 @@ Visualization 2 | DBL Group 33
         entry.addEventListener('mouseout', () => exitCell())
 
         // Click interactions
-        entry.addEventListener('click', () => clickCell(entry, nodeInfo))
+        entry.addEventListener('click', () => clickCell(entry, nodeInfo, edgeData))
     })
 
     // Control interactions
     inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeInfo) : toggleEmails(false, nodeInfo))
+
+    amWrapper.classList.add('loaded')
     </script>
 </div>
 {% endblock %}
