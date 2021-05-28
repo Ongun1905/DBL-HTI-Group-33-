@@ -1,6 +1,7 @@
 {% extends "homepage/layout.html" %}
 
 {% load filters %}
+{% load static %}
 
 {% block title %}
 Visualization 2 | DBL Group 33
@@ -23,9 +24,9 @@ Visualization 2 | DBL Group 33
                 <input type="range" id="am-size-slider" class="range-slider" value="6" min="2" max="10" step="2" />
             </div>
             <div class="field">
-                <p class="title">Display names</p>
+                <p class="title">Display email in header</p>
                 <label class="switch">
-                    <input type="checkbox" id="am-toggle-names" checked>
+                    <input type="checkbox" id="am-toggle-emails">
                     <span class="switch-slider"></span>
                 </label>
             </div>
@@ -47,7 +48,7 @@ Visualization 2 | DBL Group 33
                     {% for matrixCell in matrixRow %}
                         <td class="size-6 matrix-data-element" style="background-color: rgba(101, 204, 169, {{ normMatrixRow|index:forloop.counter0 }})">
                             {% if matrixCell > 0 %}
-                            {{ matrixCell }}
+                            <span>{{ matrixCell }}</span>
                             {% endif %}
                         </td>
                     {% endfor %}
@@ -55,61 +56,25 @@ Visualization 2 | DBL Group 33
                 {% endfor %}
             </tbody>
         </table>
+        <div class="edge-info-popup"></div>
     </div>
+    <script src="{% static "homepage/am.js" %}"></script>
     <script>
-    // Get the slider and table elements
-    const adjacencyMatrix = document.getElementById('adjacency-matrix')
-    const topHeader = document.querySelector('.adjacency-matrix thead')
-    const topHeaderElements = document.querySelectorAll('.adjacency-matrix thead th:not(:first-child)')
-    const leftHeaderElements = document.querySelectorAll('.adjacency-matrix tbody th')
-    const toggleNamesElement = document.getElementById('am-toggle-names')
-
-    const sizeSlider = document.getElementById('am-size-slider')
+    // Initialize variables
     const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
+    const inputToggleEmails = document.getElementById('am-toggle-emails')
 
-    // When the slider value changes, resize all td elements by setting their class
-    //
-    // Example:
-    // Let's say the slider has got the value 4. This results in every td element getting the class="size-4"
-    // In CSS, all elements with the class "size-4" get a width of 4px and a height of 4px
-    sizeSlider.addEventListener('change', () => {
-        matrixTableEntries.forEach(entry => {
-            entry.className = `size-${sizeSlider.value}`
-        })
-    })
+    // Fetch Django variables into JS variables
+    const nodeInfo = {{ nodeData| safe }}
 
-    toggleNamesElement.addEventListener('click', () => {
-        // Toggle the names to become visible
-        if (toggleNamesElement.checked) {
-            // Fix AM styling
-            if (!adjacencyMatrix.classList.contains('names')) adjacencyMatrix.classList.add('names')
-
-            // Add the names
-            if (!topHeader.classList.contains('visible')) topHeader.classList.add('visible')
-            leftHeaderElements.forEach(el => {
-                if (!el.classList.contains('visible')) el.classList.add('visible')
-            })
-        } else {
-            // Fix AM styling
-            if (adjacencyMatrix.classList.contains('names')) adjacencyMatrix.classList.remove('names')
-
-            // Remove the names
-            if (topHeader.classList.contains('visible')) topHeader.classList.remove('visible')
-            leftHeaderElements.forEach(el => {
-                if (el.classList.contains('visible')) el.classList.remove('visible')
-            })
-        }
-    })
-
-
-    // Click interaction
+    // Matrix cell interactions
     matrixTableEntries.forEach(entry => {
-        entry.addEventListener('click', () => {
-            alert('The click interaction is not yet set up!')
-        })
+        entry.addEventListener('mouseenter', (e) => enterCell(e, entry, nodeInfo))
+        entry.addEventListener('mouseout', (e) => exitCell(e))
     })
 
-    
+    // Control interactions
+    inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeInfo) : toggleEmails(false, nodeInfo))
     </script>
 </div>
 {% endblock %}

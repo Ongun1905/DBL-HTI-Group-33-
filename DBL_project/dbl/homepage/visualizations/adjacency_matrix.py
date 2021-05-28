@@ -23,45 +23,25 @@ import NodeLinkFunctions as nlf
 # Read CSV and setup NX graph data structure
 #mailSet = pd.read_csv(settings.BASE_DIR / 'enron-v1.csv', engine='python')
 
-#def getMultiMatrix():
- # mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
- # matrix = to_numpy_matrix(mailGraph).tolist()
- # return matrix
-
-def getNormalizedMultiMatrix(norm):
- # mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
- # matrix = to_numpy_matrix(mailGraph).tolist()
- # G = mailGraph.copy()
-
-  # Efficiently adding attributes to the nodes in the graph
-  #for edge in G.edges:
-   # edgeAttribute = G.get_edge_data(*edge)
-   # if (edge[2] == 0):
-    #  if(G.nodes[edge[0]].get('Email') is None):
-     #   G.nodes[edge[0]]['Email'] = edgeAttribute['fromEmail']
-      #  G.nodes[edge[0]]['Job'] = edgeAttribute['fromJobtitle']
-      #if(G.nodes[edge[1]].get('Email') is None):
-       # G.nodes[edge[1]]['Email'] = edgeAttribute['toEmail']
-       # G.nodes[edge[1]]['Job'] = edgeAttribute['toJobtitle']
-  matrix = to_numpy_matrix(nlf.filteredGraph).tolist()
+def getMultiMatrix():
+  matrix = to_numpy_matrix(nlf.filteredGraph).astype(int).tolist()
 
   # Store the node info in a list
   nodeInfo = []
   for node in nlf.filteredGraph.nodes:
-    nodeInfo.append({
-      "id": node,
-      "email": nlf.filteredGraph.nodes[node]['Email'],
-      "job": nlf.filteredGraph.nodes[node]['Job']
-    })
+      nodeInfo.append({
+          "id": node,
+          "email": nlf.filteredGraph.nodes[node]['Email'],
+          "job": nlf.filteredGraph.nodes[node]['Job']
+      })
 
   # Return the numpy matrix and the nodes with their corresponding email and job
   return matrix, nodeInfo
 
 def getNormalizedMultiMatrix(norm):
-  mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph())
-  matrix = to_numpy_matrix(mailGraph).tolist()
+  matrix = to_numpy_matrix(nlf.filteredGraph).astype(int).tolist()
 
-  # Finding the max matrix element for linear normalization
+  # Finding the max matrix element for normalization
   maxMatrixElement = 0
   for row in matrix:
     for cell in row:
@@ -75,11 +55,6 @@ def getNormalizedMultiMatrix(norm):
   normalizedMatrix = np.vectorize(vectorizedNormalizing)(matrix, norm, maxMatrixElement)
 
   return normalizedMatrix
-
-def getMatrix():
-  mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.DiGraph())
-  matrix = to_numpy_matrix(mailGraph).tolist()
-  return matrix
 
 
 

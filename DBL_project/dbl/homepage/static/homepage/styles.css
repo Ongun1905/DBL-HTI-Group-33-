@@ -298,6 +298,7 @@ Adjacency matrix styling
 
 
 .adjacency-matrix .matrix-data-element {
+	position: relative;
 	text-align: center;
 	cursor: pointer;
 }
@@ -334,6 +335,42 @@ Adjacency matrix styling
 .field .title { margin-bottom: 4px; }
 .field { max-width: 300px; }
 .field + .field { margin-top: 1rem; }
+
+/* Adjacency matrix - Popup */
+.edge-info-popup {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	padding: 1em;
+	background-color: var(--color-black-hardest);
+	color: #fff;
+	border-radius: 6px;
+	opacity: 0;
+	/*transition: opacity 300ms ease, bottom 300ms ease;*/
+	z-index: 1;
+	pointer-events: none;
+}
+
+.edge-info-popup p { white-space: nowrap; }
+.edge-info-popup::after {
+	content: " ";
+	position: absolute;
+	top: 99%;
+	left: 50%;
+	margin-left: -8px;
+	border-width: 8px;
+	border-style: solid;
+	border-color: var(--color-black-hardest) transparent transparent transparent;
+}
+
+.matrix-data-element span {
+	pointer-events: none;
+}
+
+.edge-info-popup.show {
+	opacity: 1;
+}
+
+
 
 /* ------------------------------
 node link styling
