@@ -5,6 +5,7 @@
 
 <head>
   <title>{% block title %}{% endblock %}</title>
+  <link href="{% static 'homepage/components.css' %}" type="text/css" rel="stylesheet">
   <link href="{% static 'homepage/styles.css' %}" type="text/css" rel="stylesheet">
   <!-- Importing fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -29,6 +30,10 @@
       <p>Made by Jelte, Jesse, Johan, Minh, Ongun and Victor</p>
     </footer>
   </div>
+  <div class="modal">
+    <div class="modal-content"></div>
+  </div>
+  <div class="overlay"></div>
 </body>
 
 </html>
