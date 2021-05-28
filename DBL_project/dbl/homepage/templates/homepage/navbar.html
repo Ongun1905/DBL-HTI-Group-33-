@@ -5,6 +5,7 @@
       <ul>
         <li class="{% if active_page == 'vis1' %}current{% endif %}"><a href="{% url 'vis1' %}">Vis 1</a></li>
         <li class="{% if active_page == 'vis2' %}current{% endif %}"><a href="{% url 'vis2' %}">Vis 2</a></li>
+        <li class="{% if active_page == 'combined' %}current{% endif %}"><a href="{% url 'vis2' %}">Combined</a></li>
       </ul>
     </li>
     <li class="{% if active_page == 'about' %}current{% endif %}"><a href="{% url 'about' %}">About</a></li>

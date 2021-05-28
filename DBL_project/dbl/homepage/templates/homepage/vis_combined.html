@@ -1,15 +1,19 @@
 {% extends "homepage/layout.html" %}
 
+{% block title %}
+Combined visualization 1 &amp; 2 | DBL Group 33
+{% endblock %}
+
 {% block nav %}
-{% include "homepage/navbar.html" with active_page='vis1' %}
+{% include "homepage/navbar.html" with active_page='combined' %}
 {% endblock %}
 
 
 {% block div %}
 <div class="container">
     <div class="main">
-	<h1>Visualization 1: MultiDiGraph</h1>
-        <p1>This visualization consists of a Network MultiDiGraph, where each node represents a user's e-mail address and each edge represents a message sent between two users. With the help of interactive tools, you can easily analyze the e-mail traffic of Enron's company.</p2>
+	    <h1>Combined visualization</h1>
+        <p>This visualization consists of a Network MultiDiGraph, where each node represents a user's e-mail address and each edge represents a message sent between two users. With the help of interactive tools, you can easily analyze the e-mail traffic of Enron's company.</p>
 	</div>
     <iframe src="http://127.0.0.1:8050/" height="500" width="1000" title="Iframe Example"></iframe>
 </div>
