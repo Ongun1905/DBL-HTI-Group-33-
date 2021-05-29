@@ -2,7 +2,7 @@
 import NodeLinkFunctions as nlf
 
 # Import settings to allow BASE_DIR to be used
-from django.conf import settings
+
 
 # Make sure you have plotly and networkx installed before running this code!
 import pandas as pd # General data handling
@@ -38,10 +38,7 @@ dateEnd = maxDate
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 # Initialise Dash app
-#app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-from django_plotly_dash import DjangoDash
-app = DjangoDash('GraphVisualisation')
-app.title = "Email Network"
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 ####
 styles = {
@@ -159,7 +156,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                             dcc.Dropdown(
                                 id='fileDropDown',
                                 options=[
-                                    {'label': j, 'value': j} for j in os.listdir(settings.BASE_DIR / 'media')
+                                    {'label': j, 'value': j} for j in os.listdir(os.path.join(os.path.dirname(__file__), '..', 'media'))
                                 ],
                                 value = "enron-v1.csv",
                                 placeholder="slect dataset from uploaded files"
@@ -225,7 +222,7 @@ def update_output(n_clicks, value, jobFromInput, jobToInput, mailFromInput, mail
 def change_my_dropdown_options(n_clicks):                                       # The newly uploaded files can now also be selected
     if n_clicks is None:
         raise dash.exceptions.PreventUpdate
-    options = [{'label': j, 'value': j} for j in os.listdir('media')]
+    options = [{'label': j, 'value': j} for j in os.listdir(os.path.join(os.path.dirname(__file__)), '..', 'media')]
     return options
 
 if __name__ == '__main__':

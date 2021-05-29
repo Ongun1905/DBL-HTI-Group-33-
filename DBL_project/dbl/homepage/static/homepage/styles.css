@@ -54,7 +54,7 @@ header p {
 
 header nav {
 	position: relative; /* z-index only works if the position is set to anything other than "static", the default */
-	z-index: 100; /* Makes sure dropdown menu is seen as a top layer| higher z-index -> higher layer */
+	z-index: 10; /* Makes sure dropdown menu is seen as a top layer| higher z-index -> higher layer */
 }
 header nav > ul > li {
 	position: relative;
@@ -96,7 +96,7 @@ header nav ul li ul li a {
 
 .container {
 	position: relative;
-	z-index: 10;
+	z-index: 1;
 	display: flex;
 	justify-content: center;
 	
@@ -265,15 +265,13 @@ Homepage row layout design
 Adjacency matrix styling
 ------------------------------ */
 .adjacency-matrix {
+  position: relative;
 	margin-top: 2rem;
 	border-collapse: separate; /* Don't collapse for header borders */
   border-spacing: 0;
 	background-color: var(--color-black-soft);
 }
 .adjacency-matrix.names { display: block; overflow: scroll; max-height: 600px; max-width: calc(100vw - 2 * var(--padding-sides)) }
-.adjacency-matrix.names tbody tr:nth-child(even) {
-	background-color: var(--color-black-hard);
-}
 
 /* Set up the adjacency matrix for removing headers */
 .adjacency-matrix thead:not(.visible) { display: none; }
@@ -290,6 +288,7 @@ Adjacency matrix styling
 
 .adjacency-matrix tbody th {
 	position: sticky;
+	z-index: 1;
 	left: 0;
 	padding: 4px 8px;
 	text-align: left;
@@ -300,42 +299,124 @@ Adjacency matrix styling
 .adjacency-matrix th { font-size: 14px; }
 
 
-.adjacency-matrix td.size-2 { width: 2px; height: 2px; }
-.adjacency-matrix td.size-4 { width: 4px; height: 4px; }
-.adjacency-matrix td.size-6 { width: 6px; height: 6px; }
-.adjacency-matrix td.size-8 { width: 8px; height: 8px; }
-.adjacency-matrix td.size-10 { width: 10px; height: 10px; }
-.adjacency-matrix td.size-12 { width: 12px; height: 12px; }
-.adjacency-matrix td.size-14 { width: 14px; height: 14px; }
-.adjacency-matrix td.size-16 { width: 16px; height: 16px; }
-.adjacency-matrix td.size-18 { width: 18px; height: 18px; }
-
-/* Vertical table header experiments */
-.vertical-table-header {
+.adjacency-matrix .matrix-data-element {
+	position: relative;
 	text-align: center;
-	white-space: nowrap;
-	transform-origin: 50% 50%;
-	transform: rotate(90deg);
-}
-.vertical-table-header span {
-	display: inline-block;
-	margin: 0 -100%;
-}
-.vertical-table-header span::before {
-	content: '';
-	display: inline-block;
-	width: 0;
-	padding-top: 150%;
-	vertical-align: middle;
+	cursor: pointer;
 }
 
 .field .title { margin-bottom: 4px; }
 .field { max-width: 300px; }
 .field + .field { margin-top: 1rem; }
 
+
+/* Adjacency matrix - Loading animation */
+.am-wrapper { position: relative;}
+.am-wrapper::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-black-soft);
+  z-index: 2;
+}
+.am-wrapper.loaded::before { content: none; }
+
+.am-wrapper .circle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+
+  box-sizing: border-box;
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  border: 10px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #FFF;
+  animation: spin 1s infinite linear;
+}
+.am-wrapper.loaded .circle { display: none; }
+
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg); 
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg); 
+  } 
+}
+
+
+/* Adjacency matrix - Popup */
+.edge-info-popup {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	padding: 1em;
+	background-color: var(--color-black-hardest);
+	color: #fff;
+	border-radius: 6px;
+	opacity: 0;
+	/*transition: opacity 300ms ease, bottom 300ms ease;*/
+	z-index: 1;
+	pointer-events: none;
+}
+
+.edge-info-popup p { white-space: nowrap; }
+.edge-info-popup::after {
+	content: " ";
+	position: absolute;
+	top: 99%;
+	left: 50%;
+	margin-left: -8px;
+	border-width: 8px;
+	border-style: solid;
+	border-color: var(--color-black-hardest) transparent transparent transparent;
+}
+
+.matrix-data-element span {
+	pointer-events: none;
+}
+
+.edge-info-popup.show {
+	opacity: 1;
+}
+
+
+/* Email list within modal */
+.email-list {
+	width: 100%;
+	text-align: left;
+	background-color: var(--color-black-soft);
+	border-spacing: 0;
+  max-height: 500px;
+  overflow-y: auto;
+}
+.email-list thead { background-color: var(--color-black-softest); }
+.email-list th { padding: 6px 10px; color: #fff; }
+
+.email-list th:first-child, .email-list td:first-child { padding-left: 1rem; }
+.email-list th:last-child, .email-list td:last-child { padding-right: 1rem; }
+
+.email-list td { padding: 4px 10px; }
+
+.email-list td + td, .email-list th + th {
+	padding-left: 1rem;
+}
+
+
+
+
+
 /* ------------------------------
 node link styling
 ------------------------------ */
-.test{
+.nodeLinkGraph{
+	margin-top: 3rem;
 	overflow: hidden;
+	border: 10px solid #65cca9;
+	border-radius: 20px;
 }
