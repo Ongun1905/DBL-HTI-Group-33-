@@ -1,4 +1,7 @@
 # Import Node Link functions from another Python file
+from networkx.algorithms.tree.coding import to_nested_tuple
+from networkx.algorithms.tree.mst import maximum_spanning_edges
+from networkx.generators.geometric import thresholded_random_geometric_graph
 import NodeLinkFunctions as nlf
 
 # Import settings to allow BASE_DIR to be used
@@ -68,6 +71,8 @@ html.Div(children = [ #top compontent - containes two subdivs
                             },
                             value=[-1, 1],
                             allowCross=False,   
+                            persistence= True,
+                            persistence_type= 'session'
                         ),
                         html.Br(),#breaks space between the interactive elements
                         html.Br(),#breaks space between the interactive elements
@@ -80,15 +85,18 @@ html.Div(children = [ #top compontent - containes two subdivs
                                 {'label': j, 'value': j} for j in sorted(jobFrom)
                             ],
                             multi = True,
-                            placeholder="Select from Job, Nothing = all"
-                        ),
+                            placeholder="Select from Job, Nothing = all",
+                            persistence= True,
+                            persistence_type= 'session'                        ),
                         dcc.Dropdown(
                             id='jobTo-dropdown',
                             options=[
                                 {'label': j, 'value': j} for j in sorted(jobTo)
                             ],
                             multi = True,
-                            placeholder="Select to Job, Nothing = all"
+                            placeholder="Select to Job, Nothing = all",
+                            persistence= True,
+                            persistence_type= 'session'                            
                         )
                     ], style = {'width': '100%'}
                 ),
@@ -99,7 +107,9 @@ html.Div(children = [ #top compontent - containes two subdivs
                                 {'label': j, 'value': j} for j in sorted(mailFrom)
                             ],
                             multi = True,
-                            placeholder="Select from Email, Nothing = all"
+                            placeholder="Select from Email, Nothing = all",
+                            persistence= True,
+                            persistence_type= 'session'                            
                         ),
                         dcc.Dropdown(
                             id='mailTo-dropdown',
@@ -107,7 +117,9 @@ html.Div(children = [ #top compontent - containes two subdivs
                                 {'label': j, 'value': j} for j in sorted(mailTo)
                             ],
                             multi = True,
-                            placeholder="Select to Email, Nothing = all"
+                            placeholder="Select to Email, Nothing = all",
+                            persistence= True,
+                            persistence_type= 'session'                            
                         )
                     ], style = {'width': '100%'}
                 ),
@@ -124,6 +136,8 @@ html.Div(children = [ #top compontent - containes two subdivs
                             end_date_placeholder_text="MMM Do, YYYY",
                             first_day_of_week = 1,
                             display_format='MMM Do, YYYY',
+                            persistence= True,
+                            persistence_type= 'session'                            
                         ), style={'width':'100%', 'margin-left':'21.5%'} # does not work somehow
                 ),
                 html.Br(),
@@ -134,6 +148,8 @@ html.Div(children = [ #top compontent - containes two subdivs
                         {'label': 'CC', 'value': 'CC'}
                     ],
                     value=['TO', 'CC'],
+                    persistence= True,
+                    persistence_type= 'session',                    
                     labelStyle={'display': 'inline-block'},
                     style={'color':'#65cca9', 'margin-left':'41.75%'}
                 ), 
@@ -144,6 +160,8 @@ html.Div(children = [ #top compontent - containes two subdivs
                         {'label': 'Hide unlinked nodes', 'value': 'False'}
                     ],
                     value='True',
+                    persistence= True,
+                    persistence_type= 'session',
                     labelStyle={'display': 'inline-block'},
                     style={'color':'#65cca9', 'margin-left':'18%'}
                 ),
