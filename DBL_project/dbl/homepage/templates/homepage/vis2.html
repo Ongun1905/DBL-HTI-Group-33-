@@ -29,8 +29,11 @@ Visualization 2 | DBL Group 33
         </form>
 
         <div class="am-wrapper">
-            <div class="circle"></div>
-            <table class="adjacency-matrix names" id="adjacency-matrix">
+            <div class="am-loader">
+                <div class="circle"></div>
+                <span id="am-loader-text">Loading...</span>
+            </div>
+            <table class="adjacency-matrix names custom-scrollbar" id="adjacency-matrix">
                 <thead class="visible">
                     <tr>
                         <th><span>x</span></th>
@@ -44,7 +47,7 @@ Visualization 2 | DBL Group 33
                     <tr>
                         <th class="visible">{{ nodeDataLeftHeader.id  }}</th>
                         {% for matrixCell in matrixRow %}
-                            <td class="matrix-data-element" style="background-color: rgba(101, 204, 169, {{ normMatrixRow|index:forloop.counter0 }})">
+                            <td class="matrix-data-element" style="background-color: rgba(101, 204, 169, {{ normMatrixRow|index:forloop.counter0 }})" data-row-index="{{ forloop.parentloop.counter0 }}" data-column-index="{{ forloop.counter0 }}">
                                 {% if matrixCell > 0 %}
                                 <span>{{ matrixCell }}</span>
                                 {% endif %}
@@ -63,6 +66,7 @@ Visualization 2 | DBL Group 33
     const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
     const inputToggleEmails = document.getElementById('am-toggle-emails')
     const amWrapper = document.querySelector('.am-wrapper')
+    const amLoader = document.querySelector('.am-wrapper .am-loader')
 
     // Fetch Django variables into JS variables
     const nodeInfo = {{ nodeData| safe }}
@@ -81,7 +85,11 @@ Visualization 2 | DBL Group 33
     // Control interactions
     inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeInfo) : toggleEmails(false, nodeInfo))
 
+    // Hide the preloader on load
     amWrapper.classList.add('loaded')
+    setTimeout(() => {
+        amLoader.classList.add('hidden')
+    }, 300)
     </script>
 </div>
 {% endblock %}

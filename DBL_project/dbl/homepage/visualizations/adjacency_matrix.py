@@ -12,6 +12,7 @@ import networkx as nx # Handling network graphs
 import numpy as np
 import math
 import NodeLinkFunctions as nlf
+from datetime import datetime
 
 # -------------------------------------------------------
 # Visualization 2
@@ -25,7 +26,15 @@ import NodeLinkFunctions as nlf
 
 def getMultiMatrix():
   matrix = to_numpy_matrix(nlf.filteredGraph).astype(int).tolist()
-  edgeData = without_keys(list(nlf.filteredGraph.edges(data=True))[0][2], {'date'})
+  edgeData = []
+
+  for edge in nlf.filteredGraph.edges(data=True):
+    edgeList = list(edge)
+    edgeDict = without_keys(edgeList[2], {'fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle'})
+    edgeDict['date'] = edgeDict['date'].strftime("%Y-%m-%d")
+    edgeList[2] = edgeDict
+    
+    edgeData.append(edgeList)
 
   # Store the node info in a list
   nodeInfo = []

@@ -5,21 +5,21 @@
  */
 function enterCell(matrixCell, nodeInfo) {
   // Get the header & column id
-  const headerId = getNodeIndex(matrixCell) - 1
-  const columnId = getNodeIndex(matrixCell.closest("tr"))
+  const rowId = matrixCell.dataset.columnIndex
+  const colId = matrixCell.dataset.rowIndex
   const edgeInfoPopup = document.querySelector('.edge-info-popup')
 
   // Fill the popup with data
   edgeInfoPopup.innerHTML = `
     <p><strong>Sender</strong></p>
-    <p>ID: ${nodeInfo[columnId].id}</p>
-    <p>Email: ${nodeInfo[columnId].email}</p>
-    <p>Job title: ${nodeInfo[columnId].job}</p>
+    <p>ID: ${nodeInfo[colId].id}</p>
+    <p>Email: ${nodeInfo[colId].email}</p>
+    <p>Job title: ${nodeInfo[colId].job}</p>
     <br />
     <p><strong>Receiver</strong></p>
-    <p>ID: ${nodeInfo[headerId].id}</p>
-    <p>Email: ${nodeInfo[headerId].email}</p>
-    <p>Job title: ${nodeInfo[headerId].job}</p>
+    <p>ID: ${nodeInfo[rowId].id}</p>
+    <p>Email: ${nodeInfo[rowId].email}</p>
+    <p>Job title: ${nodeInfo[rowId].job}</p>
     <br />
     <p><strong>Edge data</strong></p>
     <p>Average sentiment: -</p>
@@ -54,40 +54,46 @@ function exitCell() {
  */
 function clickCell(matrixCell, nodeInfo, edgeData) {
   // Get the header & column id
-  const headerId = getNodeIndex(matrixCell) - 1
-  const columnId = getNodeIndex(matrixCell.closest("tr"))
+  const rowId = matrixCell.dataset.columnIndex
+  const colId = matrixCell.dataset.rowIndex
+  const relatedEdgeData = edgeData.filter(item => item[0] === nodeInfo[colId].id && item[1] === nodeInfo[rowId].id).map(item => item[2])
 
-  console.log(edgeData[0])
-
-  const edgesHTML = [`<tr>
-            <td>Email #1</td>
-            <td>0.918</td>
-            <td>2000-08-13</td>
-          </tr>`]
+  let emailListHTML = []
+  relatedEdgeData.forEach((el, index) => {
+    emailListHTML.push(`
+      <tr>
+        <td>Email #${index + 1}</td>
+        <td>${el.sentiment}</td>
+        <td>${el.messageType}</td>
+        <td>${el.date}</td>
+      </tr>
+    `)
+  })
 
   openModal(`
-    <h1>Emails from ${nodeInfo[columnId].id} to ${nodeInfo[headerId].id}</h1>
+    <h1>Emails from ${nodeInfo[colId].id} to ${nodeInfo[rowId].id}</h1>
     <div class="modal-body">
       <p><strong>Sender</strong></p>
-      <p>ID: ${nodeInfo[columnId].id}</p>
-      <p>Email: ${nodeInfo[columnId].email}</p>
-      <p>Job title: ${nodeInfo[columnId].job}</p>
+      <p>ID: ${nodeInfo[colId].id}</p>
+      <p>Email: ${nodeInfo[colId].email}</p>
+      <p>Job title: ${nodeInfo[colId].job}</p>
       <br />
       <p><strong>Receiver</strong></p>
-      <p>ID: ${nodeInfo[headerId].id}</p>
-      <p>Email: ${nodeInfo[headerId].email}</p>
-      <p>Job title: ${nodeInfo[headerId].job}</p>
+      <p>ID: ${nodeInfo[rowId].id}</p>
+      <p>Email: ${nodeInfo[rowId].email}</p>
+      <p>Job title: ${nodeInfo[rowId].job}</p>
       <br />
-      <table class="email-list">
+      <table class="email-list custom-scrollbar">
         <thead>
           <tr>
             <th>Email number</th>
             <th>Sentiment</th>
+            <th>Message type</th>
             <th>Date</th>
           </tr>
         </thead>
         <tbody>
-          ${edgesHTML.join('')}
+          ${emailListHTML.join('')}
         </tbody>
       </table>
     </div>
@@ -121,6 +127,8 @@ function toggleEmails(state, nodeInfo) {
 }
 
 // A function to find a node's index within its parent element
+// Watch out when using this in the matrix table, since it's a
+// huge HTML element and is therefore pretty slow
 const getNodeIndex = el => [...el.parentNode.children].indexOf(el)
 
 
