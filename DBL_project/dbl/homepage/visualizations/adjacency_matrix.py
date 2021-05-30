@@ -50,6 +50,9 @@ def getMultiMatrix():
   # Return the numpy matrix and the nodes with their corresponding email and job
   return matrix, nodeInfo, edgeData
 
+
+# Get a normalized form of the matrix where the amount of edges
+# are normalized between 0 and the given `norm`.
 def getNormalizedMultiMatrix(norm):
   graph = nlf.filteredGraph
   graph.remove_nodes_from(list(nx.isolates(nlf.filteredGraph)))

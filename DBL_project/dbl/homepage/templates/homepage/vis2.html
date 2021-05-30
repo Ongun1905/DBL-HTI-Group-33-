@@ -38,6 +38,13 @@ Visualization 2 | DBL Group 33
                     <span class="switch-slider"></span>
                 </label>
             </div>
+            <div class="field">
+                <p class="title">Color by sentiment instead of amount</p>
+                <label class="switch">
+                    <input type="checkbox" id="am-toggle-coloring-sentiment">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
         </form>
 
         <div class="am-wrapper">
@@ -59,7 +66,7 @@ Visualization 2 | DBL Group 33
                     <tr id="node-{{ nodeDataLeftHeader.id  }}">
                         <th class="visible">{{ nodeDataLeftHeader.id  }}</th>
                         {% for matrixCell in matrixRow %}
-                            <td class="matrix-data-element" style="background-color: rgba(101, 204, 169, {{ normMatrixRow|index:forloop.counter0 }})" data-row-index="{{ forloop.parentloop.counter0 }}" data-column-index="{{ forloop.counter0 }}">
+                            <td class="matrix-data-element" data-row-index="{{ forloop.parentloop.counter0 }}" data-column-index="{{ forloop.counter0 }}" data-edge-count-norm="{{ normMatrixRow|index:forloop.counter0 }}">
                                 {% if matrixCell > 0 %}
                                 <span>{{ matrixCell }}</span>
                                 {% endif %}
@@ -78,6 +85,7 @@ Visualization 2 | DBL Group 33
     const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
     const inputToggleEmails = document.getElementById('am-toggle-emails')
     const inputToggleHover = document.getElementById('am-toggle-hover')
+    const inputToggleColoring = document.getElementById('am-toggle-coloring-sentiment')
     const amWrapper = document.querySelector('.am-wrapper')
     const amLoader = document.querySelector('.am-wrapper .am-loader')
     const amLoaderText = document.getElementById('am-loader-text')
@@ -104,7 +112,7 @@ Visualization 2 | DBL Group 33
         if (inputToggleHover.checked) {
             // Add hover popups
             matrixTableEntries.forEach(entry => {
-                entry.onmouseenter = () => enterCell(entry, nodeData)
+                entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
                 entry.onmouseout = () => exitCell()
             })
         } else {
@@ -115,6 +123,14 @@ Visualization 2 | DBL Group 33
             })
         }
     })
+    inputToggleColoring.addEventListener('click', () => {
+        if (inputToggleColoring.checked)
+            sentimentColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to positivity/negativity
+        else edgeCountColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to edge count
+    })
+
+    // Initialize coloring by edge count
+    edgeCountColoring(matrixTableEntries, nodeData, edgeData)
 
     // Remove empty rows
     amLoaderText.innerText = 'Removing empty rows...'
