@@ -70,6 +70,22 @@ function clickCell(matrixCell, nodeInfo, edgeData) {
     `)
   })
 
+  let emailTableHTML = `
+    <table class="email-list custom-scrollbar">
+      <thead>
+        <tr>
+          <th>Email number</th>
+          <th>Sentiment</th>
+          <th>Message type</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${emailListHTML.join('')}
+      </tbody>
+    </table>
+  `
+
   openModal(`
     <h1>Emails from ${nodeInfo[colId].id} to ${nodeInfo[rowId].id}</h1>
     <div class="modal-body">
@@ -82,20 +98,7 @@ function clickCell(matrixCell, nodeInfo, edgeData) {
       <p>ID: ${nodeInfo[rowId].id}</p>
       <p>Email: ${nodeInfo[rowId].email}</p>
       <p>Job title: ${nodeInfo[rowId].job}</p>
-      <br />
-      <table class="email-list custom-scrollbar">
-        <thead>
-          <tr>
-            <th>Email number</th>
-            <th>Sentiment</th>
-            <th>Message type</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${emailListHTML.join('')}
-        </tbody>
-      </table>
+      ${emailListHTML.length > 0 ? emailTableHTML : ''}
     </div>
   `)
 
@@ -124,6 +127,35 @@ function toggleEmails(state, nodeInfo) {
     if (state) el.innerText = nodeInfo[index].email
     else el.innerText = nodeInfo[index].id
   })
+}
+
+
+/**
+ * Removes all empty rows from the HTML table
+ * @param {Array.<Object>} nodeInfo An array of node objects
+ * @param {Array.<Array>} edgeData An array of the form [senderId, receiverId, {data}]
+ */
+function removeEmptyRows(nodeInfo, edgeData) {
+  console.log('Starting removal of empty rows...')
+
+  nodeInfo.forEach(node => {
+    // For each node, try to find if there are outgoing edges in the list
+    const outgoingEdge = edgeData.find(edge => edge[0] === node.id)
+
+    // If nothing has been found, the row has to be removed
+    if (!outgoingEdge) {
+      console.log(`No outgoing edges found for node ${node.id}! The row indicated by #node-${node.id} will be removed`)
+
+      const elToRemove = document.getElementById(`node-${node.id}`)
+      if (elToRemove) {
+        elToRemove.style.display = 'none'
+        console.log(`Removed the row!)`)
+      } else console.log('Failed to remove, element not found!')
+    }
+
+  })
+
+  console.log('Finished removal of empty rows!')
 }
 
 // A function to find a node's index within its parent element

@@ -25,10 +25,12 @@ from datetime import datetime
 #mailSet = pd.read_csv(settings.BASE_DIR / 'enron-v1.csv', engine='python')
 
 def getMultiMatrix():
-  matrix = to_numpy_matrix(nlf.filteredGraph).astype(int).tolist()
+  graph = nlf.filteredGraph
+  graph.remove_nodes_from(list(nx.isolates(nlf.filteredGraph)))
+  matrix = to_numpy_matrix(graph).astype(int).tolist()
   edgeData = []
 
-  for edge in nlf.filteredGraph.edges(data=True):
+  for edge in graph.edges(data=True):
     edgeList = list(edge)
     edgeDict = without_keys(edgeList[2], {'fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle'})
     edgeDict['date'] = edgeDict['date'].strftime("%Y-%m-%d")
@@ -38,18 +40,20 @@ def getMultiMatrix():
 
   # Store the node info in a list
   nodeInfo = []
-  for node in nlf.filteredGraph.nodes:
-      nodeInfo.append({
-          "id": node,
-          "email": nlf.filteredGraph.nodes[node]['Email'],
-          "job": nlf.filteredGraph.nodes[node]['Job']
-      })
+  for node in graph.nodes:
+    nodeInfo.append({
+        "id": node,
+        "email": graph.nodes[node]['Email'],
+        "job": graph.nodes[node]['Job']
+    })
 
   # Return the numpy matrix and the nodes with their corresponding email and job
   return matrix, nodeInfo, edgeData
 
 def getNormalizedMultiMatrix(norm):
-  matrix = to_numpy_matrix(nlf.filteredGraph).astype(int).tolist()
+  graph = nlf.filteredGraph
+  graph.remove_nodes_from(list(nx.isolates(nlf.filteredGraph)))
+  matrix = to_numpy_matrix(graph).astype(int).tolist()
 
   # Finding the max matrix element for normalization
   maxMatrixElement = 0

@@ -44,7 +44,7 @@ Visualization 2 | DBL Group 33
                 </thead>
                 <tbody>
                     {% for matrixRow, normMatrixRow, nodeDataLeftHeader in zippedMatrixData %}
-                    <tr>
+                    <tr id="node-{{ nodeDataLeftHeader.id  }}">
                         <th class="visible">{{ nodeDataLeftHeader.id  }}</th>
                         {% for matrixCell in matrixRow %}
                             <td class="matrix-data-element" style="background-color: rgba(101, 204, 169, {{ normMatrixRow|index:forloop.counter0 }})" data-row-index="{{ forloop.parentloop.counter0 }}" data-column-index="{{ forloop.counter0 }}">
@@ -67,6 +67,7 @@ Visualization 2 | DBL Group 33
     const inputToggleEmails = document.getElementById('am-toggle-emails')
     const amWrapper = document.querySelector('.am-wrapper')
     const amLoader = document.querySelector('.am-wrapper .am-loader')
+    const amLoaderText = document.getElementById('am-loader-text')
 
     // Fetch Django variables into JS variables
     const nodeInfo = {{ nodeData| safe }}
@@ -85,11 +86,14 @@ Visualization 2 | DBL Group 33
     // Control interactions
     inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeInfo) : toggleEmails(false, nodeInfo))
 
+    // Remove empty rows
+    amLoaderText.innerText = 'Removing empty rows...'
+    removeEmptyRows(nodeInfo, edgeData)
+
     // Hide the preloader on load
+    amLoaderText.innerText = 'Done!'
     amWrapper.classList.add('loaded')
-    setTimeout(() => {
-        amLoader.classList.add('hidden')
-    }, 300)
+    setTimeout(() => amLoader.classList.add('hidden'), 300)
     </script>
 </div>
 {% endblock %}

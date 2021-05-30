@@ -307,6 +307,7 @@ Adjacency matrix styling
 	text-align: left;
 	background-color: var(--color-black-soft);
 	border-spacing: 0;
+	margin-top: 1em;
 
 	/* Sizing and scroll setup */
 	display: block;
