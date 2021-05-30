@@ -26,6 +26,13 @@ Visualization 2 | DBL Group 33
                     <span class="switch-slider"></span>
                 </label>
             </div>
+            <div class="field">
+                <p class="title">Display hover information</p>
+                <label class="switch">
+                    <input type="checkbox" id="am-toggle-hover" checked>
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
         </form>
 
         <div class="am-wrapper">
@@ -65,6 +72,7 @@ Visualization 2 | DBL Group 33
     // Initialize variables
     const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
     const inputToggleEmails = document.getElementById('am-toggle-emails')
+    const inputToggleHover = document.getElementById('am-toggle-hover')
     const amWrapper = document.querySelector('.am-wrapper')
     const amLoader = document.querySelector('.am-wrapper .am-loader')
     const amLoaderText = document.getElementById('am-loader-text')
@@ -76,8 +84,8 @@ Visualization 2 | DBL Group 33
     // Matrix cell interactions
     matrixTableEntries.forEach(entry => {
         // Hover interactions
-        entry.addEventListener('mouseenter', () => enterCell(entry, nodeInfo))
-        entry.addEventListener('mouseout', () => exitCell())
+        entry.onmouseenter = () => enterCell(entry, nodeInfo)
+        entry.onmouseout = () => exitCell()
 
         // Click interactions
         entry.addEventListener('click', () => clickCell(entry, nodeInfo, edgeData))
@@ -85,6 +93,21 @@ Visualization 2 | DBL Group 33
 
     // Control interactions
     inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeInfo) : toggleEmails(false, nodeInfo))
+    inputToggleHover.addEventListener('click', () => {
+        if (inputToggleHover.checked) {
+            // Add hover popups
+            matrixTableEntries.forEach(entry => {
+                entry.onmouseenter = () => enterCell(entry, nodeInfo)
+                entry.onmouseout = () => exitCell()
+            })
+        } else {
+            // Remove hover popups
+            matrixTableEntries.forEach(entry => {
+                entry.onmouseenter = () => {}
+                entry.onmouseout = () => {}
+            })
+        }
+    })
 
     // Remove empty rows
     amLoaderText.innerText = 'Removing empty rows...'
