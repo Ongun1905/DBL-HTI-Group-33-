@@ -15,8 +15,13 @@ Visualization 2 | DBL Group 33
 <div class="container">
     <div class="main">
         <h1>Visualization 2: Adjacency matrix</h1>
-        <p>This visualization displays an adjacency matrix of the input data. Interestingly enough, we see that quite a lot of people emailed themselves, possibly to share files since cloud services didn't exist during the time that this data originates from.</p>
+        <p>This visualization displays an adjacency matrix of the input data. The left table header corresponds to outgoing edges while the top header corresponds to incoming edges. In the case of the Enron dataset, the left header corresponds to the sender of the email while the top header corresponds to the receiver of the email. The number in the table cell corresponds to the amount of emails sent between the two individuals.</p>
         <br />
+
+        <p>There are multiple options for interaction. One can hover over cells to view some basic information or click on them to display data about individual emails.</p>
+        <br />
+        <br />
+
         <h3>Controls</h3>
         <form>
             <div class="field">
@@ -77,27 +82,29 @@ Visualization 2 | DBL Group 33
     const amLoader = document.querySelector('.am-wrapper .am-loader')
     const amLoaderText = document.getElementById('am-loader-text')
 
+    amLoaderText.innerText = 'Setting up interactions...'
+
     // Fetch Django variables into JS variables
-    const nodeInfo = {{ nodeData| safe }}
+    const nodeData = {{ nodeData| safe }}
     const edgeData = {{ edgeData| safe }}
 
     // Matrix cell interactions
     matrixTableEntries.forEach(entry => {
         // Hover interactions
-        entry.onmouseenter = () => enterCell(entry, nodeInfo)
+        entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
         entry.onmouseout = () => exitCell()
 
         // Click interactions
-        entry.addEventListener('click', () => clickCell(entry, nodeInfo, edgeData))
+        entry.addEventListener('click', () => clickCell(entry, nodeData, edgeData))
     })
 
     // Control interactions
-    inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeInfo) : toggleEmails(false, nodeInfo))
+    inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeData) : toggleEmails(false, nodeData))
     inputToggleHover.addEventListener('click', () => {
         if (inputToggleHover.checked) {
             // Add hover popups
             matrixTableEntries.forEach(entry => {
-                entry.onmouseenter = () => enterCell(entry, nodeInfo)
+                entry.onmouseenter = () => enterCell(entry, nodeData)
                 entry.onmouseout = () => exitCell()
             })
         } else {
@@ -111,7 +118,7 @@ Visualization 2 | DBL Group 33
 
     // Remove empty rows
     amLoaderText.innerText = 'Removing empty rows...'
-    removeEmptyRows(nodeInfo, edgeData)
+    removeEmptyRows(nodeData, edgeData)
 
     // Hide the preloader on load
     amLoaderText.innerText = 'Done!'

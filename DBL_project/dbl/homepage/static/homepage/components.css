@@ -66,6 +66,8 @@
 .modal-content, .modal-body { width: 100%; }
 .modal.show { opacity: 1; }
 
+.modal-content > h1 { margin-bottom: 0.5em; }
+
 .modal .modal-body { color: rgba(255, 255, 255, 0.68); }
 
 
@@ -192,3 +194,16 @@ input:checked + .switch-slider:before {
 .custom-scrollbar::-webkit-scrollbar-corner {
   background: var(--color-black-hardest);
 }
+
+
+/**
+ * Layouts
+ *
+ * Layout-based components like predefined columns,
+ * rows and grids.
+*/
+.flex-col {
+  display: flex;
+}
+
+/*.flex-col > * + * { margin-left: 2rem; }*/ /* column gutter */
