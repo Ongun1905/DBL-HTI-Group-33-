@@ -162,7 +162,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                                     {'label': j, 'value': j} for j in os.listdir(settings.BASE_DIR / 'media')
                                 ],
                                 value = "enron-v1.csv",
-                                placeholder="slect dataset from uploaded files"
+                                placeholder="select dataset from uploaded files"
                             )
                         ], style={'color':'black'}
                     ), 
