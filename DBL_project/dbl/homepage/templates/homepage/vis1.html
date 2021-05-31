@@ -1,5 +1,9 @@
 {% extends "homepage/layout.html" %}
 
+{% block title %}
+Visualization 1 | DBL Group 33
+{% endblock %}
+
 {% block nav %}
 {% include "homepage/navbar.html" with active_page='vis1' %}
 {% endblock %}
@@ -8,16 +12,14 @@
 {% block div %}
 <div class="container">
     <div class="main">
-	<h1>Visualization 1: MultiDiGraph</h1>
-        <p1>This visualization consists of a Network MultiDiGraph, where each node represents a user's e-mail address and each edge represents a message sent between two users. With the help of interactive tools, you can easily analyze the e-mail traffic of Enron's company.</p2>
-	<br>
-	<br>
-	<p2>Select the filters that you want to apply for the data, then click the "Update Graph" button.</p2>
-	<br>
-	<br>
-	<p3>You can also hover over nodes in order to view their attributes, or you can click on a specific one in order to highlight it.</p3>
+        <h1>Visualization 1: MultiDiGraph</h1>
+        <p>This visualization consists of a Network MultiDiGraph, where each node represents a user's e-mail address and each edge represents a message sent between two users. With the help of interactive tools, you can easily analyze the e-mail traffic of Enron's company.</p>
+        <br>
+        <p>Select the filters that you want to apply for the data, then click the "Update Graph" button.</p>
+        <br>
+        <p>You can also hover over nodes in order to view their attributes, or you can click on a specific one in order to highlight it.</p>
         <div class="nodeLinkGraph">
-	    <br>
+            <br>
             <br>
             {% load plotly_dash %}
             <br>

@@ -15,8 +15,13 @@ Visualization 2 | DBL Group 33
 <div class="container">
     <div class="main">
         <h1>Visualization 2: Adjacency matrix</h1>
-        <p>This visualization displays an adjacency matrix of the input data. Interestingly enough, we see that quite a lot of people emailed themselves, possibly to share files since cloud services didn't exist during the time that this data originates from.</p>
+        <p>This visualization displays an adjacency matrix of the input data. The left table header corresponds to outgoing edges while the top header corresponds to incoming edges. In the case of the Enron dataset, the left header corresponds to the sender of the email while the top header corresponds to the receiver of the email. The number in the table cell corresponds to the amount of emails sent between the two individuals.</p>
         <br />
+
+        <p>There are multiple options for interaction. One can hover over cells to view some basic information or click on them to display data about individual emails.</p>
+        <br />
+        <br />
+
         <h3>Controls</h3>
         <form>
             <div class="field">
@@ -26,11 +31,28 @@ Visualization 2 | DBL Group 33
                     <span class="switch-slider"></span>
                 </label>
             </div>
+            <div class="field">
+                <p class="title">Display hover information</p>
+                <label class="switch">
+                    <input type="checkbox" id="am-toggle-hover" checked>
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
+            <div class="field">
+                <p class="title">Color by sentiment instead of amount</p>
+                <label class="switch">
+                    <input type="checkbox" id="am-toggle-coloring-sentiment">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
         </form>
 
         <div class="am-wrapper">
-            <div class="circle"></div>
-            <table class="adjacency-matrix names" id="adjacency-matrix">
+            <div class="am-loader">
+                <div class="circle"></div>
+                <span id="am-loader-text">Loading...</span>
+            </div>
+            <table class="adjacency-matrix names custom-scrollbar" id="adjacency-matrix">
                 <thead class="visible">
                     <tr>
                         <th><span>x</span></th>
@@ -41,10 +63,10 @@ Visualization 2 | DBL Group 33
                 </thead>
                 <tbody>
                     {% for matrixRow, normMatrixRow, nodeDataLeftHeader in zippedMatrixData %}
-                    <tr>
+                    <tr id="node-{{ nodeDataLeftHeader.id  }}">
                         <th class="visible">{{ nodeDataLeftHeader.id  }}</th>
                         {% for matrixCell in matrixRow %}
-                            <td class="matrix-data-element" style="background-color: rgba(101, 204, 169, {{ normMatrixRow|index:forloop.counter0 }})">
+                            <td class="matrix-data-element" data-row-index="{{ forloop.parentloop.counter0 }}" data-column-index="{{ forloop.counter0 }}" data-edge-count-norm="{{ normMatrixRow|index:forloop.counter0 }}">
                                 {% if matrixCell > 0 %}
                                 <span>{{ matrixCell }}</span>
                                 {% endif %}
@@ -62,26 +84,62 @@ Visualization 2 | DBL Group 33
     // Initialize variables
     const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
     const inputToggleEmails = document.getElementById('am-toggle-emails')
+    const inputToggleHover = document.getElementById('am-toggle-hover')
+    const inputToggleColoring = document.getElementById('am-toggle-coloring-sentiment')
     const amWrapper = document.querySelector('.am-wrapper')
+    const amLoader = document.querySelector('.am-wrapper .am-loader')
+    const amLoaderText = document.getElementById('am-loader-text')
+
+    amLoaderText.innerText = 'Setting up interactions...'
 
     // Fetch Django variables into JS variables
-    const nodeInfo = {{ nodeData| safe }}
+    const nodeData = {{ nodeData| safe }}
     const edgeData = {{ edgeData| safe }}
 
     // Matrix cell interactions
     matrixTableEntries.forEach(entry => {
         // Hover interactions
-        entry.addEventListener('mouseenter', () => enterCell(entry, nodeInfo))
-        entry.addEventListener('mouseout', () => exitCell())
+        entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
+        entry.onmouseout = () => exitCell()
 
         // Click interactions
-        entry.addEventListener('click', () => clickCell(entry, nodeInfo, edgeData))
+        entry.addEventListener('click', () => clickCell(entry, nodeData, edgeData))
     })
 
     // Control interactions
-    inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeInfo) : toggleEmails(false, nodeInfo))
+    inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeData) : toggleEmails(false, nodeData))
+    inputToggleHover.addEventListener('click', () => {
+        if (inputToggleHover.checked) {
+            // Add hover popups
+            matrixTableEntries.forEach(entry => {
+                entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
+                entry.onmouseout = () => exitCell()
+            })
+        } else {
+            // Remove hover popups
+            matrixTableEntries.forEach(entry => {
+                entry.onmouseenter = () => {}
+                entry.onmouseout = () => {}
+            })
+        }
+    })
+    inputToggleColoring.addEventListener('click', () => {
+        if (inputToggleColoring.checked)
+            sentimentColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to positivity/negativity
+        else edgeCountColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to edge count
+    })
 
+    // Initialize coloring by edge count
+    edgeCountColoring(matrixTableEntries, nodeData, edgeData)
+
+    // Remove empty rows
+    amLoaderText.innerText = 'Removing empty rows...'
+    removeEmptyRows(nodeData, edgeData)
+
+    // Hide the preloader on load
+    amLoaderText.innerText = 'Done!'
     amWrapper.classList.add('loaded')
+    setTimeout(() => amLoader.classList.add('hidden'), 300)
     </script>
 </div>
 {% endblock %}
