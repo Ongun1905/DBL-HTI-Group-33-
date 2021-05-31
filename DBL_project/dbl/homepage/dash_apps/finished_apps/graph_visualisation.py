@@ -1,4 +1,5 @@
 # Import Node Link functions from another Python file
+from dash import dependencies
 from networkx.algorithms.tree.coding import to_nested_tuple
 from networkx.algorithms.tree.mst import maximum_spanning_edges
 from networkx.generators.geometric import thresholded_random_geometric_graph
@@ -14,6 +15,8 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import os
+import datetime as dt
+import math as mt
 
 # -------------------------------------------------------
 # Visualisation 1
@@ -30,6 +33,9 @@ mailFromRange = []
 mailToRange = []
 toccSelect = []
 showhideNodes = True
+isLive = False
+month = 1
+year = 1998
 
 # Set up initial graph with positions and node attributes
 vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph('enron-v1.csv')
@@ -185,23 +191,32 @@ html.Div(children = [ #top compontent - containes two subdivs
                         ], style={'color':'black'}
                     ), 
                     dcc.Markdown('''
-                        **select your data set here**
+                        **Select your data set here**
 
                         The enron dataset contains is the default on this website.
                         The different versions differ in the amount of entries in the dataset.
 
-                        To visualize the selected dataset please hit the 'update graph' button on the left.
+                        To visualize the selected dataset please hit the 'Update Graph' button on the left.
 
                         For large datasets, it may take a while before the graph is loaded.
 
                         '''), 
-                    html.Pre(id='click-data')
+                    html.Pre(id='click-data'),
+                    dcc.Interval(
+                        id='interval-component',
+                        interval=5*1000, # in milliseconds
+                        n_intervals=0,
+                        disabled = True
+                    ),
+                    html.Button(id='play-button-state', n_clicks=0, children='Play Animation', style={'width': '90%', 'margin-left':'5%'}),
+                    html.Br(),
+                    html.Button(id='pause-button-state', n_clicks=0, children='Pause Animation', style={'width': '90%', 'margin-left':'5%'})
                 ], className='three columns', style={'color':'#65cca9', 'background':'#363F48', 'width':'48.5%', 'height':'400px', 'display':'flex','justify-content':'flex-start','flex-direction':'column', 'border-radius':'1rem'})
 ], style={'display':'flex','flex-direction':'row','justify-content':'space-between', 'width':'100%', 'align-items':'center'}
 ),
 
 html.Div(children = [dcc.Graph(id="mail-graph", #bottom component - graph
-        figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes))
+        figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
         ], style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw','width': '100%', 'height': '500px'}
         )
 ], style={'display':'flex', 'flex-direction':'column','align-items':'center','justify-content': 'space-between'}
@@ -236,7 +251,89 @@ def update_output(n_clicks, value, jobFromInput, jobToInput, mailFromInput, mail
     dateEnd = pd.to_datetime(mailEndDate)
     toccSelect = tocc
     showhideNodes = showhide
-    return nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes)
+    isLive = False
+    month = 1
+    year = 1998
+    return nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+
+
+@app.callback(                                                              # This app callback updates the graph when paused
+     #dash.dependencies.Output('mail-graph', 'figure'), 
+     dash.dependencies.Output('interval-component', 'disabled'),                     
+     [dash.dependencies.Input('pause-button-state', 'n_clicks'),           
+      dash.dependencies.State('my-range-slider', 'value'), 
+      dash.dependencies.State('jobFrom-dropdown', 'value'), 
+      dash.dependencies.State('jobTo-dropdown', 'value'), 
+      dash.dependencies.State('mailFrom-dropdown', 'value'), 
+      dash.dependencies.State('mailTo-dropdown', 'value'), 
+      dash.dependencies.State('mail-date-range', 'start_date'),
+      dash.dependencies.State('mail-date-range', 'end_date'),
+      dash.dependencies.State('to-cc-checklist', 'value'),
+      dash.dependencies.State('node-radio-items', 'value'),
+      dash.dependencies.State('fileDropDown', 'value')])
+def update_pause_output(n_clicks, value, jobFromInput, jobToInput, mailFromInput, mailToInput, mailStartDate, mailEndDate, tocc, showhide, file):
+    if file != None:
+        vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph(file)
+        #vis1Graph = nlf.createGraph(file)[0]
+    else:
+        vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph('enron-v1.csv')
+        #vis1Graph = nlf.createGraph(['enron-v1.csv'])[0]
+    sentimentRange = value
+    jobFromRange = jobFromInput
+    jobToRange = jobToInput
+    mailFromRange = mailFromInput
+    mailToRange = mailToInput
+    dateStart = pd.to_datetime(mailStartDate)
+    dateEnd = pd.to_datetime(mailEndDate)
+    toccSelect = tocc
+    showhideNodes = showhide
+    isLive = False
+    month = 1
+    year = 1998
+    #return nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+    return True
+
+
+@app.callback(                                                              # This app callback updates the graph when played
+     [dash.dependencies.Output('mail-graph', 'figure'),
+      dash.dependencies.Output('interval-component', 'disabled')],                    
+     [dash.dependencies.Input('play-button-state', 'n_clicks'),
+      dash.dependencies.Input('play-button-state', 'n_intervals'),          
+      dash.dependencies.State('my-range-slider', 'value'), 
+      dash.dependencies.State('jobFrom-dropdown', 'value'), 
+      dash.dependencies.State('jobTo-dropdown', 'value'), 
+      dash.dependencies.State('mailFrom-dropdown', 'value'), 
+      dash.dependencies.State('mailTo-dropdown', 'value'), 
+      dash.dependencies.State('mail-date-range', 'start_date'),
+      dash.dependencies.State('mail-date-range', 'end_date'),
+      dash.dependencies.State('to-cc-checklist', 'value'),
+      dash.dependencies.State('node-radio-items', 'value'),
+      dash.dependencies.State('fileDropDown', 'value')])
+def update_play_output(n_clicks, n_intervals, value, jobFromInput, jobToInput, mailFromInput, mailToInput, mailStartDate, mailEndDate, tocc, showhide, file):
+    if file != None:
+        vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph(file)
+        #vis1Graph = nlf.createGraph(file)[0]
+    else:
+        vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph('enron-v1.csv')
+        #vis1Graph = nlf.createGraph(['enron-v1.csv'])[0]
+    sentimentRange = value
+    jobFromRange = jobFromInput
+    jobToRange = jobToInput
+    mailFromRange = mailFromInput
+    mailToRange = mailToInput
+    dateStart = pd.to_datetime(mailStartDate)
+    dateEnd = pd.to_datetime(mailEndDate)
+    toccSelect = tocc
+    showhideNodes = showhide
+    isLive = True
+    month = (dateStart.dt.month + n_intervals) % 12
+    if (month == 0):
+        month = 12
+    year = dateStart.dt.year + mt.floor(dateStart.dt.month + n_intervals) - 1
+    if (not (month == 12)):
+        year += 1
+    return nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year), False
+
 
 @app.callback(output=dash.dependencies.Output('fileDropDown', 'options'),       # This app callback makes sure the media folder is
               inputs=[dash.dependencies.Input('refreshDropDown', 'n_clicks')])  # updated when clicking the dataset dropdown menu
