@@ -9,9 +9,239 @@ About | DBL Group 33
 {% endblock %}
 
 {% block div %}
-<div class="container">
-	<div class="main">
-		<p>About page just to test, I dont even know if we want an about page</p>
-	</div>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font: 17px "Rubik", sans-serif;
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.column {
+  float: left;
+  width: 33.3%;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px;
+}
+
+.container_row{
+  width: 90%;
+}
+
+.layer1 {
+  width: 100%;
+  
+}
+
+.layer2{
+  width: 100%;
+  margin-left: -50%;
+  
+}
+
+.card {
+  box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  margin: 100px;
+  width: 450px;
+}
+
+
+.container {
+  padding: 2px 16px;
+  flex-direction: column;
+}
+
+.container::after, .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.title {
+  color: grey;
+}
+
+.limit{
+    width: 350px;
+    word-wrap: break-word;
+    text-align:left;
+}
+
+.button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.button:hover {
+  background-color: #555;
+}
+
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+}
+</style>
+</head>
+<body>	
+
+<h2 style="text-align:center">Our Team</h2>
+<div class="row">
+  <div class="column">
+    <div class="card">
+      <img src="./static/OngunK.jpg" alt="Ongun" class="center">
+      <div class="container">
+        <h2>Ongun Korkmaz</h2>
+        <p class="title">Computer Engineer</p>
+        <div class = 'container_row'>
+          <div class="limit">
+            <span>Hello, thank you for visiting our website! 
+            I’m a first-year Computer Science & Engineering student at TU/e just like my other colleagues here. I’ve mainly focused on the UI elements, visualizations, and the tools we’ve added to our visualizations. 
+            We’ve made sure that you can use this website to its full potential. Have fun using our tools and website!
+            </span>
+          </div>
+        </div>
+        <br>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="card">
+      <img src="./static/OngunK.jpg" alt="Ongun" class="center">
+      <div class="container">
+        <h2>Jelte Schurmaans</h2>
+        <p class="title">Computer Engineer</p>
+        <div class = 'container_row'>
+          <div class="limit">
+            <span>Hello, thank you for visiting our website! 
+            I’m a first-year Computer Science & Engineering student at TU/e just like my other colleagues here. I’ve mainly focused on the UI elements, visualizations, and the tools we’ve added to our visualizations. 
+            We’ve made sure that you can use this website to its full potential. Have fun using our tools and website!
+            </span>
+          </div>
+        </div>
+        <br>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="column">
+    <div class="card">
+      <img src="./static/OngunK.jpg" alt="Ongun" class="center">
+      <div class="container">
+        <h2>Jesse Traas</h2>
+        <p class="title">Computer Engineer</p>
+        <div class = 'container_row'>
+          <div class="limit">
+            <span>Hello, thank you for visiting our website! 
+            I’m a first-year Computer Science & Engineering student at TU/e just like my other colleagues here. I’ve mainly focused on the UI elements, visualizations, and the tools we’ve added to our visualizations. 
+            We’ve made sure that you can use this website to its full potential. Have fun using our tools and website!
+            </span>
+          </div>
+        </div>
+        <br>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+  
 </div>
+
+<div class="row">
+  <div class="column">
+    <div class="card">
+      <img src="./static/OngunK.jpg" alt="Ongun" class="center">
+      <div class="container">
+        <h2>Pham Duc Minh</h2>
+        <p class="title">Computer Engineer</p>
+        <div class = 'container_row'>
+          <div class="limit">
+            <span>Hello, thank you for visiting our website! 
+            I’m a first-year Computer Science & Engineering student at TU/e just like my other colleagues here. I’ve mainly focused on the UI elements, visualizations, and the tools we’ve added to our visualizations. 
+            We’ve made sure that you can use this website to its full potential. Have fun using our tools and website!
+            </span>
+          </div>
+        </div>
+        <br>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="card">
+      <img src="./static/OngunK.jpg" alt="Ongun" class="center">
+      <div class="container">
+        <h2>Victor Asanache</h2>
+        <p class="title">Computer Engineer</p>
+        <div class = 'container_row'>
+          <div class="limit">
+            <span>Hello, thank you for visiting our website! 
+            I’m a first-year Computer Science & Engineering student at TU/e just like my other colleagues here. I’ve mainly focused on the UI elements, visualizations, and the tools we’ve added to our visualizations. 
+            We’ve made sure that you can use this website to its full potential. Have fun using our tools and website!
+            </span>
+          </div>
+        </div>
+        <br>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="card">
+      <img src="./static/OngunK.jpg" alt="Ongun" class="center">
+      <div class="container">
+        <h2>Johan van Dongen</h2>
+        <p class="title">Computer Engineer</p>
+        <div class = 'container_row'>
+          <div class="limit">
+            <span>Hello, thank you for visiting our website! 
+            I’m a first-year Computer Science & Engineering student at TU/e just like my other colleagues here. I’ve mainly focused on the UI elements, visualizations, and the tools we’ve added to our visualizations. 
+            We’ve made sure that you can use this website to its full potential. Have fun using our tools and website!
+            </span>
+          </div>
+        </div>
+        <br>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
+
 {% endblock %}
