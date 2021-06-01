@@ -180,7 +180,12 @@ html.Div(children = [ #top compontent - containes two subdivs
             ], style={'display': 'flex', 'flex-direction': 'column','justify-content':'space-around', 'background-color': '#363F48', 'width':'48.5%', 'height':'400px', 'border-radius':'1rem'}
         ),
         
-        html.Div(children=[ #top right component - uploading dropdown +text
+        html.Div(children=[ #top right component - uploading dropdown + text + animation
+                    dcc.Markdown('''
+                        **Select your data set here:**
+                        ''',
+                        style={'margin-left':'5%'}
+                    ),
                     html.Div(
                         id='refreshDropDown',
                         children = [
@@ -195,17 +200,14 @@ html.Div(children = [ #top compontent - containes two subdivs
                         ], style={'color':'black'}
                     ), 
                     dcc.Markdown('''
-                        **Select your data set here**
-
                         The enron dataset contains is the default on this website.
                         The different versions differ in the amount of entries in the dataset.
 
-                        For large datasets, it may take a while before the graph is loaded!
+                        **Animation Controls:**
                         ''',
                         style={'margin-left':'5%'}
                     ),
                     #html.Pre(id='click-data'),
-                    html.Br(),
                     dcc.Dropdown(
                         id='speed-dropdown',
                         options=[
@@ -213,7 +215,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                             {'label': '0.33 seconds (for performant GPUs)', 'value': '330'},
                             {'label': '0.5 seconds (for performant GPUs)', 'value': '500'},
                             {'label': '1 second (for performant GPUs)', 'value': '1000'},
-                            {'label': '2 seconds', 'value': '2000'},
+                            {'label': '2 seconds (for performant GPUs)', 'value': '2000'},
                             {'label': '3 seconds', 'value': '3000'},
                             {'label': '4 seconds', 'value': '4000'},
                             {'label': '5 seconds', 'value': '5000'},
@@ -223,7 +225,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                             {'label': '9 seconds', 'value': '9000'},
                             {'label': '10 seconds', 'value': '10000'}
                         ],
-                        placeholder="Select Animation speed (in seconds)",
+                        placeholder="Select Animation speed (in seconds - 3 default)",
                         style={'width': '94.9%','margin-left':'2.5%', 'color':'black'}
                     ),
                     html.Br(),
@@ -241,7 +243,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                     html.Br(),
                     dcc.Textarea(
                         id='text-year-month',
-                        value='Animation not active.',
+                        value='Animation status: not active.',
                         contentEditable = False,
                         draggable = False,
                         rows = 1,
@@ -295,11 +297,14 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
     jobToRange = jobToInput
     mailFromRange = mailFromInput
     mailToRange = mailToInput
-    global dateStart, dateEnd, n_intervals_start, isLive, disableState, endMonth, endYear
+    animationSpeedInit = animationSpeed
+    global dateStart, dateEnd
     dateStart = pd.to_datetime(mailStartDate)
     dateEnd = pd.to_datetime(mailEndDate)
     toccSelect = tocc
     showhideNodes = showhide
+    global n_intervals_start
+    global month, year
     month = (dateStart.month + n_intervals - n_intervals_start) % 12
     if (month == 0):
         month = 12
@@ -308,44 +313,46 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
         year += 1
     ctx = dash.callback_context
     if (not ctx.triggered and n_clicks1 == 0 and n_clicks2 == 0 and n_clicks3 == 0 and n_clicks4 == 0):
+        global isLive, disableState
         isLive = False
         disableState = True
-        return dash.no_update, disableState, 'Animation not active.', True, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+        return dash.no_update, disableState, 'Animation status: not active.', True, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
     else:
         btn_id = [b['prop_id'] for b in dash.callback_context.triggered][0]
         if 'play-button-state' in btn_id:
+            global endMonth, endYear
             endMonth = dateEnd.month
             endYear = dateEnd.year
             isLive = True
             disableState = False
             n_intervals_start = n_intervals
-            month = (dateStart.month + n_intervals - n_intervals_start) % 12
-            if (month == 0):
-                month = 12
-            year = dateStart.year + mt.floor((dateStart.month + n_intervals - n_intervals_start) / 12) - 1
-            if (not (month == 12)):
-                year += 1
-            return animationSpeed, disableState, 'Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+            month = dateStart.month
+            year = dateStart.year
+            if animationSpeedInit is None:
+                animationSpeedInit = 3000
+            return animationSpeedInit, disableState, 'Animation: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         elif 'pause-button-state' in btn_id:
             isLive = True
             disableState = True
-            return dash.no_update, disableState, 'Year: ' + str(year) + ', Month: ' + str(month), True, False, dash.no_update
+            return dash.no_update, disableState, 'Animation: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), True, False, dash.no_update
         elif 'resume-button-state' in btn_id:
             isLive = True
             disableState = False
-            return animationSpeed, disableState, 'Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+            if animationSpeedInit is None:
+                animationSpeedInit = 3000
+            return animationSpeedInit, disableState, 'Animation: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         elif 'submit-button-state' in btn_id:
             isLive = False
             disableState = True
             n_intervals_start = n_intervals
-            return dash.no_update, disableState, 'Animation not active.', True, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+            return dash.no_update, disableState, 'Animation status: not active.', True, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         else:
             if ((year == endYear and month > endMonth) or year > endYear):
                 isLive = False
                 disableState = True
-                return dash.no_update, disableState, 'Year: ' + str(endYear) + ', Month: ' + str(endMonth), True, True, dash.no_update
+                return dash.no_update, disableState, 'Animation: active. Timestamps: Year: ' + str(endYear) + ', Month: ' + str(endMonth), True, True, dash.no_update
             if isLive:
-                return dash.no_update, disableState, 'Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+                return dash.no_update, disableState, 'Animation: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
 
 
 @app.callback(output=dash.dependencies.Output('fileDropDown', 'options'),       # This app callback makes sure the media folder is
