@@ -65,7 +65,7 @@ def filterGraph(graph, sentimentValue, jobFromValue, jobToValue, mailFromValue, 
     mailDateStart = pd.to_datetime(mailDateStart)
     mailDateEnd = pd.to_datetime(mailDateEnd)
 
-    #filteredGraph.layout.update(clickmode = 'event+select')
+
     # Remove the edges that don't satisfy the range
     for edge in graph.edges:
         edgeAttribute = graph.get_edge_data(*edge)
