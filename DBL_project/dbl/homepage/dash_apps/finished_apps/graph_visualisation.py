@@ -360,7 +360,7 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
 def change_my_dropdown_options(n_clicks):                                       # The newly uploaded files can now also be selected
     if n_clicks is None:
         raise dash.exceptions.PreventUpdate
-    options = [{'label': j, 'value': j} for j in os.listdir('media')]
+    options = [{'label': j, 'value': j} for j in os.listdir(settings.MEDIA_ROOT)]
     return options
 
 if __name__ == '__main__':
