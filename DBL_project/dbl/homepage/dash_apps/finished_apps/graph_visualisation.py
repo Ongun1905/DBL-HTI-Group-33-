@@ -295,20 +295,17 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
     jobToRange = jobToInput
     mailFromRange = mailFromInput
     mailToRange = mailToInput
-    global dateStart, dateEnd
+    global dateStart, dateEnd, n_intervals_start, isLive, disableState, endMonth, endYear
     dateStart = pd.to_datetime(mailStartDate)
     dateEnd = pd.to_datetime(mailEndDate)
     toccSelect = tocc
     showhideNodes = showhide
-    global n_intervals_start
     month = (dateStart.month + n_intervals - n_intervals_start) % 12
     if (month == 0):
         month = 12
     year = dateStart.year + mt.floor((dateStart.month + n_intervals - n_intervals_start) / 12) - 1
     if (not (month == 12)):
         year += 1
-    global isLive
-    global disableState
     ctx = dash.callback_context
     if (not ctx.triggered and n_clicks1 == 0 and n_clicks2 == 0 and n_clicks3 == 0 and n_clicks4 == 0):
         isLive = False
@@ -317,7 +314,6 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
     else:
         btn_id = [b['prop_id'] for b in dash.callback_context.triggered][0]
         if 'play-button-state' in btn_id:
-            global endMonth, endYear
             endMonth = dateEnd.month
             endYear = dateEnd.year
             isLive = True
