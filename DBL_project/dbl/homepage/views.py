@@ -1,21 +1,15 @@
-# Import settings to allow BASE_DIR to be used
-from django.conf import settings
-
+from django.conf import settings  # Import settings to allow BASE_DIR to be used
 from django.shortcuts import render
-from django.http import HttpResponse
-from .visualizations import adjacency_matrix
 from django.core.files.storage import FileSystemStorage
-from django import forms
-from django.core.serializers import serialize
+from .visualizations import adjacency_matrix
+from .forms import UploadFileForm
 import os
 import json
 
-class UploadFileForm(forms.Form):
-    file = forms.FileField()
 # Create your views here.
-def index(request): 
+def index(request):
     if request.method == 'POST':
-        # Take it data the user sbmitted and save it as a form 
+        # Take it data the user submitted and save it as a form
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_file = request.FILES['file']
@@ -27,12 +21,16 @@ def index(request):
             filename = fs.save(name, uploaded_file)
             uploaded_file_url = fs.url(filename)
             return render(request, "homepage/index.html", {
-                "uploaded_file_url":"uploaded file: " + filename,
-                "form":form})
+                "has_uploaded_file": True,
+                "uploaded_file_url": filename,
+                "form": form
+            })
     
     return render(request, "homepage/index.html", {
-        "uploaded_file_url":"You have not uploaded any file", 
-        "form":UploadFileForm()})
+        "has_uploaded_file": False,
+        "uploaded_file_url": "No file selected",
+        "form": UploadFileForm(auto_id=False)
+    })
 
 def about(request):
     return render(request, "homepage/about.html")

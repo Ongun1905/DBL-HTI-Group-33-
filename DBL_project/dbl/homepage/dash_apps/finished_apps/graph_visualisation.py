@@ -350,7 +350,7 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
             if ((year == endYear and month > endMonth) or year > endYear):
                 isLive = False
                 disableState = True
-                return dash.no_update, disableState, 'Animation: active. Timestamps: Year: ' + str(endYear) + ', Month: ' + str(endMonth), True, True, dash.no_update
+                return dash.no_update, disableState, 'Animation: finished. Timestamps: Year: ' + str(endYear) + ', Month: ' + str(endMonth), True, True, dash.no_update
             if isLive:
                 return dash.no_update, disableState, 'Animation: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
 
@@ -360,7 +360,7 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
 def change_my_dropdown_options(n_clicks):                                       # The newly uploaded files can now also be selected
     if n_clicks is None:
         raise dash.exceptions.PreventUpdate
-    options = [{'label': j, 'value': j} for j in os.listdir('media')]
+    options = [{'label': j, 'value': j} for j in os.listdir(settings.MEDIA_ROOT)]
     return options
 
 if __name__ == '__main__':
