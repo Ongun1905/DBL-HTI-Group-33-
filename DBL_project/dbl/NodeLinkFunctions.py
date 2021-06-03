@@ -7,6 +7,7 @@ import pandas as pd
 import random
 import math
 from datetime import date
+import datetime as dt
 
 
 # The overarching function that does all the graph creating
@@ -15,9 +16,11 @@ def createGraph(filename):
     #mailSet = pd.read_csv(settings.BASE_DIR / 'enron-v1.csv', engine='python')
     mailSet = pd.read_csv(settings.BASE_DIR / 'media' / str(filename), engine='python')
     mailSet['date'] = pd.to_datetime(mailSet['date']) # Filter the date for Dash
+    mailSet['month'] = mailSet['date'].dt.month
+    mailSet['year'] = mailSet['date'].dt.year
 
     # Generate graph from CSV information
-    mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date'], create_using = nx.MultiDiGraph() )
+    mailGraph = nx.from_pandas_edgelist(mailSet, 'fromId', 'toId', ['fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle', 'messageType', 'sentiment', 'date', 'month', 'year'], create_using = nx.MultiDiGraph() )
     G = mailGraph.copy()
 
     jobFrom_set = []
@@ -56,13 +59,13 @@ def createGraph(filename):
     return G, jobFrom_set, jobTo_set, mailFrom_set, mailTo_set, minDate, maxDate;
 
 
-def filterGraph(graph, sentimentValue, jobFromValue, jobToValue, mailFromValue, mailToValue, mailDateStart, mailDateEnd, toccSelect, showhide):
+def filterGraph(graph, sentimentValue, jobFromValue, jobToValue, mailFromValue, mailToValue, mailDateStart, mailDateEnd, toccSelect, showhide, isLive, month, year):
     global filteredGraph
     filteredGraph = graph.copy(as_view=False)
     mailDateStart = pd.to_datetime(mailDateStart)
     mailDateEnd = pd.to_datetime(mailDateEnd)
 
-    #filteredGraph.layout.update(clickmode = 'event+select')
+
     # Remove the edges that don't satisfy the range
     for edge in graph.edges:
         edgeAttribute = graph.get_edge_data(*edge)
@@ -85,8 +88,12 @@ def filterGraph(graph, sentimentValue, jobFromValue, jobToValue, mailFromValue, 
             flag  = True
             if(edgeAttribute['toEmail'] in mailToValue):
                 flag = False
-        if(edgeAttribute['date'] < mailDateStart or edgeAttribute['date'] > mailDateEnd):
-            flag = True
+        if (isLive == True):
+            if(not (edgeAttribute['month'] == month and edgeAttribute['year'] == year)):
+                flag = True
+        else:
+            if(edgeAttribute['date'] < mailDateStart or edgeAttribute['date'] > mailDateEnd):
+                flag = True
         if(not flag and toccSelect):
             flag = True
             if(edgeAttribute['messageType'] in toccSelect):
