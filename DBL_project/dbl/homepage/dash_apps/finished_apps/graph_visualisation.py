@@ -137,9 +137,10 @@ html.Div(children = [ #top compontent - containes two subdivs
                             first_day_of_week = 1,
                             display_format='MMM Do, YYYY',
                             persistence= True,
-                            persistence_type= 'session'                            
-                        ), style={'width':'100%', 'margin-left':'21.5%'} # does not work somehow
-                ),
+                            persistence_type= 'session'     ,
+                            style={'width':'100%','text-align':'center'}                    
+                        ), style={'width':'100%', 'margin':'auto'}
+                ), 
                 html.Br(),
                 dcc.Checklist(
                     id = 'to-cc-checklist',
@@ -169,7 +170,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                 html.Div(id='output-state')
             ], style={'display': 'flex', 'flex-direction': 'column','justify-content':'space-around', 'background-color': '#363F48', 'width':'48.5%', 'height':'400px', 'border-radius':'1rem'}
         ),
-        
+        #html.A(html.Button('Refresh Data'),href="{% url '....vis1' %}"),
         html.Div(children=[ #top right component - uploading dropdown +text
                     html.Div(
                         id='refreshDropDown',
@@ -187,7 +188,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                     dcc.Markdown('''
                         **select your data set here**
 
-                        The enron dataset contains is the default on this website.
+                        The enron-v1 dataset is the default on this website.
                         The different versions differ in the amount of entries in the dataset.
 
                         To visualize the selected dataset please hit the 'update graph' button on the left.
@@ -236,6 +237,7 @@ def update_output(n_clicks, value, jobFromInput, jobToInput, mailFromInput, mail
     dateEnd = pd.to_datetime(mailEndDate)
     toccSelect = tocc
     showhideNodes = showhide
+
     return nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes)
 
 @app.callback(output=dash.dependencies.Output('fileDropDown', 'options'),       # This app callback makes sure the media folder is

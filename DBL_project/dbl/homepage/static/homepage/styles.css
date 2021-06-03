@@ -346,3 +346,57 @@ node link styling
 	border: 10px solid #65cca9;
 	border-radius: 20px;
 }
+
+/* ------------------------------
+vis 3 styling
+------------------------------ */
+.combined {
+	margin-top: 3rem;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+.combNodeVis {
+	text-align: center;
+	width: 45%;
+	overflow: hidden;
+	border: 1px solid #65cca9;
+	border-radius: 20px;
+}
+.combAdjVis {
+	text-align: center;
+	width: 45%;
+	overflow: hidden;
+	border: 1px solid #65cca9;
+	border-radius: 20px;
+}
+.combNodeVis h1, .combAdjVis h1 {
+	color: #65cca9;
+}
+.AdjForms {
+	text-align: left;
+	height: 400px;
+}
+.am-wrapper-vis3 {
+	margin-top: 3vh;
+}
+.reload-vis3 {
+	border-radius: 10px;
+	background-color: var(--color-black-soft);
+	text-align: center;
+	width: 10%;
+	color: #65cca9;
+	margin: auto;	
+	margin-top: 3vh;
+}
+.reload-vis3 a {
+	border-radius: 10px;
+	display: block;
+	margin: auto;
+	text-decoration: none;
+	color: white;
+}
+.reload-vis3 a:hover {
+	background: #65cca9;
+}
