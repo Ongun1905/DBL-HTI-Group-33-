@@ -147,9 +147,10 @@ html.Div(children = [ #top compontent - containes two subdivs
                             first_day_of_week = 1,
                             display_format='MMM Do, YYYY',
                             persistence= True,
-                            persistence_type= 'session'                            
-                        ), style={'width':'100%', 'margin-left':'21.5%'} # does not work somehow
-                ),
+                            persistence_type= 'session'     ,
+                            style={'width':'100%','text-align':'center'}                    
+                        ), style={'width':'100%', 'margin':'auto'}
+                ), 
                 html.Br(),
                 dcc.Checklist(
                     id = 'to-cc-checklist',
@@ -179,6 +180,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                 html.Div(id='output-state')
             ], style={'display': 'flex', 'flex-direction': 'column','justify-content':'space-around', 'background-color': '#363F48', 'width':'48.5%', 'height':'400px', 'border-radius':'1rem'}
         ),
+
         
         html.Div(children=[ #top right component - uploading dropdown + text + animation
                     dcc.Markdown('''
@@ -200,7 +202,10 @@ html.Div(children = [ #top compontent - containes two subdivs
                         ], style={'color':'black'}
                     ), 
                     dcc.Markdown('''
-                        The enron dataset contains is the default on this website.
+                        **select your data set here**
+
+                        The enron-v1 dataset is the default on this website.
+
                         The different versions differ in the amount of entries in the dataset.
 
                         **Animation Controls:**
@@ -303,6 +308,7 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
     dateEnd = pd.to_datetime(mailEndDate)
     toccSelect = tocc
     showhideNodes = showhide
+
     global n_intervals_start
     global month, year
     month = (dateStart.month + n_intervals - n_intervals_start) % 12
