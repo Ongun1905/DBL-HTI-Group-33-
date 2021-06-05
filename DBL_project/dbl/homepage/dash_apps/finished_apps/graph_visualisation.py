@@ -261,7 +261,7 @@ html.Div(children = [ #top compontent - containes two subdivs
 ),
 
 html.Div(children = [dcc.Graph(id="mail-graph", #bottom component - graph
-        figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
+        figure=nlf.filterGraph(nlf.createGraph('enron-empty.csv')[0], sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
         ], style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw','width': '100%', 'height': '500px'}
         )
 ], style={'display':'flex', 'flex-direction':'column','align-items':'center','justify-content': 'space-between'}
