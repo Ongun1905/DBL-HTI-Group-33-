@@ -11,6 +11,7 @@
 	--color-green: #29b586; /* medium green */
 	--padding-sides: 15%;
 	--footer-height: 3rem;
+	--timing-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 * {
@@ -282,7 +283,7 @@ Adjacency matrix styling
 	color: #fff;
 	border-radius: 6px;
 	opacity: 0;
-	z-index: 1;
+	z-index: 10;
 	pointer-events: none;
 }
 
@@ -299,7 +300,13 @@ Adjacency matrix styling
 }
 
 .matrix-data-element span { pointer-events: none; }
-.edge-info-popup.show { opacity: 1; }
+.edge-info-popup.show { opacity: 1; animation: pop 200ms ease forwards; }
+
+@keyframes pop {
+	0% { transform: var(--translate-eip) scale(0.9); }
+	80% { transform: var(--translate-eip) scale(1.01); }
+	100% { transform: var(--translate-eip) scale(1); }
+}
 
 
 /* Email list within modal */

@@ -1,3 +1,6 @@
+// Global variables
+var cellHoverTimeout
+
 /**
  * Opens the popup that displays when hovering a cell in the adjacency matrix
  * 
@@ -5,6 +8,13 @@
  * @param {Array.<Object>} nodeData An array of node objects
  */
 function enterCell(matrixCell, nodeData, edgeData) {
+  cellHoverTimeout = setTimeout(() => {
+    displayPopup(matrixCell, nodeData, edgeData)
+  }, 400)
+}
+
+
+function displayPopup(matrixCell, nodeData, edgeData) {
   // Get the header & column id
   const rowId = matrixCell.dataset.columnIndex
   const colId = matrixCell.dataset.rowIndex
@@ -34,7 +44,9 @@ function enterCell(matrixCell, nodeData, edgeData) {
   const cellRect = matrixCell.getBoundingClientRect()
   edgeInfoPopup.style.left = cellRect.left + matrixCell.offsetWidth / 2 + 'px' // offsetWidth / 2 horizontally centers the popup
   edgeInfoPopup.style.top = cellRect.top - 80 + window.scrollY + 'px' // -80 is to account for the navbar, window.scrollY to prevent positioning issues
-  edgeInfoPopup.style.transform = `translate(-50%, calc(-100% - ${matrixCell.offsetHeight / 2 + 'px'} + 4px))`
+  
+  // Set translate property to the :root element
+  document.documentElement.style.setProperty('--translate-eip', `translate(-50%, calc(-100% - ${matrixCell.offsetHeight / 2 + 'px'} + 4px))`)
 
   // Display popup
   edgeInfoPopup.classList.add('show')
@@ -45,6 +57,10 @@ function enterCell(matrixCell, nodeData, edgeData) {
  * Removes the popup that displays when hovering a cell in the adjacency matrix
  */
 function exitCell() {
+  // Remove the hover timeout
+  clearTimeout(cellHoverTimeout)
+  cellHoverTimeout = undefined
+
   // Hide the popup
   const edgeInfoPopup = document.querySelector('.edge-info-popup')
   edgeInfoPopup.classList.remove('show')
@@ -126,10 +142,11 @@ function clickCell(matrixCell, nodeData, edgeData) {
  * @param {Array.<Object>} nodeData An array of node objects
  */
 function toggleEmails(state, nodeData) {
+  // Select the header elements
   const topHeaderElements = document.querySelectorAll('.adjacency-matrix thead th:not(:first-child) span')
   const leftHeaderElements = document.querySelectorAll('.adjacency-matrix tbody th')
-
   
+  // For every header element, set the innerText to either the email or the ID
   topHeaderElements.forEach((el, index) => {
     if (state) el.innerText = nodeData[index].email
     else el.innerText = nodeData[index].id
@@ -149,8 +166,6 @@ function toggleEmails(state, nodeData) {
  * @param {Array.<Array>} edgeData An array of the form [senderId, receiverId, {data}]
  */
 function removeEmptyRows(nodeData, edgeData) {
-  console.log('Starting removal of empty rows...')
-
   nodeData.forEach(node => {
     // For each node, try to find if there are outgoing edges in the list
     const outgoingEdge = edgeData.find(edge => edge[0] === node.id)
@@ -160,10 +175,7 @@ function removeEmptyRows(nodeData, edgeData) {
       const elToRemove = document.getElementById(`node-${node.id}`)
       if (elToRemove) elToRemove.style.display = 'none'
     }
-
   })
-
-  console.log('Finished removal of empty rows!')
 }
 
 
@@ -203,7 +215,7 @@ function sentimentColoring(matrixCells, nodeData, edgeData) {
   })
 
   // Find the maximum sentiment value
-  const maxSentimentValue = arrayMax(sentimentValuesAbs)
+  const maxSentimentValue = 1 /*arrayMax(sentimentValuesAbs)*/
 
   // Normalizing the sentiment value logarithmically and setting the background color of cells
   matrixCells.forEach((cell, index) => {
@@ -225,14 +237,101 @@ function sentimentColoring(matrixCells, nodeData, edgeData) {
  * @param {HTMLElement} matrixCells All cells in the matrix
  */
 function edgeCountColoring(matrixCells) {
-  console.log('Coloring by edge count...')
   matrixCells.forEach(cell => cell.style.backgroundColor = `rgba(101, 204, 169, ${cell.dataset.edgeCountNorm})`)
-  console.log('Done! The data is now colored by edge count.')
+}
+
+
+
+// ------------------------------------------------------------
+// NX graph manipulation functions
+//
+// These functions are used to manipulate the NX graph
+// from JS. It's not meant to replace the Dash controls,
+// only used to interact with the AM on the vis2 page
+// ------------------------------------------------------------
+
+
+/**
+ * Dual input sliders
+ */
+const sliders = document.querySelectorAll('.dual-range-slider')
+
+// Support for multiple sliders
+sliders.forEach(slider => {
+  const minRange = slider.querySelector('.min-range')
+  const maxRange = slider.querySelector('.max-range')
+  const children = slider.childNodes[1].childNodes
+
+  minRange.addEventListener('input', () => {
+    // Make sure the sliders don't cross eachother
+    const minValue = Math.min(minRange.value, maxRange.value)
+    minRange.value = minValue
+
+    // Set width of slider elements
+    const value = minValue / parseInt(minRange.max) * 100
+    children[1].style.width = value + '%'
+    children[5].style.left = value + '%'
+    children[7].style.left = value + '%'
+    // children[11].style.left = value + '%'
+    // children[11].childNodes[1].innerHTML = minValue // Set bubble text
+
+
+    // If the thumb handles are on top of eachother,
+    // give the most recently changed thumb handle height priority
+    if (Math.abs(minRange.value - maxRange.value) === 0) {
+      children[7].style.zIndex = 1
+      children[9].style.zIndex = 0
+      minRange.style.zIndex = 1
+      maxRange.style.zIndex = 0
+    } else {
+      children[7].style.zIndex = 3
+      children[9].style.zIndex = 3
+      minRange.style.zIndex = 3
+      maxRange.style.zIndex = 3
+    }
+  })
+
+  maxRange.addEventListener('input', () => {
+    // Make sure the sliders don't cross eachother
+    const maxValue = Math.max(minRange.value, maxRange.value)
+    maxRange.value = maxValue
+
+    // Set width of slider elements
+    let value = maxValue / parseInt(maxRange.max) * 100
+    children[3].style.width = 100 - value + '%'
+    children[5].style.right = 100 - value + '%'
+    children[9].style.left = value + '%'
+    // children[13].style.left = value + '%'
+    // children[13].childNodes[1].innerHTML = maxValue // Set bubble text
+
+    // If the thumb handles are on top of eachother,
+    // give the most recently changed thumb handle height priority
+    if (Math.abs(minRange.value - maxRange.value) === 0) {
+      children[9].style.zIndex = 1
+      children[7].style.zIndex = 0
+      maxRange.style.zIndex = 1
+      minRange.style.zIndex = 0
+    } else {
+      children[9].style.zIndex = 3
+      children[7].style.zIndex = 3
+      maxRange.style.zIndex = 3
+      minRange.style.zIndex = 3
+    }
+  })
+
+  minRange.addEventListener('input', () => console.log(`(${normalizeToSentiment(minRange.value)}, ${normalizeToSentiment(maxRange.value)})`))
+  maxRange.addEventListener('input', () => console.log(`(${normalizeToSentiment(minRange.value)}, ${normalizeToSentiment(maxRange.value)})`))
+})
+
+
+const normalizeToSentiment = (value) => {
+  // Value is between 0 and 100
+  return roundTo(value / 50 - 1, 1)
 }
 
 
 /**
- * Rounds a decimal number to a certain amount of decimals
+ * Rounds a number to a certain amount of decimals
  * 
  * @param {Number} number The number to round
  * @param {Number} decimals The amount of decimals to round to
