@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from homepage.dash_apps.finished_apps import graph_visualisation
+from homepage.dash_apps.finished_apps import adjacency_matrix
 
 urlpatterns = [
     path("", views.index, name="index"),

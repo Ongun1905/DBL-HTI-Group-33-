@@ -53,7 +53,7 @@ def vis2(request):
         
     return render(request, "homepage/vis2.html", matrixDataObject)
 
-def vis3(request): 
+def vis3(request):
     # Fetch data from the adjacency matrix vis file
     matrix, nodeInfo, edges = adjacency_matrix.getMultiMatrix()
     normalizedMatrix = adjacency_matrix.getNormalizedMultiMatrix(1)

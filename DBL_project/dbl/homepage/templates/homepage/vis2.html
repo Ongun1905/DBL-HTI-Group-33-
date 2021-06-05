@@ -19,7 +19,8 @@ Visualization 2 | DBL Group 33
         <br />
         <br />
 
-        {% include "homepage/am_controls.html" %}
+        {% load plotly_dash %}
+        {% plotly_app name="AdjacencyMatrix" ratio=0.92 %}
     </div>
 </div>
 {% endblock %}

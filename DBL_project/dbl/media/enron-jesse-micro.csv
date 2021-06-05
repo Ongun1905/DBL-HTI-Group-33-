@@ -1,0 +1,11 @@
+date,fromId,fromEmail,fromJobtitle,toId,toEmail,toJobtitle,messageType,sentiment
+2000-08-13,96,matthew.lenhart@enron.com,Employee,77,eric.bass@enron.com,Trader,CC,0.0136986301369863
+2000-08-13,96,matthew.lenhart@enron.com,Employee,112,phillip.m.love@enron.com,Unknown,TO,0.0136986301369863
+2001-11-22,64,danny.mccarty@enron.com,Vice President,121,rod.hayslett@enron.com,Vice President,TO,0.0
+2000-10-29,139,susan.scott@enron.com,Unknown,104,monique.sanchez@enron.com,Unknown,TO,0.0
+2000-10-11,48,andy.zipper@enron.com,Vice President,2,mark.e.taylor@enron.com,Employee,TO,0.0273972602739726
+2001-09-25,69,debra.perlingiere@enron.com,Employee,105,patrice.l.mims@enron.com,Unknown,TO,0.0
+2000-07-27,148,j.kaminski@enron.com,Manager,15,kevin.m.presto@enron.com,Vice President,TO,0.0273972602739726
+2001-11-14,87,mark.whitt@enron.com,Unknown,49,barry.tycholiz@enron.com,Vice President,TO,0.0136986301369863
+2002-03-26,57,chris.germany@enron.com,Employee,57,chris.germany@enron.com,Employee,TO,0.0
+2000-08-20,87,mark.whitt@enron.com,Unknown,84,gerald.nemec@enron.com,Unknown,TO,0.0

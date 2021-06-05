@@ -7,3 +7,6 @@ DBL_project/dbl/db.sqlite3
 
 # Python virtual environments (Add the path to your virtual environment below!)
 /venv
+
+# Miscellaneous
+run.bat

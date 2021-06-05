@@ -1,15 +1,10 @@
 # Import Node Link functions from another Python file
 from datetime import date
 from dash import dependencies
-from networkx.algorithms.tree.coding import to_nested_tuple
-from networkx.algorithms.tree.mst import maximum_spanning_edges
-from networkx.generators.geometric import thresholded_random_geometric_graph
 import NodeLinkFunctions as nlf
 
 # Import settings to allow BASE_DIR to be used
 from django.conf import settings
-
-# Make sure you have plotly and networkx installed before running this code!
 import pandas as pd # General data handling
 import networkx as nx # Handling network graphs
 import dash
@@ -42,10 +37,12 @@ endMonth = 12
 endYear = 9999
 
 # Set up initial graph with positions and node attributes
-vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph('enron-v1.csv')
+vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph('enron-jesse-mini.csv')
 
 dateStart = minDate 
 dateEnd = maxDate
+
+vis1FilteredGraph = nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
 
 # Get external styles for the Dash app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -261,7 +258,7 @@ html.Div(children = [ #top compontent - containes two subdivs
 ),
 
 html.Div(children = [dcc.Graph(id="mail-graph", #bottom component - graph
-        figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
+        figure=vis1FilteredGraph)
         ], style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw','width': '100%', 'height': '500px'}
         )
 ], style={'display':'flex', 'flex-direction':'column','align-items':'center','justify-content': 'space-between'}
