@@ -85,7 +85,7 @@ function clickCell(matrixCell, nodeData, edgeData) {
     emailListHTML.push(`
       <tr>
         <td>Email #${index + 1}</td>
-        <td>${roundTo(el.sentiment, 3)}</td>
+        <td class="${el.sentiment < 0 ? 'negative' : el.sentiment > 0 ? 'positive' : ''}">${roundTo(el.sentiment, 3)}</td>
         <td>${el.messageType}</td>
         <td>${el.date}</td>
       </tr>

@@ -9,6 +9,7 @@
 	--color-black-hardest: #21282e; /* hardest black */
 	--color-green-light: #65cca9; /* light green */
 	--color-green: #29b586; /* medium green */
+	--color-red: #cc6688;
 	--padding-sides: 15%;
 	--footer-height: 3rem;
 	--timing-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -320,7 +321,6 @@ Adjacency matrix styling
 .email-list {
 	width: 100%;
 	text-align: left;
-	background-color: var(--color-black-soft);
 	border-spacing: 0;
 	margin-top: 2em;
 
@@ -329,14 +329,30 @@ Adjacency matrix styling
 	overflow: auto;
 	max-height: 500px;
 }
-.email-list thead { background-color: var(--color-black-softest); }
-.email-list th { padding: 8px 10px; color: #fff; white-space: nowrap; }
+.email-list th {
+	padding: 8px 20px;
+	white-space: nowrap;
+	font-weight: 400;
+	border-top: 1px solid var(--color-black-softest);
+  border-bottom: 1px solid var(--color-black-softest);
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background-color: var(--color-black-hard);
+}
 
 .email-list th:first-child, .email-list td:first-child { padding-left: 1rem; }
 .email-list th:last-child, .email-list td:last-child { padding-right: 1rem; }
 
-.email-list td { padding: 4px 10px; white-space: nowrap; }
-.email-list td + td, .email-list th + th { padding-left: 1rem; }
+.email-list td:nth-child(2), .email-list th:nth-child(2) { text-align: right; }
+
+.email-list td { padding: 6px 20px; color: #fff; white-space: nowrap; }
+
+.email-list tbody tr { transition: color 200ms ease; }
+.email-list tbody tr:hover { background-color: var(--color-black-soft); }
+
+.email-list td.positive { color: var(--color-green); }
+.email-list td.negative { color: var(--color-red); }
 
 .no-emphasis { color: #999; }
 
