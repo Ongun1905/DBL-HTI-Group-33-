@@ -1,0 +1,152 @@
+{% extends "homepage/layout.html" %}
+
+{% load filters %}
+{% load static %}
+
+{% block title %}
+Visualization 3 | DBL Group 33
+{% endblock %}
+
+{% block nav %}
+{% include "homepage/navbar.html" with active_page='vis3' %}
+{% endblock %}
+
+
+{% block div %}
+<div class="reload-vis3">
+    <a href="{% url 'vis3' %}">send filters</a>
+    Click here to send the filters to the adjacency matrix
+</div>
+<div class="container">
+    <div class="combined">
+        <div class="combNodeVis">
+            <h1>Node Link diagram</h1>
+            {% load plotly_dash %}
+            {% plotly_app name="GraphVisualisation" ratio=1.5 %}
+        </div>
+        <div class=combAdjVis>
+            <h1>Adjacency matrix</h1>
+            <div class="AdjForms">
+                <form>
+                    <div class="field">
+                        <p class="title">Display email in header</p>
+                        <label class="switch">
+                            <input type="checkbox" id="am-toggle-emails">
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <div class="field">
+                        <p class="title">Display hover information</p>
+                        <label class="switch">
+                            <input type="checkbox" id="am-toggle-hover" checked>
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <div class="field">
+                        <p class="title">Color by sentiment instead of amount</p>
+                        <label class="switch">
+                            <input type="checkbox" id="am-toggle-coloring-sentiment">
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="am-wrapper-vis3">
+            <div class="am-wrapper">
+                <div class="am-loader">
+                    <div class="circle"></div>
+                    <span id="am-loader-text">Loading...</span>
+                </div>
+                <table class="adjacency-matrix names custom-scrollbar" id="adjacency-matrix">
+                    <thead class="visible">
+                        <tr>
+                            <th><span>x</span></th>
+                            {% for nodeDataTopHeader in nodeData %}
+                            <th><span>{{ nodeDataTopHeader.id }}</span></th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for matrixRow, normMatrixRow, nodeDataLeftHeader in zippedMatrixData %}
+                        <tr id="node-{{ nodeDataLeftHeader.id  }}">
+                            <th class="visible">{{ nodeDataLeftHeader.id  }}</th>
+                            {% for matrixCell in matrixRow %}
+                                <td class="matrix-data-element" data-row-index="{{ forloop.parentloop.counter0 }}" data-column-index="{{ forloop.counter0 }}" data-edge-count-norm="{{ normMatrixRow|index:forloop.counter0 }}">
+                                    {% if matrixCell > 0 %}
+                                    <span>{{ matrixCell }}</span>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="edge-info-popup"></div>
+
+        </div>
+        <script src="{% static "homepage/am.js" %}"></script>
+    <script>
+    // Initialize variables
+    const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
+    const inputToggleEmails = document.getElementById('am-toggle-emails')
+    const inputToggleHover = document.getElementById('am-toggle-hover')
+    const inputToggleColoring = document.getElementById('am-toggle-coloring-sentiment')
+    const amWrapper = document.querySelector('.am-wrapper')
+    const amLoader = document.querySelector('.am-wrapper .am-loader')
+    const amLoaderText = document.getElementById('am-loader-text')
+
+    amLoaderText.innerText = 'Setting up interactions...'
+
+    // Fetch Django variables into JS variables
+    const nodeData = {{ nodeData| safe }}
+    const edgeData = {{ edgeData| safe }}
+
+    // Matrix cell interactions
+    matrixTableEntries.forEach(entry => {
+        // Hover interactions
+        entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
+        entry.onmouseout = () => exitCell()
+
+        // Click interactions
+        entry.addEventListener('click', () => clickCell(entry, nodeData, edgeData))
+    })
+
+    // Control interactions
+    inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeData) : toggleEmails(false, nodeData))
+    inputToggleHover.addEventListener('click', () => {
+        if (inputToggleHover.checked) {
+            // Add hover popups
+            matrixTableEntries.forEach(entry => {
+                entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
+                entry.onmouseout = () => exitCell()
+            })
+        } else {
+            // Remove hover popups
+            matrixTableEntries.forEach(entry => {
+                entry.onmouseenter = () => {}
+                entry.onmouseout = () => {}
+            })
+        }
+    })
+    inputToggleColoring.addEventListener('click', () => {
+        if (inputToggleColoring.checked)
+            sentimentColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to positivity/negativity
+        else edgeCountColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to edge count
+    })
+
+    // Initialize coloring by edge count
+    edgeCountColoring(matrixTableEntries, nodeData, edgeData)
+
+    // Remove empty rows
+    amLoaderText.innerText = 'Removing empty rows...'
+    removeEmptyRows(nodeData, edgeData)
+
+    // Hide the preloader on load
+    amLoaderText.innerText = 'Done!'
+    amWrapper.classList.add('loaded')
+    setTimeout(() => amLoader.classList.add('hidden'), 300)
+    </script>
+    </div>
+</div>
+{% endblock %}

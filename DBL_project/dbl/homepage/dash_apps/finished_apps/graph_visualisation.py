@@ -147,10 +147,10 @@ html.Div(children = [ #top compontent - containes two subdivs
                             first_day_of_week = 1,
                             display_format='MMM Do, YYYY',
                             persistence= True,
-                            persistence_type= 'session'                            
-                        ), style={'width':'100%', 'margin-left':'21.5%'} # does not work somehow
+                            persistence_type= 'session'     ,
+                            style={'width':'100%','text-align':'center'}                    
+                        ), style={'width':'100%', 'margin':'auto'}
                 ),
-                html.Br(),
                 dcc.Checklist(
                     id = 'to-cc-checklist',
                     options=[
@@ -175,10 +175,16 @@ html.Div(children = [ #top compontent - containes two subdivs
                     labelStyle={'display': 'inline-block'},
                     style={'color':'#65cca9', 'margin-left':'18%'}
                 ),
-                html.Button(id='submit-button-state', n_clicks=0, children='Update Graph', style={'width': '90%', 'margin-left':'5%'}),
+                html.Button(
+                    id='submit-button-state', 
+                    n_clicks=0, 
+                    children='Update Graph',
+                    style={'width': '90%', 'margin-left':'5%'}
+                ),
                 html.Div(id='output-state')
             ], style={'display': 'flex', 'flex-direction': 'column','justify-content':'space-around', 'background-color': '#363F48', 'width':'48.5%', 'height':'400px', 'border-radius':'1rem'}
         ),
+
         
         html.Div(children=[ #top right component - uploading dropdown + text + animation
                     dcc.Markdown('''
@@ -195,12 +201,14 @@ html.Div(children = [ #top compontent - containes two subdivs
                                     {'label': j, 'value': j} for j in os.listdir(settings.BASE_DIR / 'media')
                                 ],
                                 value = "enron-v1.csv",
-                                placeholder="select dataset from uploaded files"
+                                placeholder="select dataset from uploaded files",
+                                persistence= True,
+                                persistence_type= 'session',
                             )
                         ], style={'color':'black'}
                     ), 
                     dcc.Markdown('''
-                        The enron dataset contains is the default on this website.
+                        The enron-v1 dataset is the default on this website.
                         The different versions differ in the amount of entries in the dataset.
 
                         **Animation Controls:**
@@ -226,6 +234,8 @@ html.Div(children = [ #top compontent - containes two subdivs
                             {'label': '10 seconds', 'value': '10000'}
                         ],
                         placeholder="Select Animation speed (in seconds - 3 default)",
+                        persistence= True,
+                        persistence_type= 'session',
                         style={'width': '94.9%','margin-left':'2.5%', 'color':'black'}
                     ),
                     html.Br(),
@@ -235,11 +245,27 @@ html.Div(children = [ #top compontent - containes two subdivs
                         n_intervals = 0,
                         disabled = True
                     ),
-                    html.Button(id='play-button-state', n_clicks=0, children='Play Animation from the beginning', style={'width': '90%', 'margin-left':'5%'}),
+                    html.Button(
+                        id='play-button-state', 
+                        n_clicks=0, 
+                        children='Play Animation from the beginning',
+                        style={'width': '90%', 'margin-left':'5%'}
+                    ),
                     html.Br(),
-                    html.Button(id='pause-button-state', n_clicks=0, disabled = True, children='Pause Animation', style={'width': '90%', 'margin-left':'5%'}),
-                    html.Br(),
-                    html.Button(id='resume-button-state', n_clicks=0, disabled = True, children='Resume Animation', style={'width': '90%', 'margin-left':'5%'}),
+                    html.Button(
+                        id='pause-button-state', 
+                        n_clicks=0, 
+                        disabled = True, 
+                        children='Pause Animation',
+                        style={'width': '90%', 'margin-left':'5%'}
+                    ),
+                    html.Button(
+                        id='resume-button-state', 
+                        n_clicks=0, 
+                        disabled = True, 
+                        children='Resume Animation',
+                        style={'width': '90%', 'margin-left':'5%'}
+                    ),
                     html.Br(),
                     dcc.Textarea(
                         id='text-year-month',
@@ -250,14 +276,15 @@ html.Div(children = [ #top compontent - containes two subdivs
                         readOnly = True,
                         persistence= True,
                         persistence_type= 'session',
-                        style={'width': '89%', 'height':'15px', 'margin-left':'5%'},
+                        style={'width': '89%', 'height':'30px', 'margin-left':'5%'},
                     ),
                 ], className='three columns', style={'color':'#65cca9', 'background':'#363F48', 'width':'48.5%', 'height':'400px', 'display':'flex','justify-content':'flex-start','flex-direction':'column', 'border-radius':'1rem'})
 ], style={'display':'flex','flex-direction':'row','justify-content':'space-between', 'width':'100%', 'align-items':'center'}
 ),
 
 html.Div(children = [dcc.Graph(id="mail-graph", #bottom component - graph
-        figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
+        #figure=nlf.filterGraph(nlf.createGraph('enron-empty.csv')[0], sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
+        figure = nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
         ], style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw','width': '100%', 'height': '500px'}
         )
 ], style={'display':'flex', 'flex-direction':'column','align-items':'center','justify-content': 'space-between'}
@@ -303,6 +330,7 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
     dateEnd = pd.to_datetime(mailEndDate)
     toccSelect = tocc
     showhideNodes = showhide
+
     global n_intervals_start
     global month, year
     month = (dateStart.month + n_intervals - n_intervals_start) % 12
@@ -330,17 +358,17 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
             year = dateStart.year
             if animationSpeedInit is None:
                 animationSpeedInit = 3000
-            return animationSpeedInit, disableState, 'Animation: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+            return animationSpeedInit, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         elif 'pause-button-state' in btn_id:
             isLive = True
             disableState = True
-            return dash.no_update, disableState, 'Animation: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), True, False, dash.no_update
+            return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), True, False, dash.no_update
         elif 'resume-button-state' in btn_id:
             isLive = True
             disableState = False
             if animationSpeedInit is None:
                 animationSpeedInit = 3000
-            return animationSpeedInit, disableState, 'Animation: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+            return animationSpeedInit, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         elif 'submit-button-state' in btn_id:
             isLive = False
             disableState = True
@@ -350,9 +378,9 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
             if ((year == endYear and month > endMonth) or year > endYear):
                 isLive = False
                 disableState = True
-                return dash.no_update, disableState, 'Animation: finished. Timestamps: Year: ' + str(endYear) + ', Month: ' + str(endMonth), True, True, dash.no_update
+                return dash.no_update, disableState, 'Animation status: finished. Timestamps: Year: ' + str(endYear) + ', Month: ' + str(endMonth), True, True, dash.no_update
             if isLive:
-                return dash.no_update, disableState, 'Animation: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+                return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
 
 
 @app.callback(output=dash.dependencies.Output('fileDropDown', 'options'),       # This app callback makes sure the media folder is
