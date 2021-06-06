@@ -7,7 +7,7 @@
         <span id="am-loader-text">Loading...</span>
     </div>
     <table class="adjacency-matrix names custom-scrollbar" id="adjacency-matrix">
-        <thead class="visible">
+        <thead>
             <tr>
                 <th><span>x</span></th>
                 {% for nodeDataTopHeader in nodeData %}
@@ -18,7 +18,7 @@
         <tbody>
             {% for matrixRow, normMatrixRow, nodeDataLeftHeader in zippedMatrixData %}
             <tr id="node-{{ nodeDataLeftHeader.id  }}">
-                <th class="visible">{{ nodeDataLeftHeader.id  }}</th>
+                <th>{{ nodeDataLeftHeader.id  }}</th>
                 {% for matrixCell in matrixRow %}
                     <td class="matrix-data-element" data-row-index="{{ forloop.parentloop.counter0 }}" data-column-index="{{ forloop.counter0 }}" data-edge-count-norm="{{ normMatrixRow|index:forloop.counter0 }}">
                         {% if matrixCell > 0 %}
@@ -47,8 +47,8 @@ const amLoaderText = document.getElementById('am-loader-text')
 amLoaderText.innerText = 'Setting up interactions...'
 
 // Fetch Django variables into JS variables
-const nodeData = {{ nodeData| safe }}
-const edgeData = {{ edgeData| safe }}
+var nodeData = {{ nodeData| safe }}
+var edgeData = {{ edgeData| safe }}
 
 // Matrix cell interactions
 matrixTableEntries.forEach(entry => {

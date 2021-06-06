@@ -177,10 +177,6 @@ Adjacency matrix styling
 	max-width: calc(100vw - 2 * var(--padding-sides));
 }
 
-/* Set up the adjacency matrix for removing headers */
-.adjacency-matrix thead:not(.visible) { display: none; }
-.adjacency-matrix tbody th:not(.visible) { display: none; padding: 0; }
-
 .adjacency-matrix thead th {
 	padding: 4px 8px;
 	position: sticky;

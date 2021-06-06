@@ -1,17 +1,15 @@
 # Import Node Link functions from another Python file
-from datetime import date
-from dash import dependencies
-from networkx.algorithms.tree.coding import to_nested_tuple
-from networkx.algorithms.tree.mst import maximum_spanning_edges
-from networkx.generators.geometric import thresholded_random_geometric_graph
 import NodeLinkFunctions as nlf
 
 # Import settings to allow BASE_DIR to be used
 from django.conf import settings
 
 # Make sure you have plotly and networkx installed before running this code!
+from dash.dependencies import Input, Output, State
+from networkx.convert_matrix import to_numpy_matrix
 import pandas as pd # General data handling
 import networkx as nx # Handling network graphs
+import numpy as np
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -66,6 +64,7 @@ styles = {
 
 # Generating Layout
 app.layout = html.Div([
+dcc.Store(id='session', storage_type='session', data={}),
 html.Div(children = [ #top compontent - containes two subdivs
         html.Div(children = [ #top left compontent - containes all filter options (54-149)
                 html.Div(children = [
@@ -367,6 +366,64 @@ def change_my_dropdown_options(n_clicks):                                       
         raise dash.exceptions.PreventUpdate
     options = [{'label': j, 'value': j} for j in os.listdir(settings.MEDIA_ROOT)]
     return options
+
+
+@app.callback(
+    Output('session', 'data'),
+    Input('submit-button-state', 'n_clicks'),
+    State('session', 'data'))
+def update_session_graph(n_clicks, data):
+    graph = nlf.filteredGraph
+    graph.remove_nodes_from(list(nx.isolates(nlf.filteredGraph)))
+    matrix = to_numpy_matrix(graph).astype(int).tolist()
+
+    # Store the edge data in a list
+    edgeData = []
+    for edge in graph.edges(data=True):
+        edgeList = list(edge)
+        edgeDict = without_keys(edgeList[2], {'fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle'})
+        edgeDict['date'] = edgeDict['date'].strftime("%Y-%m-%d")
+        edgeList[2] = edgeDict
+        
+        edgeData.append(edgeList)
+
+    # Store the node data in a list
+    nodeData = []
+    for node in graph.nodes:
+        nodeData.append({
+            "id": node,
+            "email": graph.nodes[node]['Email'],
+            "job": graph.nodes[node]['Job']
+        })
+
+    # Finding the max matrix element for normalization
+    maxMatrixElement = 0
+    for row in matrix:
+        for cell in row:
+            if cell > maxMatrixElement:
+                maxMatrixElement = cell
+            
+    matrixdict = {
+        'matrix': matrix,
+        'normMatrix': np.vectorize(vectorizedNormalizing)(matrix, 1, maxMatrixElement),
+        'nodeData': nodeData,
+        'edgeData': edgeData
+    }
+
+    data = matrixdict or {}
+    return data
+
+
+# Normalization mathematics
+def vectorizedNormalizing(z, norm, max):
+    # This can be any arbitrary mathematical function
+    return norm * mt.log(1 + z, max + 1)
+
+# List comprehension object key exclusion
+def without_keys(d, keys):
+    return {x: d[x] for x in d if x not in keys}
+
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
