@@ -372,11 +372,11 @@ def change_my_dropdown_options(n_clicks):                                       
 @app.callback(
     Output('session', 'data'),
     Input('submit-button-state', 'n_clicks'),
-    Input('play-button-state', 'n_clicks'),
-    Input('pause-button-state', 'n_clicks'),
-    Input('resume-button-state', 'n_clicks'),
+    #Input('play-button-state', 'n_clicks'),
+    #Input('pause-button-state', 'n_clicks'),
+    #Input('resume-button-state', 'n_clicks'),
     State('session', 'data'))
-def update_session_graph(n_clicks1, n_clicks2, n_clicks3, n_clicks4, data):
+def update_session_graph(n_clicks1, data): #n_clicks2, n_clicks3, n_clicks4, data):
     graph = nlf.filteredGraph
     graph.remove_nodes_from(list(nx.isolates(nlf.filteredGraph)))
     matrix = to_numpy_matrix(graph).astype(int).tolist()
