@@ -38,6 +38,8 @@ year = 1998
 n_intervals_start = 0
 endMonth = 12
 endYear = 9999
+pauseDisabled = True
+resumeDisabled = True
 
 # Set up initial graph with positions and node attributes
 vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph('enron-v1.csv')
@@ -301,31 +303,27 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
     mailFromRange = mailFromInput
     mailToRange = mailToInput
     animationSpeedInit = animationSpeed
-    global dateStart, dateEnd
+    global dateStart, dateEnd, n_intervals_start, month, year, isLive, disableState, endMonth, endYear, pauseDisabled, resumeDisabled
     dateStart = pd.to_datetime(mailStartDate)
     dateEnd = pd.to_datetime(mailEndDate)
     toccSelect = tocc
     showhideNodes = showhide
-
-    global n_intervals_start
-    global month, year
-    month = (dateStart.month + n_intervals - n_intervals_start) % 12
-    if (month == 0):
-        month = 12
-    year = dateStart.year + mt.floor((dateStart.month + n_intervals - n_intervals_start) / 12) - 1
-    if (not (month == 12)):
-        year += 1
+    #month = (dateStart.month + n_intervals - n_intervals_start) % 12
+    #if (month == 0):
+    #    month = 12
+    #year = dateStart.year + mt.floor((dateStart.month + n_intervals - n_intervals_start) / 12) - 1
+    #if (not (month == 12)):
+    #    year += 1
     ctx = dash.callback_context
     if (not ctx.triggered and n_clicks1 == 0 and n_clicks2 == 0 and n_clicks3 == 0 and n_clicks4 == 0):
-        global isLive, disableState
         if (isLive):
-            return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+            #return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+            return dash.no_update, disableState, 'Animation status: paused. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), pauseDisabled, resumeDisabled, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         else:
             return dash.no_update, disableState, 'Animation status: not active.', True, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
     else:
         btn_id = [b['prop_id'] for b in dash.callback_context.triggered][0]
         if 'play-button-state' in btn_id:
-            global endMonth, endYear
             endMonth = dateEnd.month
             endYear = dateEnd.year
             isLive = True
@@ -333,31 +331,44 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
             n_intervals_start = n_intervals
             month = dateStart.month
             year = dateStart.year
+            pauseDisabled = False
+            resumeDisabled = True
             if animationSpeedInit is None:
                 animationSpeedInit = 3000
             return animationSpeedInit, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         elif 'pause-button-state' in btn_id:
             isLive = True
             disableState = True
+            pauseDisabled = True
+            resumeDisabled = False
             return dash.no_update, disableState, 'Animation status: paused. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), True, False, dash.no_update
         elif 'resume-button-state' in btn_id:
             isLive = True
             disableState = False
             if animationSpeedInit is None:
                 animationSpeedInit = 3000
+            pauseDisabled = False
+            resumeDisabled = True
             return animationSpeedInit, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         elif 'submit-button-state' in btn_id:
             isLive = False
             disableState = True
             n_intervals_start = n_intervals
+            pauseDisabled = True
+            resumeDisabled = True
             return dash.no_update, disableState, 'Animation status: not active.', True, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         else:
-            if ((year == endYear and month > endMonth) or year > endYear):
-                isLive = False
-                disableState = True
-                return dash.no_update, disableState, 'Animation status: finished. Timestamps: Year: ' + str(endYear) + ', Month: ' + str(endMonth), True, True, dash.no_update
             if isLive:
-                return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+                month = month + 1
+                if(month == 13):
+                    month = 1
+                    year = year + 1
+                if ((year == endYear and month > endMonth) or year > endYear):
+                    isLive = False
+                    disableState = True
+                    return dash.no_update, disableState, 'Animation status: finished. Timestamps: Year: ' + str(endYear) + ', Month: ' + str(endMonth), True, True, dash.no_update
+                else:
+                    return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
 
 
 @app.callback(output=dash.dependencies.Output('fileDropDown', 'options'),       # This app callback makes sure the media folder is
