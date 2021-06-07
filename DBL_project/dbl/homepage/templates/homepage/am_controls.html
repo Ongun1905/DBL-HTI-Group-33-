@@ -1,0 +1,84 @@
+<h3>Visualization controls</h3>
+<form>
+    <div class="field">
+        <p class="title">Display email in header</p>
+        <label class="switch">
+            <input type="checkbox" id="am-toggle-emails">
+            <span class="switch-slider"></span>
+        </label>
+    </div>
+    <div class="field">
+        <p class="title">Display hover information</p>
+        <label class="switch">
+            <input type="checkbox" id="am-toggle-hover" checked>
+            <span class="switch-slider"></span>
+        </label>
+    </div>
+    <div class="field">
+        <p class="title">Color by sentiment instead of amount</p>
+        <label class="switch">
+            <input type="checkbox" id="am-toggle-coloring-sentiment">
+            <span class="switch-slider"></span>
+        </label>
+    </div>
+</form>
+<br />
+<br />
+
+<h3>Graph controls</h3>
+<form>
+    <div class="field">
+        <p class="title">Sentiment selection</p>
+        <div slider id="slider-distance" class="dual-range-slider">
+            <div>
+                <div inverse-left style="width:70%;"></div>
+                <div inverse-right style="width:70%;"></div>
+                <div range style="left:0%;right:0%;"></div>
+                <span thumb style="left:0%;"></span>
+                <span thumb style="left:100%;"></span>
+            </div>
+            <input class="min-range" type="range" value="0" max="100" min="0" step="10" />
+            <input class="max-range" type="range" value="100" max="100" min="0" step="10" />
+            <div tickmarks class="tickmarks">
+                <span value="0" data-label="-1"></span>
+                <span value="10"></span>
+                <span value="20"></span>
+                <span value="30"></span>
+                <span value="40"></span>
+                <span value="50" data-label="0"></span>
+                <span value="60"></span>
+                <span value="70"></span>
+                <span value="80"></span>
+                <span value="90"></span>
+                <span value="100" data-label="1"></span>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% include "homepage/am.html" %}
+
+<script>
+// Control interactions
+inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeData) : toggleEmails(false, nodeData))
+inputToggleHover.addEventListener('click', () => {
+    if (inputToggleHover.checked) {
+        // Add hover popups
+        matrixTableEntries.forEach(entry => {
+            entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
+            entry.onmouseout = () => exitCell()
+        })
+    } else {
+        // Remove hover popups
+        matrixTableEntries.forEach(entry => {
+            entry.onmouseenter = () => {}
+            entry.onmouseout = () => {}
+        })
+    }
+})
+inputToggleColoring.addEventListener('click', () => {
+    if (inputToggleColoring.checked)
+        sentimentColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to positivity/negativity
+    else edgeCountColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to edge count
+})
+</script>

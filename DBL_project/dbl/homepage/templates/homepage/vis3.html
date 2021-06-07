@@ -13,10 +13,6 @@ Visualization 3 | DBL Group 33
 
 
 {% block div %}
-<div class="reload-vis3">
-    <a href="{% url 'vis3' %}">send filters</a>
-    Click here to send the filters to the adjacency matrix
-</div>
 <div class="container">
     <div class="combined">
         <div class="combNodeVis">
@@ -26,81 +22,171 @@ Visualization 3 | DBL Group 33
         </div>
         <div class=combAdjVis>
             <h1>Adjacency matrix</h1>
-            <div class="AdjForms">
-                <form>
-                    <div class="field">
-                        <p class="title">Display email in header</p>
-                        <label class="switch">
-                            <input type="checkbox" id="am-toggle-emails">
-                            <span class="switch-slider"></span>
-                        </label>
-                    </div>
-                    <div class="field">
-                        <p class="title">Display hover information</p>
-                        <label class="switch">
-                            <input type="checkbox" id="am-toggle-hover" checked>
-                            <span class="switch-slider"></span>
-                        </label>
-                    </div>
-                    <div class="field">
-                        <p class="title">Color by sentiment instead of amount</p>
-                        <label class="switch">
-                            <input type="checkbox" id="am-toggle-coloring-sentiment">
-                            <span class="switch-slider"></span>
-                        </label>
-                    </div>
-                </form>
-            </div>
-            <div class="am-wrapper-vis3">
-            <div class="am-wrapper">
-                <div class="am-loader">
-                    <div class="circle"></div>
-                    <span id="am-loader-text">Loading...</span>
-                </div>
-                <table class="adjacency-matrix names custom-scrollbar" id="adjacency-matrix">
-                    <thead class="visible">
-                        <tr>
-                            <th><span>x</span></th>
-                            {% for nodeDataTopHeader in nodeData %}
-                            <th><span>{{ nodeDataTopHeader.id }}</span></th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for matrixRow, normMatrixRow, nodeDataLeftHeader in zippedMatrixData %}
-                        <tr id="node-{{ nodeDataLeftHeader.id  }}">
-                            <th class="visible">{{ nodeDataLeftHeader.id  }}</th>
-                            {% for matrixCell in matrixRow %}
-                                <td class="matrix-data-element" data-row-index="{{ forloop.parentloop.counter0 }}" data-column-index="{{ forloop.counter0 }}" data-edge-count-norm="{{ normMatrixRow|index:forloop.counter0 }}">
-                                    {% if matrixCell > 0 %}
-                                    <span>{{ matrixCell }}</span>
-                                    {% endif %}
-                                </td>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="edge-info-popup"></div>
-
+            {% include "homepage/am_controls.html" %}
         </div>
-        <script src="{% static "homepage/am.js" %}"></script>
-    <script>
-    // Initialize variables
-    const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
-    const inputToggleEmails = document.getElementById('am-toggle-emails')
-    const inputToggleHover = document.getElementById('am-toggle-hover')
-    const inputToggleColoring = document.getElementById('am-toggle-coloring-sentiment')
+    </div>
+</div>
+
+<script>
+var oldMatrix
+
+let combinedNodeVisFrame = document.querySelector('.combNodeVis iframe')
+let outerLoopBool = true
+
+// Constant loop that checks if the mailgraph is reloading
+const checkUpdateLoop = setInterval(() => {
+    if (outerLoopBool) {
+        const mailGraph = combinedNodeVisFrame.contentWindow.document.querySelector('#mail-graph[data-dash-is-loading="true"]')
+
+        if (mailGraph) {
+            outerLoopBool = false // Stop the loop from checking
+            console.log("MailGraph is currently loading! Start a new interval that waits until it's done to update the matrix")
+
+            // Remove loaded class from matrix wrapper to show load animation and add appropriate text
+            amLoaderText.innerText = 'Reloading matrix...'
+            amWrapper.classList.remove('loaded')
+            amLoader.classList.remove('hidden')
+            console.log('Hiding matrix completed!')
+            
+            const waitingLoop = setInterval(() => {
+                const mailGraphDone = combinedNodeVisFrame.contentWindow.document.querySelector('#mail-graph:not([data-dash-is-loading="true"])')
+                if (mailGraphDone) {
+                    clearInterval(waitingLoop)
+                    outerLoopBool = true
+                    updateMatrix()
+                }
+            }, 1000)
+        }
+    }
+}, 1000)
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function sessionUpdateHandler(resolve, reject) {
+    var success = false
+
+    if (!oldMatrix) {
+        // No old matrix, just fetch the data (on a small delay for the session data to update if necessary)
+        sleep(1000)
+        console.log(`[%csession%c]%c Couldn't find an old matrix, returning session data`, 'color: #65cca9;', 'color: #ddd;', 'color: #ddd;')
+        success = true
+        oldMatrix = JSON.parse(window.sessionStorage.session)
+        resolve(JSON.parse(window.sessionStorage.session))
+    } else if (oldMatrix.edgeData.length == JSON.parse(window.sessionStorage.session).edgeData.length) {
+        // Old matrix is the same as the current session data: Don't update yet, keep checking
+        // If after 3 seconds it has not changed, abort refresh
+
+        // Set up the loop that checks for changes
+        console.log(`[%csession%c]%cMatrices were equal! Starting the fetching loop...`, 'color: #65cca9;', 'color: #ddd;', 'color: #ddd;')
+        let loopFetchIndex = 0
+
+        loopFetchInterval = setInterval(() => {
+            // Handle loop exiting on too long loads
+            loopFetchIndex++
+            if (loopFetchIndex > 3) {
+                clearInterval(loopFetchInterval)
+                // The loopFetchInterval is done and the code has not returned. Matrix could't be updated!
+                if (success) resolve(JSON.parse(window.sessionStorage.session))
+                else resolve(false)
+            }
+
+            // Check the matrices
+            if (oldMatrix.edgeData.length == JSON.parse(window.sessionStorage.session).edgeData.length) {
+                console.log(`[%csession%c]%cThe matrices are still equal...`, 'color: #65cca9;', 'color: #ddd;', 'color: #ddd;')
+            } else {
+                console.log(`[%csession%c]%cThe matrices are no longer equal! Returning result...`, 'color: #65cca9;', 'color: #ddd;', 'color: #ddd;')
+                success = true
+                oldMatrix = JSON.parse(window.sessionStorage.session)
+                clearInterval(loopFetchInterval)
+                resolve(JSON.parse(window.sessionStorage.session))
+            }
+        }, 500)
+    } else {
+        // The old matrix exists and is different from the session data! Fetch and return the data
+        console.log(`[%csession%c]%cThe matrices were never equal! Returning result and printing oldMatrix and newMatrix...`, 'color: #65cca9;', 'color: #ddd;', 'color: #ddd;')
+        console.log(oldMatrix, JSON.parse(window.sessionStorage.session))
+        success = true
+        oldMatrix = JSON.parse(window.sessionStorage.session)
+        resolve(JSON.parse(window.sessionStorage.session))
+    }
+}
+
+async function updateMatrix() {
+    console.log(`The matrix is going to update...`)
+
+    // Init variables
     const amWrapper = document.querySelector('.am-wrapper')
     const amLoader = document.querySelector('.am-wrapper .am-loader')
     const amLoaderText = document.getElementById('am-loader-text')
+    const am = document.querySelector('.adjacency-matrix')
 
-    amLoaderText.innerText = 'Setting up interactions...'
+    // Fetch the session data using promises
+    let sessionUpdatePromise = new Promise((resolve, reject) => sessionUpdateHandler(resolve, reject));
+    const sessionMatrixData = await sessionUpdatePromise
 
-    // Fetch Django variables into JS variables
-    const nodeData = {{ nodeData| safe }}
-    const edgeData = {{ edgeData| safe }}
+    if (sessionMatrixData === false) {
+        console.log('Data did not change!')
+
+        // Hide the preloader again
+        amLoaderText.innerText = 'Aborted...'
+        amWrapper.classList.add('loaded')
+        setTimeout(() => amLoader.classList.add('hidden'), 300)
+
+        return
+    } else {
+        console.log(`Session data found! Here's the object: %o`, sessionMatrixData)
+    }
+
+    // Fetch the new nodeData, edgeData, matrix and normalized matrix
+    const updatedMatrix = sessionMatrixData.matrix
+    const updatedNormMatrix = sessionMatrixData.normMatrix
+    nodeData = sessionMatrixData.nodeData
+    edgeData = sessionMatrixData.edgeData
+
+    // Empty the table element
+    am.innerHTML = ''
+
+    // Re-fill the table element from scratch by looping over the node and edge data, similar to the python loop version in vis2.html
+    let headerElements = []
+    nodeData.forEach(data => headerElements.push(`<th><span>${data.id}</span></th>`))
+
+    let bodyRows = []
+    updatedMatrix.forEach((row, rowIndex) => {
+
+        // Generate the matrix cell elements
+        let bodyRowCells = []
+        row.forEach((cell, colIndex) => {
+            bodyRowCells.push(`<td class="matrix-data-element" data-row-index="${rowIndex}" data-column-index="${colIndex}" data-edge-count-norm="${updatedNormMatrix[rowIndex][colIndex]}">${cell > 0 ? '<span>' + cell + '</span>' : ''}</td>`)
+        })
+        
+        // Generate the row elements and append the cell elements
+        bodyRows.push(`
+            <tr id="node-${nodeData[rowIndex].id}">
+                <th>${nodeData[rowIndex].id}</th>
+                ${bodyRowCells.join('')}
+            </tr>
+        `)
+    })
+
+    // Fill the table with the new data
+    const tableInnerHTML = `
+    <thead>
+        <tr>
+            <th><span>x</span></th>
+            ${headerElements.join('')}
+        </tr>
+    </thead>
+    <tbody>
+        ${bodyRows.join('')}
+    </tbody>
+    `
+
+    am.innerHTML = tableInnerHTML
+
+    // Add event listeners back in
+    const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
 
     // Matrix cell interactions
     matrixTableEntries.forEach(entry => {
@@ -110,29 +196,6 @@ Visualization 3 | DBL Group 33
 
         // Click interactions
         entry.addEventListener('click', () => clickCell(entry, nodeData, edgeData))
-    })
-
-    // Control interactions
-    inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeData) : toggleEmails(false, nodeData))
-    inputToggleHover.addEventListener('click', () => {
-        if (inputToggleHover.checked) {
-            // Add hover popups
-            matrixTableEntries.forEach(entry => {
-                entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
-                entry.onmouseout = () => exitCell()
-            })
-        } else {
-            // Remove hover popups
-            matrixTableEntries.forEach(entry => {
-                entry.onmouseenter = () => {}
-                entry.onmouseout = () => {}
-            })
-        }
-    })
-    inputToggleColoring.addEventListener('click', () => {
-        if (inputToggleColoring.checked)
-            sentimentColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to positivity/negativity
-        else edgeCountColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to edge count
     })
 
     // Initialize coloring by edge count
@@ -146,7 +209,8 @@ Visualization 3 | DBL Group 33
     amLoaderText.innerText = 'Done!'
     amWrapper.classList.add('loaded')
     setTimeout(() => amLoader.classList.add('hidden'), 300)
-    </script>
-    </div>
-</div>
+
+    console.log('Finished matrix update!')
+}
+</script>
 {% endblock %}
