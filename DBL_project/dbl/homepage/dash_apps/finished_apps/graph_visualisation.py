@@ -260,7 +260,7 @@ html.Div(children = [ #top compontent - containes two subdivs
 ),
 
 html.Div(children = [dcc.Graph(id="mail-graph", #bottom component - graph
-        figure=nlf.filterGraph(nlf.createGraph('enron-empty.csv')[0], sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
+        figure = nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
         ], style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw','width': '100%', 'height': '500px'}
         )
 ], style={'display':'flex', 'flex-direction':'column','align-items':'center','justify-content': 'space-between'}
@@ -318,9 +318,10 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
     ctx = dash.callback_context
     if (not ctx.triggered and n_clicks1 == 0 and n_clicks2 == 0 and n_clicks3 == 0 and n_clicks4 == 0):
         global isLive, disableState
-        isLive = False
-        disableState = True
-        return dash.no_update, disableState, 'Animation status: not active.', True, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+        if (isLive):
+            return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+        else:
+            return dash.no_update, disableState, 'Animation status: not active.', True, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
     else:
         btn_id = [b['prop_id'] for b in dash.callback_context.triggered][0]
         if 'play-button-state' in btn_id:
@@ -338,7 +339,7 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
         elif 'pause-button-state' in btn_id:
             isLive = True
             disableState = True
-            return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), True, False, dash.no_update
+            return dash.no_update, disableState, 'Animation status: paused. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), True, False, dash.no_update
         elif 'resume-button-state' in btn_id:
             isLive = True
             disableState = False
@@ -371,8 +372,11 @@ def change_my_dropdown_options(n_clicks):                                       
 @app.callback(
     Output('session', 'data'),
     Input('submit-button-state', 'n_clicks'),
+    Input('play-button-state', 'n_clicks'),
+    Input('pause-button-state', 'n_clicks'),
+    Input('resume-button-state', 'n_clicks'),
     State('session', 'data'))
-def update_session_graph(n_clicks, data):
+def update_session_graph(n_clicks1, n_clicks2, n_clicks3, n_clicks4, data):
     graph = nlf.filteredGraph
     graph.remove_nodes_from(list(nx.isolates(nlf.filteredGraph)))
     matrix = to_numpy_matrix(graph).astype(int).tolist()
