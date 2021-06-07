@@ -176,7 +176,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                     labelStyle={'display': 'inline-block'},
                     style={'color':'#65cca9', 'margin-left':'18%'}
                 ),
-                html.Button(id='submit-button-state', n_clicks=0, children='Update Graph', style={'width': '90%', 'margin-left':'5%'}),
+                html.Button(id='submit-button-state', n_clicks=0, children='Update Filters', style={'width': '90%', 'margin-left':'5%'}),
                 html.Div(id='output-state')
             ], style={'display': 'flex', 'flex-direction': 'column','justify-content':'space-around', 'background-color': '#363F48', 'width':'48.5%', 'height':'400px', 'border-radius':'1rem'}
         ),
@@ -227,7 +227,17 @@ html.Div(children = [ #top compontent - containes two subdivs
                             {'label': '7 seconds', 'value': '7000'},
                             {'label': '8 seconds', 'value': '8000'},
                             {'label': '9 seconds', 'value': '9000'},
-                            {'label': '10 seconds', 'value': '10000'}
+                            {'label': '10 seconds', 'value': '10000'},
+                            {'label': '11 seconds', 'value': '11000'},
+                            {'label': '12 seconds', 'value': '12000'},
+                            {'label': '13 seconds', 'value': '13000'},
+                            {'label': '14 seconds', 'value': '14000'},
+                            {'label': '15 seconds', 'value': '15000'},
+                            {'label': '16 seconds', 'value': '16000'},
+                            {'label': '17 seconds', 'value': '17000'},
+                            {'label': '18 seconds', 'value': '18000'},
+                            {'label': '19 seconds', 'value': '19000'},
+                            {'label': '20 seconds', 'value': '20000'}
                         ],
                         placeholder="Select Animation speed (in seconds - 3 default)",
                         persistence= True,
@@ -383,11 +393,12 @@ def change_my_dropdown_options(n_clicks):                                       
 @app.callback(
     Output('session', 'data'),
     Input('submit-button-state', 'n_clicks'),
-    #Input('play-button-state', 'n_clicks'),
-    #Input('pause-button-state', 'n_clicks'),
-    #Input('resume-button-state', 'n_clicks'),
+    Input('play-button-state', 'n_clicks'),
+    Input('pause-button-state', 'n_clicks'),
+    Input('resume-button-state', 'n_clicks'),
+    Input('interval-component', 'n_intervals'),
     State('session', 'data'))
-def update_session_graph(n_clicks1, data): #n_clicks2, n_clicks3, n_clicks4, data):
+def update_session_graph(n_clicks1, n_clicks2, n_clicks3, n_clicks4, data, n_intervals):
     graph = nlf.filteredGraph
     graph.remove_nodes_from(list(nx.isolates(nlf.filteredGraph)))
     matrix = to_numpy_matrix(graph).astype(int).tolist()
