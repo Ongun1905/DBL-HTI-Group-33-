@@ -1,17 +1,15 @@
 # Import Node Link functions from another Python file
-from datetime import date
-from dash import dependencies
-from networkx.algorithms.tree.coding import to_nested_tuple
-from networkx.algorithms.tree.mst import maximum_spanning_edges
-from networkx.generators.geometric import thresholded_random_geometric_graph
 import NodeLinkFunctions as nlf
 
 # Import settings to allow BASE_DIR to be used
 from django.conf import settings
 
 # Make sure you have plotly and networkx installed before running this code!
+from dash.dependencies import Input, Output, State
+from networkx.convert_matrix import to_numpy_matrix
 import pandas as pd # General data handling
 import networkx as nx # Handling network graphs
+import numpy as np
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -40,6 +38,8 @@ year = 1998
 n_intervals_start = 0
 endMonth = 12
 endYear = 9999
+pauseDisabled = True
+resumeDisabled = True
 
 # Set up initial graph with positions and node attributes
 vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph('enron-v1.csv')
@@ -66,6 +66,7 @@ styles = {
 
 # Generating Layout
 app.layout = html.Div([
+dcc.Store(id='session', storage_type='session', data={}),
 html.Div(children = [ #top compontent - containes two subdivs
         html.Div(children = [ #top left compontent - containes all filter options (54-149)
                 html.Div(children = [
@@ -175,7 +176,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                     labelStyle={'display': 'inline-block'},
                     style={'color':'#65cca9', 'margin-left':'18%'}
                 ),
-                html.Button(id='submit-button-state', n_clicks=0, children='Update Graph', style={'width': '90%', 'margin-left':'5%'}),
+                html.Button(id='submit-button-state', n_clicks=0, children='Update Filters', style={'width': '90%', 'margin-left':'5%'}),
                 html.Div(id='output-state')
             ], style={'display': 'flex', 'flex-direction': 'column','justify-content':'space-around', 'background-color': '#363F48', 'width':'48.5%', 'height':'400px', 'border-radius':'1rem'}
         ),
@@ -226,7 +227,17 @@ html.Div(children = [ #top compontent - containes two subdivs
                             {'label': '7 seconds', 'value': '7000'},
                             {'label': '8 seconds', 'value': '8000'},
                             {'label': '9 seconds', 'value': '9000'},
-                            {'label': '10 seconds', 'value': '10000'}
+                            {'label': '10 seconds', 'value': '10000'},
+                            {'label': '11 seconds', 'value': '11000'},
+                            {'label': '12 seconds', 'value': '12000'},
+                            {'label': '13 seconds', 'value': '13000'},
+                            {'label': '14 seconds', 'value': '14000'},
+                            {'label': '15 seconds', 'value': '15000'},
+                            {'label': '16 seconds', 'value': '16000'},
+                            {'label': '17 seconds', 'value': '17000'},
+                            {'label': '18 seconds', 'value': '18000'},
+                            {'label': '19 seconds', 'value': '19000'},
+                            {'label': '20 seconds', 'value': '20000'}
                         ],
                         placeholder="Select Animation speed (in seconds - 3 default)",
                         persistence= True,
@@ -261,7 +272,7 @@ html.Div(children = [ #top compontent - containes two subdivs
 ),
 
 html.Div(children = [dcc.Graph(id="mail-graph", #bottom component - graph
-        figure=nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
+        figure = nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
         ], style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw','width': '100%', 'height': '500px'}
         )
 ], style={'display':'flex', 'flex-direction':'column','align-items':'center','justify-content': 'space-between'}
@@ -302,30 +313,27 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
     mailFromRange = mailFromInput
     mailToRange = mailToInput
     animationSpeedInit = animationSpeed
-    global dateStart, dateEnd
+    global dateStart, dateEnd, n_intervals_start, month, year, isLive, disableState, endMonth, endYear, pauseDisabled, resumeDisabled
     dateStart = pd.to_datetime(mailStartDate)
     dateEnd = pd.to_datetime(mailEndDate)
     toccSelect = tocc
     showhideNodes = showhide
-
-    global n_intervals_start
-    global month, year
-    month = (dateStart.month + n_intervals - n_intervals_start) % 12
-    if (month == 0):
-        month = 12
-    year = dateStart.year + mt.floor((dateStart.month + n_intervals - n_intervals_start) / 12) - 1
-    if (not (month == 12)):
-        year += 1
+    #month = (dateStart.month + n_intervals - n_intervals_start) % 12
+    #if (month == 0):
+    #    month = 12
+    #year = dateStart.year + mt.floor((dateStart.month + n_intervals - n_intervals_start) / 12) - 1
+    #if (not (month == 12)):
+    #    year += 1
     ctx = dash.callback_context
     if (not ctx.triggered and n_clicks1 == 0 and n_clicks2 == 0 and n_clicks3 == 0 and n_clicks4 == 0):
-        global isLive, disableState
-        isLive = False
-        disableState = True
-        return dash.no_update, disableState, 'Animation status: not active.', True, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+        if (isLive):
+            #return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+            return dash.no_update, disableState, 'Animation status: paused. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), pauseDisabled, resumeDisabled, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+        else:
+            return dash.no_update, disableState, 'Animation status: not active.', True, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
     else:
         btn_id = [b['prop_id'] for b in dash.callback_context.triggered][0]
         if 'play-button-state' in btn_id:
-            global endMonth, endYear
             endMonth = dateEnd.month
             endYear = dateEnd.year
             isLive = True
@@ -333,31 +341,44 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
             n_intervals_start = n_intervals
             month = dateStart.month
             year = dateStart.year
+            pauseDisabled = False
+            resumeDisabled = True
             if animationSpeedInit is None:
                 animationSpeedInit = 3000
             return animationSpeedInit, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         elif 'pause-button-state' in btn_id:
             isLive = True
             disableState = True
-            return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), True, False, dash.no_update
+            pauseDisabled = True
+            resumeDisabled = False
+            return dash.no_update, disableState, 'Animation status: paused. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), True, False, dash.no_update
         elif 'resume-button-state' in btn_id:
             isLive = True
             disableState = False
             if animationSpeedInit is None:
                 animationSpeedInit = 3000
+            pauseDisabled = False
+            resumeDisabled = True
             return animationSpeedInit, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         elif 'submit-button-state' in btn_id:
             isLive = False
             disableState = True
             n_intervals_start = n_intervals
+            pauseDisabled = True
+            resumeDisabled = True
             return dash.no_update, disableState, 'Animation status: not active.', True, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         else:
-            if ((year == endYear and month > endMonth) or year > endYear):
-                isLive = False
-                disableState = True
-                return dash.no_update, disableState, 'Animation status: finished. Timestamps: Year: ' + str(endYear) + ', Month: ' + str(endMonth), True, True, dash.no_update
             if isLive:
-                return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
+                month = month + 1
+                if(month == 13):
+                    month = 1
+                    year = year + 1
+                if ((year == endYear and month > endMonth) or year > endYear):
+                    isLive = False
+                    disableState = True
+                    return dash.no_update, disableState, 'Animation status: finished. Timestamps: Year: ' + str(endYear) + ', Month: ' + str(endMonth), True, True, dash.no_update
+                else:
+                    return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
 
 
 @app.callback(output=dash.dependencies.Output('fileDropDown', 'options'),       # This app callback makes sure the media folder is
@@ -367,6 +388,68 @@ def change_my_dropdown_options(n_clicks):                                       
         raise dash.exceptions.PreventUpdate
     options = [{'label': j, 'value': j} for j in os.listdir(settings.MEDIA_ROOT)]
     return options
+
+
+@app.callback(
+    Output('session', 'data'),
+    Input('submit-button-state', 'n_clicks'),
+    Input('play-button-state', 'n_clicks'),
+    Input('pause-button-state', 'n_clicks'),
+    Input('resume-button-state', 'n_clicks'),
+    Input('interval-component', 'n_intervals'),
+    State('session', 'data'))
+def update_session_graph(n_clicks1, n_clicks2, n_clicks3, n_clicks4, data, n_intervals):
+    graph = nlf.filteredGraph
+    graph.remove_nodes_from(list(nx.isolates(nlf.filteredGraph)))
+    matrix = to_numpy_matrix(graph).astype(int).tolist()
+
+    # Store the edge data in a list
+    edgeData = []
+    for edge in graph.edges(data=True):
+        edgeList = list(edge)
+        edgeDict = without_keys(edgeList[2], {'fromEmail', 'fromJobtitle', 'toEmail', 'toJobtitle'})
+        edgeDict['date'] = edgeDict['date'].strftime("%Y-%m-%d")
+        edgeList[2] = edgeDict
+        
+        edgeData.append(edgeList)
+
+    # Store the node data in a list
+    nodeData = []
+    for node in graph.nodes:
+        nodeData.append({
+            "id": node,
+            "email": graph.nodes[node]['Email'],
+            "job": graph.nodes[node]['Job']
+        })
+
+    # Finding the max matrix element for normalization
+    maxMatrixElement = 0
+    for row in matrix:
+        for cell in row:
+            if cell > maxMatrixElement:
+                maxMatrixElement = cell
+            
+    matrixdict = {
+        'matrix': matrix,
+        'normMatrix': np.vectorize(vectorizedNormalizing)(matrix, 1, maxMatrixElement),
+        'nodeData': nodeData,
+        'edgeData': edgeData
+    }
+
+    data = matrixdict or {}
+    return data
+
+
+# Normalization mathematics
+def vectorizedNormalizing(z, norm, max):
+    # This can be any arbitrary mathematical function
+    return norm * mt.log(1 + z, max + 1)
+
+# List comprehension object key exclusion
+def without_keys(d, keys):
+    return {x: d[x] for x in d if x not in keys}
+
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
