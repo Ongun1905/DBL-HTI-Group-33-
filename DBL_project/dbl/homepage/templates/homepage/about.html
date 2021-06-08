@@ -15,6 +15,7 @@ About | DBL Group 33
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body {
+  color: #65cca9;
   font: 17px "Rubik", sans-serif;
   margin: 0;
 }
@@ -64,7 +65,7 @@ input[type=text], select, textarea {
 
 /* Style the submit button with a specific background color etc */
 input[type=submit] {
-  background-color: #04AA6D;
+  background-color: #65cca9;
   color: white;
   padding: 12px 20px;
   border: none;
@@ -74,13 +75,13 @@ input[type=submit] {
 
 /* When moving the mouse over the submit button, add a darker green color */
 input[type=submit]:hover {
-  background-color: #45a049;
+  background-color: #339072;
 }
 
 /* Add a background color and some padding around the form */
 .containerContact {
   border-radius: 5px;
-  background-color: #f2f2f2;
+  background-color: rgba(0, 0, 0, 0.2);
   padding: 20px;
 }
 
@@ -271,25 +272,19 @@ input[type=submit]:hover {
 </div>
 
 <div class="containerContact">
-  <form action="action_page.php">
-
+  <form action="action_page.php" method="POST">
+    
     <label for="fname">First Name</label>
     <input type="text" id="fname" name="firstname" placeholder="Your name..">
 
     <label for="lname">Last Name</label>
     <input type="text" id="lname" name="lastname" placeholder="Your last name..">
 
-    <label for="country">Country</label>
-    <select id="country" name="country">
-      <option value="australia">Australia</option>
-      <option value="canada">Canada</option>
-      <option value="usa">USA</option>
-    </select>
-
     <label for="subject">Subject</label>
     <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
 
-    <input type="submit" value="Submit">
+      <input type="submit" value="Submit">
+    
 
   </form>
 </div>
