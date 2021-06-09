@@ -374,18 +374,19 @@ vis 3 styling
 	width: 100%;
 	display: flex;
 	flex-direction: row;
-	justify-content: space-around;
+	justify-content: space-between;
 }
 .combNodeVis {
 	text-align: center;
-	width: 45%;
+	width: 50%;
 	overflow: hidden;
 	border: 1px solid #65cca9;
 	border-radius: 20px;
 }
 .combAdjVis {
 	text-align: center;
-	width: 45%;
+	width: 50%;
+	margin-left: 3rem;
 	overflow: hidden;
 	border: 1px solid #65cca9;
 	border-radius: 20px;

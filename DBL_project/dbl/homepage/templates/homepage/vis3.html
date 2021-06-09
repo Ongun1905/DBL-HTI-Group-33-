@@ -13,23 +13,25 @@ Visualization 3 | DBL Group 33
 
 
 {% block div %}
-<div class="description">
-    <h1>Visualization 3: Node Link diagram and Adjacency matrix</h1>
-        <p>On this page you can view both visualisations at the same time. Do you want to view some specific data in both visualizations? No problem! Just press the "Update Filters" button! Or do you want to view the timestamp animation on both figures? Please use the animation controls!</p>
-        <br>
-        <p>For the timestamp animation we recommend a minimum speed of 10 seconds for the default data set. For an optimal simultaneous rendering, the speed may vary according to the used data.<p>
-        <br>
-</div>
 <div class="container">
-    <div class="combined">
-        <div class="combNodeVis">
-            <h1>Node Link diagram</h1>
-            {% load plotly_dash %}
-            {% plotly_app name="GraphVisualisation" ratio=1.5 %}
+    <div class="main">
+        <div class="description">
+            <h1>Visualization 3: Node Link diagram and Adjacency matrix</h1>
+                <p>On this page you can view both visualisations at the same time. Do you want to view some specific data in both visualizations? No problem! Just press the "Update Filters" button! Or do you want to view the timestamp animation on both figures? Please use the animation controls!</p>
+                <br>
+                <p>For the timestamp animation we recommend a minimum speed of 10 seconds for the default data set. For an optimal simultaneous rendering, the speed may vary according to the used data.<p>
+                <br>
         </div>
-        <div class=combAdjVis>
-            <h1>Adjacency matrix</h1>
-            {% include "homepage/am_controls.html" %}
+        <div class="combined">
+            <div class="combNodeVis">
+                <h1>Node Link diagram</h1>
+                {% load plotly_dash %}
+                {% plotly_app name="GraphVisualisation" ratio=1.55 %}
+            </div>
+            <div class=combAdjVis>
+                <h1>Adjacency matrix</h1>
+                {% include "homepage/am_controls.html" %}
+            </div>
         </div>
     </div>
 </div>
