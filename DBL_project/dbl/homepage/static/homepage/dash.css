@@ -1,15 +1,28 @@
 /* This stylesheet is used by Dash to style plotly elements, amongst other things. */
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&display=swap');
 
+:root {
+	--color-black-softest: #485461; /* softer black */
+	--color-black-soft: #363F48; /* softer black */
+	--color-black-hard: #2d353c; /* harder black */
+	--color-black-hardest: #21282e; /* hardest black */
+	--color-green-light: #65cca9; /* light green */
+	--color-green: #29b586; /* medium green */
+	--color-red: #cc6688;
+	--padding-sides: 15%;
+	--footer-height: 3rem;
+	--timing-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
 * {
 	margin: 0;
-	padding: 0;
+	/*padding: 0;*/
 	box-sizing: border-box; /* Changes the behaviour of padding and borders. It makes sure the element doesn't become larger because of it's padding, since the padding is put inside the element. Try commenting out this line to see what it does! The navbar will go "outside of the page" to the right. */
 }
 
 body {
 	background-color: var(--color-black-hard);
-	font: 17px "Rubik", sans-serif;
+	font-family: "Rubik", sans-serif;
 }
 
 .graph-wrapper {
@@ -20,4 +33,87 @@ body {
 
 .am-wrapper {
   color: #fff;
+}
+
+/* Selects and multi-selects */
+.Select-control {
+  background-color: var(--color-black-softest);
+  border-radius: 4px;
+  border-width: 0px;
+  color: #333;
+  display: table;
+  border-spacing: 0;
+  border-collapse: separate;
+  height: 36px;
+  overflow: hidden;
+}
+
+/* active state */
+.is-open>.Select-control {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background: var(--color-black-softest);
+  border-color: transparent;
+}
+
+/* data selection label un-darkening */
+.has-value.Select--single>.Select-control .Select-value .Select-value-label, .has-value.is-pseudo-focused.Select--single>.Select-control .Select-value .Select-value-label {
+  color: #aaa !important;
+}
+
+/* Multi-select selected elements */
+.Select--multi .Select-value { color: var(--color-green-light) !important; border: 1px solid rgba(102, 204, 170,.24); background-color: rgba(102, 204, 170,.08); }
+.Select--multi .Select-value-icon { border-right: 1px solid rgba(102, 204, 170,.24); }
+.Select--multi .Select-value-icon:focus, .Select--multi .Select-value-icon:hover {
+  background-color: rgba(102, 204, 170,.08);
+  color: var(--color-green-light);
+}
+
+
+.dash-dropdown + .dash-dropdown .Select-control {
+  margin-top: 8px;
+}
+
+#my-range-slider {
+  padding: 10px 25px 25px !important;
+}
+
+.rc-slider-track {
+  background-color: var(--color-green) !important;
+}
+
+.rc-slider-handle {
+  background-color: var(--color-green) !important;
+  border-width: 0px !important;
+}
+
+.rc-slider-dot-active { border-color: var(--color-green) !important; }
+
+
+
+/* Button */
+.button {
+	display: inline-block;
+	padding: 8px 12px;
+	text-decoration: none;
+	color: #fff;
+	background-color: var(--color-green-light);
+	border: 2px solid var(--color-green-light);
+	border-radius: 4px;
+	transition: background-color 200ms ease, border-color 200ms ease;
+}
+.button:hover {
+	background-color: var(--color-green);
+	border-color: var(--color-green);
+}
+.button.outline {
+	background-color: transparent;
+}
+.button.outline:hover {
+	background-color: var(--color-green);
+}
+.button:disabled {
+  background-color: #999;
+  border-color: #999;
+  cursor: not-allowed;
 }

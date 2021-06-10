@@ -381,29 +381,24 @@ body.wide {
 	--padding-sides: 2rem; /* making body wider for vis3 */
 }
 .combined {
-	margin-top: 3rem;
+	padding: 3rem;
 	width: 100%;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 }
-.combNodeVis {
-	text-align: center;
+.combNodeVis, .combAdjVis {
 	width: 50%;
 	overflow: hidden;
 	border: 1px solid #65cca9;
 	border-radius: 20px;
 }
 .combAdjVis {
-	text-align: center;
-	width: 50%;
 	margin-left: 3rem;
-	overflow: hidden;
-	border: 1px solid #65cca9;
-	border-radius: 20px;
 }
 .combNodeVis h1, .combAdjVis h1 {
 	color: #65cca9;
+	text-align: center;
 }
 .AdjForms {
 	text-align: left;

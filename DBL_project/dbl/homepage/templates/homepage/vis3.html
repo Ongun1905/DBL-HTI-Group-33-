@@ -20,14 +20,22 @@ Visualization 3 | DBL Group 33
             <p>On this page you can view both visualisations at the same time. Do you want to view some specific data in both visualizations? No problem! Just press the "Update Filters" button! Or do you want to view the timestamp animation on both figures? Please use the animation controls!</p>
             <br>
             <p>For the timestamp animation we recommend a minimum speed of 10 seconds for the default data set. For an optimal simultaneous rendering, the speed may vary according to the used data.<p>
-            <br>
-            <div class="iframe-wrapper">
-                {% load plotly_dash %}
-                {% plotly_app name="GraphVisualisation" ratio=1.55 %}
-            </div>
-            <div class="am-vis-wrapper">
-                {% include "homepage/am.html" %}
-            </div>
+        </div>
+    </div>
+</div>
+
+<div class="combined">
+    <div class="combNodeVis">
+        <h1>Node Link diagram</h1>
+        <div class="iframe-wrapper">
+            {% load plotly_dash %}
+            {% plotly_app name="GraphVisualisation" ratio=1.55 %}
+        </div>
+    </div>
+    <div class="combAdjVis">
+        <h1>Adjacency matrix</h1>
+        <div class="am-vis-wrapper">
+            {% include "homepage/am_controls.html" %}
         </div>
     </div>
 </div>
@@ -42,51 +50,59 @@ const combinedVisContent = combinedVisFrame.contentWindow
 const amVis = document.querySelector('.am-vis-wrapper .am-vis')
 
 var combinedVisHead = combinedVisContent.document.querySelector('head')
-var graphWrapper = combinedVisContent.document.querySelector('.graph-wrapper')
 
-console.log('Running script in vis3 file!')
+console.log('Executing vis3 script...')
+console.log(combinedVisFrame)
 
-combinedVisFrame.onload = () => {
-    console.log('iframe loaded, injecting stylesheet and matrix now!')
+if (combinedVisFrame.contentWindow.document.readyState === 'complete') {
+    console.log('Dash iframe loaded, injecting stylesheet!')
 
     // Creating stylesheet
-    const amStyleLink = document.createElement('link')
-    amStyleLink.href = '{% static 'homepage/am.css' %}'
-    amStyleLink.rel = 'stylesheet'
-
     const dashStyleLink = document.createElement('link')
     dashStyleLink.href = '{% static 'homepage/dash.css' %}'
     dashStyleLink.rel = 'stylesheet'
 
-    if (combinedVisHead) combinedVisHead.appendChild(dashStyleLink)
-
-
-    // Inject adjacency matrix (WITHOUT CONTROLS) into the graph wrapper
-
-    // Inject adjacency matrix controls into the control wrapper
-
-    // Actual injection loop
-    if (!graphWrapper) {
+    // Injection loop
+    if (combinedVisHead) {
+        console.log('Found the head element! Injection complete.')
+        combinedVisHead.appendChild(dashStyleLink)
+    } else {
         let injectionInterval = setInterval(() => {
             console.log('Injection interval running!')
-            graphWrapper = combinedVisContent.document.querySelector('.graph-wrapper')
-            if (graphWrapper) {
+            combinedVisHead = combinedVisContent.document.querySelector('head')
+            if (combinedVisHead) {
                 // The iframe is loaded! Inject the elements
                 clearInterval(injectionInterval)
-                console.log('Found the graphWrapper! Injection complete.')
-
-                // Reinit variables
-                combinedVisHead = combinedVisContent.document.querySelector('head')
-                
-                combinedVisHead.appendChild(amStyleLink)
+                console.log('Found the head element! Injection complete.')
                 combinedVisHead.appendChild(dashStyleLink)
-                graphWrapper.appendChild(amVis)
             }
         }, 1000)
+    }
+}
+
+combinedVisFrame.onload = () => {
+    console.log('Dash iframe loaded, injecting stylesheet!')
+
+    // Creating stylesheet
+    const dashStyleLink = document.createElement('link')
+    dashStyleLink.href = '{% static 'homepage/dash.css' %}'
+    dashStyleLink.rel = 'stylesheet'
+
+    // Injection loop
+    if (combinedVisHead) {
+        console.log('Found the head element! Injection complete.')
+        combinedVisHead.appendChild(dashStyleLink)
     } else {
-        console.log('Injection interval unnecessary, wrappers already exist. Injection complete!')
-        combinedVisHead.appendChild(amStyleLink)
-        graphWrapper.appendChild(amVis)
+        let injectionInterval = setInterval(() => {
+            console.log('Injection interval running!')
+            combinedVisHead = combinedVisContent.document.querySelector('head')
+            if (combinedVisHead) {
+                // The iframe is loaded! Inject the elements
+                clearInterval(injectionInterval)
+                console.log('Found the head element! Injection complete.')
+                combinedVisHead.appendChild(dashStyleLink)
+            }
+        }, 1000)
     }
 }
 
@@ -94,7 +110,6 @@ combinedVisFrame.onload = () => {
 let outerLoopBool = true
 
 // Constant loop that checks if the mailgraph is reloading
-/*
 const checkUpdateLoop = setInterval(() => {
     if (outerLoopBool) {
         const mailGraph = combinedVisFrame.contentWindow.document.querySelector('#mail-graph[data-dash-is-loading="true"]')
@@ -120,7 +135,6 @@ const checkUpdateLoop = setInterval(() => {
         }
     }
 }, 1000)
-*/
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
