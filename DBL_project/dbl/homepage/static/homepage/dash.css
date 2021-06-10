@@ -1,0 +1,23 @@
+/* This stylesheet is used by Dash to style plotly elements, amongst other things. */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&display=swap');
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box; /* Changes the behaviour of padding and borders. It makes sure the element doesn't become larger because of it's padding, since the padding is put inside the element. Try commenting out this line to see what it does! The navbar will go "outside of the page" to the right. */
+}
+
+body {
+	background-color: var(--color-black-hard);
+	font: 17px "Rubik", sans-serif;
+}
+
+.graph-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 3rem;
+}
+
+.am-wrapper {
+  color: #fff;
+}

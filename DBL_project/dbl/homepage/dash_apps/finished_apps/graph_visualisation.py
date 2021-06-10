@@ -271,10 +271,13 @@ html.Div(children = [ #top compontent - containes two subdivs
 ], style={'display':'flex','flex-direction':'row','justify-content':'space-between', 'width':'100%', 'align-items':'center'}
 ),
 
-html.Div(children = [dcc.Graph(id="mail-graph", #bottom component - graph
-        figure = nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
-        ], style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw','width': '100%', 'height': '500px'}
-        )
+html.Div(
+    className="graph-wrapper",
+    children = [
+        dcc.Graph(id="mail-graph", figure = nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
+    ],
+    style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw', 'width': '100%', 'height': '500px'}
+)
 ], style={'display':'flex', 'flex-direction':'column','align-items':'center','justify-content': 'space-between'}
 )
 
