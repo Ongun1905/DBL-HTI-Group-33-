@@ -64,7 +64,7 @@ input[type=text], select, textarea {
 }
 
 /* Style the submit button with a specific background color etc */
-input[type=submit] {
+button[type=submit] {
   background-color: #65cca9;
   color: white;
   padding: 12px 20px;
@@ -74,7 +74,7 @@ input[type=submit] {
 }
 
 /* When moving the mouse over the submit button, add a darker green color */
-input[type=submit]:hover {
+button[type=submit]:hover {
   background-color: #339072;
 }
 
@@ -266,18 +266,21 @@ input[type=submit]:hover {
 
 <div class="containerContact">
   <h1>Contact Us!</h1>
-  <form action="action_page.php" method="POST">
-    
-    <label for="fname">First Name</label>
-    <input type="text" id="fname" name="firstname" placeholder="Your name..">
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <!--
+    <label for="fname">Your Email</label>
+    <input type="text" id="fname" name="Your Email" placeholder="Your email...">
 
-    <label for="lname">Last Name</label>
-    <input type="text" id="lname" name="lastname" placeholder="Your last name..">
+    <label for="lname">Subject</label>
+    <input type="text" id="lname" name="Subject" placeholder="The Subject...">
 
-    <label for="subject">Subject</label>
+    <label for="subject">Message</label>
     <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
-
-      <input type="submit" value="Submit">
+    -->
+    <button type="submit" value="Submit">Submit</button>
+    
   </form>
 </div>
 

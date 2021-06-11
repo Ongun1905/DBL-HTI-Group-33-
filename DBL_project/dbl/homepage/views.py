@@ -1,8 +1,11 @@
 from django.conf import settings  # Import settings to allow BASE_DIR to be used
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
+from django.core.mail import message, send_mail, BadHeaderError
 from .visualizations import adjacency_matrix
 from .forms import UploadFileForm
+from .forms import ContactForm
+from django.http import HttpResponse, HttpResponseRedirect
 import os
 import json
 
@@ -34,7 +37,22 @@ def index(request):
     })
 
 def about(request):
-    return render(request, "homepage/about.html")
+    #added for contact form
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data["subject"]
+            your_email = form.cleaned_data["your_email"]
+            message = form.cleaned_data["message"]
+            try:
+                send_mail(subject, message, your_email, ["dblgroup3333@gmail.com"])
+            except BadHeaderError:
+                return ("Invalid header found.")
+            return redirect("success")
+    return render(request, "homepage/about.html", {"form": form})
+
 
 def vis1(request): 
     return render(request, "homepage/vis1.html")
@@ -67,3 +85,6 @@ def vis3(request):
         "nodeData": nodeInfo
     }
     return render(request, "homepage/vis3.html", matrixDataObject)
+
+def successView(request):
+    return HttpResponse('Success! Thank you for your message')
