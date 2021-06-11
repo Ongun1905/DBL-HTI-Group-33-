@@ -140,6 +140,11 @@ function orderModalTable(index) {
   const table = document.querySelector('.email-list')
   var rows, switchCount, x, y
 
+  if (table.rows.length > 200) {
+    alert('Table sorting is not supported for tables with more than 200 rows! Sorry for the inconvenience.')
+    return
+  }
+
   const tableHeadEls = table.tHead.children[0].children
   const orderHeadEl = tableHeadEls[index]
 
