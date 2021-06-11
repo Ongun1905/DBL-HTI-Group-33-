@@ -335,6 +335,15 @@ Adjacency matrix styling
 	top: 0;
 	z-index: 1;
 	background-color: var(--color-black-hard);
+	cursor: pointer;
+}
+.email-list th[data-order="asc"]::after {
+	margin-left: 8px;
+	content: '\25B4';
+}
+.email-list th[data-order="desc"]::after {
+	margin-left: 8px;
+	content: '\25BE';
 }
 
 .email-list th:first-child, .email-list td:first-child { padding-left: 1rem; }

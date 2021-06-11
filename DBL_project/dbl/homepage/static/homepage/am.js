@@ -96,10 +96,10 @@ function clickCell(matrixCell, nodeData, edgeData) {
     <table class="email-list custom-scrollbar">
       <thead>
         <tr>
-          <th style="width: 100%;">Email number</th>
-          <th>Sentiment</th>
-          <th>Type</th>
-          <th>Date</th>
+          <th style="width: 100%;" onclick="orderModalTable(0)" data-order="none">Email number</th>
+          <th onclick="orderModalTable(1)" data-order="none">Sentiment</th>
+          <th onclick="orderModalTable(2)" data-order="none">Type</th>
+          <th onclick="orderModalTable(3)" data-order="none">Date</th>
         </tr>
       </thead>
       <tbody>
@@ -132,6 +132,65 @@ function clickCell(matrixCell, nodeData, edgeData) {
   // Close the modal if someone clicks outside of it
   const overlay = document.querySelector('.overlay')
   overlay.addEventListener('click', () => closeModal(300))
+}
+
+
+function orderModalTable(index) {
+  // TODO: Fix that first click doesn't actually sort
+  const table = document.querySelector('.email-list')
+  var rows, switchCount, x, y
+
+  const tableHeadEls = table.tHead.children[0].children
+  const orderHeadEl = tableHeadEls[index]
+
+  var switching = true
+  var dir = orderHeadEl.dataset.order == 'asc' ? 'desc' : 'asc'
+
+  console.log(`Current order is ${orderHeadEl.dataset.order}, so changing it to ${dir}`)
+
+  while (switching) {
+    switching = false
+    rows = table.rows
+
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false
+
+      x = rows[i].getElementsByTagName("TD")[index]
+      y = rows[i + 1].getElementsByTagName("TD")[index]
+
+      if (dir == 'asc') {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          shouldSwitch = true
+          break
+        }
+      } else if (dir == 'desc') {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          shouldSwitch = true
+          break
+        }
+      }
+    }
+
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+
+      // Each time a switch is done, increase this count by 1:
+      switchCount++;
+    } else {
+      if (switchCount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+  
+  // Toggle data-order for styling
+  orderHeadEl.dataset.order = dir
+
+  // Toggle data-order for no-longer-ordered elements for styling
+  const nonOrderHeadEls = Array.from(tableHeadEls).filter(el => el !== orderHeadEl)
+  nonOrderHeadEls.forEach(el => el.dataset.order = 'none')
 }
 
 

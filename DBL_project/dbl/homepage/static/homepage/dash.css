@@ -90,6 +90,11 @@ body {
 .rc-slider-dot-active { border-color: var(--color-green) !important; }
 
 
+/* Date time */
+.DateRangePicker, .DateRangePickerInput {
+  display: block;
+}
+
 
 /* Button */
 .button {
