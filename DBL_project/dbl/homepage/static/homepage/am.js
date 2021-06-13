@@ -136,12 +136,11 @@ function clickCell(matrixCell, nodeData, edgeData) {
 
 
 function orderModalTable(index) {
-  // TODO: Fix that first click doesn't actually sort
   const table = document.querySelector('.email-list')
   var rows, switchCount, x, y
 
-  if (table.rows.length > 200) {
-    alert('Table sorting is not supported for tables with more than 200 rows! Sorry for the inconvenience.')
+  if (table.rows.length > 100) {
+    alert('Table sorting is not supported for tables with more than 100 rows! Sorry for the inconvenience.')
     return
   }
 
@@ -160,16 +159,16 @@ function orderModalTable(index) {
     for (i = 1; i < (rows.length - 1); i++) {
       shouldSwitch = false
 
-      x = rows[i].getElementsByTagName("TD")[index]
-      y = rows[i + 1].getElementsByTagName("TD")[index]
+      x = rows[i].getElementsByTagName("TD")[index].innerText
+      y = rows[i + 1].getElementsByTagName("TD")[index].innerText
 
       if (dir == 'asc') {
-        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        if (x.localeCompare(y, undefined, { numeric: true, sensitivity: 'base' }) === 1) {
           shouldSwitch = true
           break
         }
       } else if (dir == 'desc') {
-        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+        if (y.localeCompare(x, undefined, { numeric: true, sensitivity: 'base' }) === 1) {
           shouldSwitch = true
           break
         }

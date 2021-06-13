@@ -48,12 +48,13 @@ dateStart = minDate
 dateEnd = maxDate
 
 # Get external styles for the Dash app
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = ['https://errato.nl/css/dash.css']
 
 # Initialise Dash app
 #app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 from django_plotly_dash import DjangoDash
-app = DjangoDash('GraphVisualisation')
+app = DjangoDash('GraphVisualisation',
+                 external_stylesheets=external_stylesheets)
 app.title = "Email Network"
 
 ####

@@ -43,76 +43,18 @@ Visualization 3 | DBL Group 33
 
 
 <script>
-var oldMatrix
+console.log('Executing vis3 script...')
 
 const combinedVisFrame = document.querySelector('.iframe-wrapper iframe')
 const combinedVisContent = combinedVisFrame.contentWindow
-const amVis = document.querySelector('.am-vis-wrapper .am-vis')
 
-var combinedVisHead = combinedVisContent.document.querySelector('head')
-
-console.log('Executing vis3 script...')
-console.log(combinedVisFrame)
-
-if (combinedVisFrame.contentWindow.document.readyState === 'complete') {
-    console.log('Dash iframe loaded, injecting stylesheet!')
-
-    // Creating stylesheet
-    const dashStyleLink = document.createElement('link')
-    dashStyleLink.href = '{% static 'homepage/dash.css' %}'
-    dashStyleLink.rel = 'stylesheet'
-
-    // Injection loop
-    if (combinedVisHead) {
-        console.log('Found the head element! Injection complete.')
-        combinedVisHead.appendChild(dashStyleLink)
-    } else {
-        let injectionInterval = setInterval(() => {
-            console.log('Injection interval running!')
-            combinedVisHead = combinedVisContent.document.querySelector('head')
-            if (combinedVisHead) {
-                // The iframe is loaded! Inject the elements
-                clearInterval(injectionInterval)
-                console.log('Found the head element! Injection complete.')
-                combinedVisHead.appendChild(dashStyleLink)
-            }
-        }, 1000)
-    }
-}
-
-combinedVisFrame.onload = () => {
-    console.log('Dash iframe loaded, injecting stylesheet!')
-
-    // Creating stylesheet
-    const dashStyleLink = document.createElement('link')
-    dashStyleLink.href = '{% static 'homepage/dash.css' %}'
-    dashStyleLink.rel = 'stylesheet'
-
-    // Injection loop
-    if (combinedVisHead) {
-        console.log('Found the head element! Injection complete.')
-        combinedVisHead.appendChild(dashStyleLink)
-    } else {
-        let injectionInterval = setInterval(() => {
-            console.log('Injection interval running!')
-            combinedVisHead = combinedVisContent.document.querySelector('head')
-            if (combinedVisHead) {
-                // The iframe is loaded! Inject the elements
-                clearInterval(injectionInterval)
-                console.log('Found the head element! Injection complete.')
-                combinedVisHead.appendChild(dashStyleLink)
-            }
-        }, 1000)
-    }
-}
-
-
-let outerLoopBool = true
+var outerLoopBool = true
+var oldMatrix
 
 // Constant loop that checks if the mailgraph is reloading
 const checkUpdateLoop = setInterval(() => {
     if (outerLoopBool) {
-        const mailGraph = combinedVisFrame.contentWindow.document.querySelector('#mail-graph[data-dash-is-loading="true"]')
+        const mailGraph = combinedVisContent.document.querySelector('#mail-graph[data-dash-is-loading="true"]')
 
         if (mailGraph) {
             outerLoopBool = false // Stop the loop from checking
@@ -125,7 +67,7 @@ const checkUpdateLoop = setInterval(() => {
             console.log('Hiding matrix completed!')
             
             const waitingLoop = setInterval(() => {
-                const mailGraphDone = combinedVisFrame.contentWindow.document.querySelector('#mail-graph:not([data-dash-is-loading="true"])')
+                const mailGraphDone = combinedVisContent.document.querySelector('#mail-graph:not([data-dash-is-loading="true"])')
                 if (mailGraphDone) {
                     clearInterval(waitingLoop)
                     outerLoopBool = true
