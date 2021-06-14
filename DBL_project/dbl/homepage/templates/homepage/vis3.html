@@ -17,35 +17,44 @@ Visualization 3 | DBL Group 33
     <div class="main">
         <div class="description">
             <h1>Visualization 3: Node Link diagram and Adjacency matrix</h1>
-                <p>On this page you can view both visualisations at the same time. Do you want to view some specific data in both visualizations? No problem! Just press the "Update Filters" button! Or do you want to view the timestamp animation on both figures? Please use the animation controls!</p>
-                <br>
-                <p>For the timestamp animation we recommend a minimum speed of 10 seconds for the default data set. For an optimal simultaneous rendering, the speed may vary according to the used data.<p>
-                <br>
-        </div>
-        <div class="combined">
-            <div class="combNodeVis">
-                <h1>Node Link diagram</h1>
-                {% load plotly_dash %}
-                {% plotly_app name="GraphVisualisation" ratio=1.55 %}
-            </div>
-            <div class=combAdjVis>
-                <h1>Adjacency matrix</h1>
-                {% include "homepage/am_controls.html" %}
-            </div>
+            <p>On this page you can view both visualisations at the same time. Do you want to view some specific data in both visualizations? No problem! Just press the "Update Filters" button! Or do you want to view the timestamp animation on both figures? Please use the animation controls!</p>
+            <br>
+            <p>For the timestamp animation we recommend a minimum speed of 10 seconds for the default data set. For an optimal simultaneous rendering, the speed may vary according to the used data.<p>
         </div>
     </div>
 </div>
 
-<script>
-var oldMatrix
+<div class="combined">
+    <div class="combNodeVis">
+        <h1>Node Link diagram</h1>
+        <div class="iframe-wrapper">
+            {% load plotly_dash %}
+            {% plotly_app name="GraphVisualisation" ratio=1.55 %}
+        </div>
+    </div>
+    <div class="combAdjVis">
+        <h1>Adjacency matrix</h1>
+        <div class="am-vis-wrapper">
+            {% include "homepage/am_controls.html" %}
+        </div>
+    </div>
+</div>
 
-let combinedNodeVisFrame = document.querySelector('.combNodeVis iframe')
-let outerLoopBool = true
+
+
+<script>
+console.log('Executing vis3 script...')
+
+const combinedVisFrame = document.querySelector('.iframe-wrapper iframe')
+const combinedVisContent = combinedVisFrame.contentWindow
+
+var outerLoopBool = true
+var oldMatrix
 
 // Constant loop that checks if the mailgraph is reloading
 const checkUpdateLoop = setInterval(() => {
     if (outerLoopBool) {
-        const mailGraph = combinedNodeVisFrame.contentWindow.document.querySelector('#mail-graph[data-dash-is-loading="true"]')
+        const mailGraph = combinedVisContent.document.querySelector('#mail-graph[data-dash-is-loading="true"]')
 
         if (mailGraph) {
             outerLoopBool = false // Stop the loop from checking
@@ -58,7 +67,7 @@ const checkUpdateLoop = setInterval(() => {
             console.log('Hiding matrix completed!')
             
             const waitingLoop = setInterval(() => {
-                const mailGraphDone = combinedNodeVisFrame.contentWindow.document.querySelector('#mail-graph:not([data-dash-is-loading="true"])')
+                const mailGraphDone = combinedVisContent.document.querySelector('#mail-graph:not([data-dash-is-loading="true"])')
                 if (mailGraphDone) {
                     clearInterval(waitingLoop)
                     outerLoopBool = true

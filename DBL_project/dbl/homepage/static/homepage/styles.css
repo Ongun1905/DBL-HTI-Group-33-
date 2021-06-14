@@ -22,7 +22,7 @@
 }
 
 body {
-	color: black;
+	color: #fff;
 	background-color: var(--color-black-hard);
 	font: 17px "Rubik", sans-serif;
 }
@@ -335,6 +335,15 @@ Adjacency matrix styling
 	top: 0;
 	z-index: 1;
 	background-color: var(--color-black-hard);
+	cursor: pointer;
+}
+.email-list th[data-order="asc"]::after {
+	margin-left: 8px;
+	content: '\25B4';
+}
+.email-list th[data-order="desc"]::after {
+	margin-left: 8px;
+	content: '\25BE';
 }
 
 .email-list th:first-child, .email-list td:first-child { padding-left: 1rem; }
@@ -359,40 +368,46 @@ Adjacency matrix styling
 /* ------------------------------
 node link styling
 ------------------------------ */
-.nodeLinkGraph{
+.node-link-graph {
 	margin-top: 3rem;
 	overflow: hidden;
 	border: 10px solid #65cca9;
 	border-radius: 20px;
 }
 
+.graph-wrapper #mail-graph {
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: 3vw;
+	width: 100%;
+	height: 500px;
+}
+
 /* ------------------------------
 vis 3 styling
 ------------------------------ */
+body.wide {
+	--padding-sides: 2rem; /* making body wider for vis3 */
+}
 .combined {
-	margin-top: 3rem;
+	padding: 3rem;
 	width: 100%;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 }
-.combNodeVis {
-	text-align: center;
+.combNodeVis, .combAdjVis {
 	width: 50%;
 	overflow: hidden;
 	border: 1px solid #65cca9;
 	border-radius: 20px;
 }
 .combAdjVis {
-	text-align: center;
-	width: 50%;
 	margin-left: 3rem;
-	overflow: hidden;
-	border: 1px solid #65cca9;
-	border-radius: 20px;
 }
 .combNodeVis h1, .combAdjVis h1 {
 	color: #65cca9;
+	text-align: center;
 }
 .AdjForms {
 	text-align: left;

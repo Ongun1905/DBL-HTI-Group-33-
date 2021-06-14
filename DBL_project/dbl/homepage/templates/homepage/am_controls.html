@@ -1,53 +1,55 @@
-<h3>Visualization controls</h3>
-<form>
-    <div class="field">
-        <p class="title">Display email in header</p>
-        <label class="switch">
-            <input type="checkbox" id="am-toggle-emails">
-            <span class="switch-slider"></span>
-        </label>
-    </div>
-    <div class="field">
-        <p class="title">Display hover information</p>
-        <label class="switch">
-            <input type="checkbox" id="am-toggle-hover" checked>
-            <span class="switch-slider"></span>
-        </label>
-    </div>
-    <div class="field">
-        <p class="title">Color by sentiment instead of amount</p>
-        <label class="switch">
-            <input type="checkbox" id="am-toggle-coloring-sentiment">
-            <span class="switch-slider"></span>
-        </label>
-    </div>
-</form>
-<br />
-<br />
+<div class="am-full">
+    <h3>Visualization controls</h3>
+    <form>
+        <div class="field">
+            <p class="title">Display email in header</p>
+            <label class="switch">
+                <input type="checkbox" id="am-toggle-emails">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+        <div class="field">
+            <p class="title">Display hover information</p>
+            <label class="switch">
+                <input type="checkbox" id="am-toggle-hover" checked>
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+        <div class="field">
+            <p class="title">Color by sentiment instead of amount</p>
+            <label class="switch">
+                <input type="checkbox" id="am-toggle-coloring-sentiment">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+    </form>
+    <br />
+    <br />
 
-{% include "homepage/am.html" %}
+    {% include "homepage/am.html" %}
 
-<script>
-// Control interactions
-inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeData) : toggleEmails(false, nodeData))
-inputToggleHover.addEventListener('click', () => {
-    if (inputToggleHover.checked) {
-        // Add hover popups
-        matrixTableEntries.forEach(entry => {
-            entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
-            entry.onmouseout = () => exitCell()
-        })
-    } else {
-        // Remove hover popups
-        matrixTableEntries.forEach(entry => {
-            entry.onmouseenter = () => {}
-            entry.onmouseout = () => {}
-        })
-    }
-})
-inputToggleColoring.addEventListener('click', () => {
-    if (inputToggleColoring.checked)
-        sentimentColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to positivity/negativity
-    else edgeCountColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to edge count
-})
-</script>
+    <script>
+    // Control interactions
+    inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeData) : toggleEmails(false, nodeData))
+    inputToggleHover.addEventListener('click', () => {
+        if (inputToggleHover.checked) {
+            // Add hover popups
+            matrixTableEntries.forEach(entry => {
+                entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
+                entry.onmouseout = () => exitCell()
+            })
+        } else {
+            // Remove hover popups
+            matrixTableEntries.forEach(entry => {
+                entry.onmouseenter = () => {}
+                entry.onmouseout = () => {}
+            })
+        }
+    })
+    inputToggleColoring.addEventListener('click', () => {
+        if (inputToggleColoring.checked)
+            sentimentColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to positivity/negativity
+        else edgeCountColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to edge count
+    })
+    </script>
+</div>
