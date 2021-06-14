@@ -17,6 +17,6 @@ class UploadFileForm(forms.ModelForm):
 
 #contactForm
 class ContactForm(forms.Form):
-    your_email = forms.EmailField(required=True)
+    Your_Email = forms.CharField(required=True)
     subject = forms.CharField(required=True)
     message = forms.CharField(widget=forms.Textarea, required=True)

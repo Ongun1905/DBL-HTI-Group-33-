@@ -44,10 +44,10 @@ def about(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             subject = form.cleaned_data["subject"]
-            your_email = form.cleaned_data["your_email"]
+            Your_Email = form.cleaned_data["Your_Email"]
             message = form.cleaned_data["message"]
             try:
-                send_mail(subject, message, your_email, ["dblgroup3333@gmail.com"])
+                send_mail(Your_Email, message, subject, ["dblgroup3333@gmail.com"])
             except BadHeaderError:
                 return ("Invalid header found.")
             return redirect("success")

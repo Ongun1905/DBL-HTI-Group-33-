@@ -169,7 +169,6 @@ MEDIA_URL = '/media/'
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 # Increase the maximum memory upload size for transferring matrix data
 
 #Contact form
-DEFAULT_FROM_EMAIL = 'ongunkorkmaz@hotmail.com'
 EMAIL_BACKEND ="django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
