@@ -1,0 +1,1 @@
+python DBL_Project/dbl/manage.py runserver
