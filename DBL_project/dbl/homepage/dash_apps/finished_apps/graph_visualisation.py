@@ -264,7 +264,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                         readOnly = True,
                         persistence= True,
                         persistence_type= 'session',
-                        style={'height':'30px'},
+                        style={'height':'40px'},
                     ),
                 ], className='three columns', style={'color':'#65cca9', 'display':'flex','justify-content':'flex-start','flex-direction':'column', 'border-radius':'1rem', 'width': '100%', 'padding-right': '2rem', 'margin-left': '2rem'})
 ], style={'display':'flex','flex-direction':'row','justify-content':'space-between', 'width':'100%', 'align-items':'flex-start'}
