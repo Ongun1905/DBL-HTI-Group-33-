@@ -25,6 +25,7 @@ body {
 	color: #fff;
 	background-color: var(--color-black-hard);
 	font: 17px "Rubik", sans-serif;
+	overflow-x: hidden;
 }
 
 /* General font settings */

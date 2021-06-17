@@ -1,3 +1,6 @@
+{% load filters %}
+{% load static %}
+
 <div class="am-full">
     <h3>Visualization controls</h3>
     <form>
@@ -26,30 +29,118 @@
     <br />
     <br />
 
-    {% include "homepage/am.html" %}
+    <div class="am-wrapper am-vis">
+        <div class="am-loader">
+            <div class="circle"></div>
+            <span id="am-loader-text">Loading...</span>
+        </div>
+        <table class="adjacency-matrix names custom-scrollbar{% if not hasEdges %} hidden{% endif %}" id="adjacency-matrix">
+            <thead>
+                <tr>
+                    <th><span>x</span></th>
+                    {% for nodeDataTopHeader in nodeData %}
+                    <th><span>{{ nodeDataTopHeader.id }}</span></th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for matrixRow, normMatrixRow, nodeDataLeftHeader in zippedMatrixData %}
+                <tr id="node-{{ nodeDataLeftHeader.id  }}">
+                    <th>{{ nodeDataLeftHeader.id  }}</th>
+                    {% for matrixCell in matrixRow %}
+                        <td class="matrix-data-element" data-row-index="{{ forloop.parentloop.counter0 }}" data-column-index="{{ forloop.counter0 }}" data-edge-count-norm="{{ normMatrixRow|index:forloop.counter0 }}">
+                            {% if matrixCell > 0 %}
+                            <span>{{ matrixCell }}</span>
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        
+        <div class="no-data{% if hasEdges %} hidden{% endif %}">
+            <p class="no-emphasis">No data found!<p>
+        </div>
+    </div>
+    <div class="edge-info-popup"></div>
 
+    <style>
+    .no-data.hidden, .adjacency-matrix.hidden {
+        display: none;
+    }
+    </style>
+
+    <script src="{% static "homepage/am.js" %}"></script>
     <script>
+    // Initialize variables
+    const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
+    const inputToggleEmails = document.getElementById('am-toggle-emails')
+    const inputToggleHover = document.getElementById('am-toggle-hover')
+    const inputToggleColoring = document.getElementById('am-toggle-coloring-sentiment')
+    const amWrapper = document.querySelector('.am-wrapper')
+    const amLoader = document.querySelector('.am-wrapper .am-loader')
+    const amLoaderText = document.getElementById('am-loader-text')
+
+    amLoaderText.innerText = 'Setting up interactions...'
+
+    // Fetch Django variables into JS variables
+    var nodeData = {{ nodeData| safe }}
+    var edgeData = {{ edgeData| safe }}
+
+    // Matrix cell interactions
+    matrixTableEntries.forEach(entry => {
+        // Hover interactions
+        entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
+        entry.onmouseout = () => exitCell()
+
+        // Click interactions
+        entry.addEventListener('click', () => clickCell(entry, nodeData, edgeData))
+    })
+
+    // Initialize coloring by edge count
+    edgeCountColoring(matrixTableEntries, nodeData, edgeData)
+
+    // Remove empty rows
+    amLoaderText.innerText = 'Removing empty rows...'
+    removeEmptyRows(nodeData, edgeData)
+
+    // Hide the preloader on load
+    amLoaderText.innerText = 'Done!'
+    amWrapper.classList.add('loaded')
+    setTimeout(() => amLoader.classList.add('hidden'), 300)
+
+
     // Control interactions
+    // TODO: Replace matrixTableEntries, nodeData and edgeData by their new equivalents in vis3
     inputToggleEmails.addEventListener('click', () => inputToggleEmails.checked ? toggleEmails(true, nodeData) : toggleEmails(false, nodeData))
     inputToggleHover.addEventListener('click', () => {
+        let currentMatrixEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
         if (inputToggleHover.checked) {
             // Add hover popups
-            matrixTableEntries.forEach(entry => {
+            currentMatrixEntries.forEach(entry => {
                 entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
                 entry.onmouseout = () => exitCell()
             })
         } else {
             // Remove hover popups
-            matrixTableEntries.forEach(entry => {
+            currentMatrixEntries.forEach(entry => {
                 entry.onmouseenter = () => {}
                 entry.onmouseout = () => {}
             })
         }
     })
     inputToggleColoring.addEventListener('click', () => {
+        let currentMatrixEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
+        let sessionMatrixData = JSON.parse(window.sessionStorage.session)
+
+        if (sessionMatrixData && nodeData !== sessionMatrixData.nodeData) nodeData = sessionMatrixData.nodeData
+        if (sessionMatrixData && edgeData !== sessionMatrixData.edgeData) edgeData = sessionMatrixData.edgeData
+
         if (inputToggleColoring.checked)
-            sentimentColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to positivity/negativity
-        else edgeCountColoring(matrixTableEntries, nodeData, edgeData) // Recolor according to edge count
+            sentimentColoring(currentMatrixEntries, nodeData, edgeData) // Recolor according to positivity/negativity
+        else edgeCountColoring(currentMatrixEntries, nodeData, edgeData) // Recolor according to edge count
     })
     </script>
 </div>

@@ -138,7 +138,7 @@ async function updateMatrix() {
     const amWrapper = document.querySelector('.am-wrapper')
     const amLoader = document.querySelector('.am-wrapper .am-loader')
     const amLoaderText = document.getElementById('am-loader-text')
-    const am = document.querySelector('.adjacency-matrix')
+    const am = document.getElementById('adjacency-matrix')
 
     // Fetch the session data using promises
     let sessionUpdatePromise = new Promise((resolve, reject) => sessionUpdateHandler(resolve, reject));
@@ -203,25 +203,39 @@ async function updateMatrix() {
 
     am.innerHTML = tableInnerHTML
 
-    // Add event listeners back in
-    const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
+    // Check if there is edge data
+    if (edgeData.length < 1) {
+        // There's no edge data. Hide the table and display the "no data" element!
+        document.querySelector('.no-data').classList.remove('hidden')
+        am.classList.add('hidden')
+    } else {
+        // There is edge data. Display the table and hide the "no data" element!
+        document.querySelector('.no-data').classList.add('hidden')
+        am.classList.remove('hidden')
 
-    // Matrix cell interactions
-    matrixTableEntries.forEach(entry => {
-        // Hover interactions
-        entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
-        entry.onmouseout = () => exitCell()
+        // Only load event listeners and table entry based functions if there are edges
+        // Add event listeners back in
+        const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
 
-        // Click interactions
-        entry.addEventListener('click', () => clickCell(entry, nodeData, edgeData))
-    })
+        // Matrix cell interactions
+        matrixTableEntries.forEach(entry => {
+            // Hover interactions
+            entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
+            entry.onmouseout = () => exitCell()
 
-    // Initialize coloring by edge count
-    edgeCountColoring(matrixTableEntries, nodeData, edgeData)
+            // Click interactions
+            entry.addEventListener('click', () => clickCell(entry, nodeData, edgeData))
+        })
 
-    // Remove empty rows
-    amLoaderText.innerText = 'Removing empty rows...'
-    removeEmptyRows(nodeData, edgeData)
+        // Initialize coloring
+        amLoaderText.innerText = 'Applying cell coloring...'
+        if (document.getElementById('am-toggle-coloring-sentiment').checked === false) edgeCountColoring(matrixTableEntries, nodeData, edgeData)
+        else sentimentColoring(matrixTableEntries, nodeData, edgeData)
+
+        // Remove empty rows
+        amLoaderText.innerText = 'Removing empty rows...'
+        removeEmptyRows(nodeData, edgeData)
+    }
 
     // Hide the preloader on load
     amLoaderText.innerText = 'Done!'

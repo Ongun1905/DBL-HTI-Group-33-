@@ -43,7 +43,11 @@ function displayPopup(matrixCell, nodeData, edgeData) {
   // Move the popup to the matrix cell
   const cellRect = matrixCell.getBoundingClientRect()
   edgeInfoPopup.style.left = cellRect.left + matrixCell.offsetWidth / 2 + 'px' // offsetWidth / 2 horizontally centers the popup
-  edgeInfoPopup.style.top = cellRect.top - 80 + window.scrollY + 'px' // -80 is to account for the navbar, window.scrollY to prevent positioning issues
+
+  // Change the top distance based on whether or not it's in the combined view
+  // -80 is to account for the navbar, window.scrollY to prevent positioning issues
+  const topDistance = matrixCell.closest('.combined') ? cellRect.top + window.scrollY : cellRect.top - 80 + window.scrollY
+  edgeInfoPopup.style.top = topDistance + 'px'
   
   // Set translate property to the :root element
   document.documentElement.style.setProperty('--translate-eip', `translate(-50%, calc(-100% - ${matrixCell.offsetHeight / 2 + 'px'} + 4px))`)
