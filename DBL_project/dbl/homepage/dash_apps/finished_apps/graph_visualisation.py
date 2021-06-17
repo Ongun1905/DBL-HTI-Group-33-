@@ -47,8 +47,8 @@ vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph(
 dateStart = minDate 
 dateEnd = maxDate
 
-# Get external styles for the Dash app
-external_stylesheets = ['https://errato.nl/css/dash.css']
+# Get external styles for the Dash app (the Dash stylesheet is hosted on Google Drive)
+external_stylesheets = ['https://drive.google.com/uc?export=view&id=1nqO1GRPAXQziZm9zDBCM09iutaRbqrt3']
 
 # Initialise Dash app
 #app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -430,10 +430,14 @@ def update_session_graph(n_clicks1, n_clicks2, n_clicks3, n_clicks4, data, n_int
         for cell in row:
             if cell > maxMatrixElement:
                 maxMatrixElement = cell
+
+    normalizedMatrix = []
+    if (len(matrix) > 0):
+        normalizedMatrix = np.vectorize(vectorizedNormalizing)(matrix, 1, maxMatrixElement)
             
     matrixdict = {
         'matrix': matrix,
-        'normMatrix': np.vectorize(vectorizedNormalizing)(matrix, 1, maxMatrixElement),
+        'normMatrix': normalizedMatrix,
         'nodeData': nodeData,
         'edgeData': edgeData
     }

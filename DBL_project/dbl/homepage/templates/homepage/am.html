@@ -6,6 +6,7 @@
         <div class="circle"></div>
         <span id="am-loader-text">Loading...</span>
     </div>
+    {% if hasEdges %}
     <table class="adjacency-matrix names custom-scrollbar" id="adjacency-matrix">
         <thead>
             <tr>
@@ -30,6 +31,13 @@
             {% endfor %}
         </tbody>
     </table>
+    {% endif %}
+    
+    {% if not hasEdges %}
+    <div class="no-data">
+        <p class="no-emphasis">No data found!<p>
+    </div>
+    {% endif %}
 </div>
 <div class="edge-info-popup"></div>
 

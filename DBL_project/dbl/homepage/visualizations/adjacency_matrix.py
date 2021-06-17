@@ -69,9 +69,12 @@ def getNormalizedMultiMatrix(norm):
   # normalizedMatrix = np.multiply((norm / maxMatrixElement), matrix)
 
   # Logarithmic normalization between 0 and norm
-  normalizedMatrix = np.vectorize(vectorizedNormalizing)(matrix, norm, maxMatrixElement)
-
-  return normalizedMatrix
+  print(len(matrix))
+  if (len(matrix) > 0):
+    normalizedMatrix = np.vectorize(vectorizedNormalizing)(matrix, norm, maxMatrixElement)
+    return normalizedMatrix
+  else:
+    return []
 
 
 
