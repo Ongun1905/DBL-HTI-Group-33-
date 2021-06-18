@@ -181,7 +181,7 @@ def drawGraph(filteredGraph):
 
 
     # Drawing the graph as a figure
-    figure = go.Figure(data=[edge_trace, node_trace],
+    figure = go.Figure(data=[node_trace, edge_trace],
         layout=go.Layout(
         title='Network Graph Visualisation',
         titlefont_size=16,
