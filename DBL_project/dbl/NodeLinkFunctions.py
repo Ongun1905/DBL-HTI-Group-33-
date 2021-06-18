@@ -125,7 +125,7 @@ def drawGraph(filteredGraph):
         edge_y.append(None)
 
     # Drawing edge lines
-    edge_trace = go.Scatter(
+    edge_trace = go.Scattergl(
         x=edge_x, y=edge_y,
         line=dict(width=0.5, color='rgba(152, 152, 152, 0.5)'),
         hoverinfo='none',
@@ -140,7 +140,7 @@ def drawGraph(filteredGraph):
         node_y.append(y)
 
     # Drawing nodes
-    node_trace = go.Scatter(
+    node_trace = go.Scattergl(
         x=node_x, y=node_y,
         mode='markers',
         hoverinfo='text',
@@ -181,7 +181,7 @@ def drawGraph(filteredGraph):
 
 
     # Drawing the graph as a figure
-    figure = go.Figure(data=[edge_trace, node_trace],
+    figure = go.Figure(data=[node_trace, edge_trace],
         layout=go.Layout(
         title='Network Graph Visualisation',
         titlefont_size=16,

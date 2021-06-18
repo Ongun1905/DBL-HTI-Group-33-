@@ -17,10 +17,6 @@ def index(request):
         if form.is_valid():
             uploaded_file = request.FILES['file']
             fs = FileSystemStorage()
-            #if uploaded_file.name in os.listdir(settings.BASE_DIR / 'media'):
-            #    name = os.listdir(settings.BASE_DIR / 'media')[-1][:-4] + '1.csv'
-            #else:
-            #    name = uploaded_file.name
             name = uploaded_file.name
             filename = fs.save(name, uploaded_file)
             uploaded_file_url = fs.url(filename)
