@@ -1,0 +1,101 @@
+date,fromId,fromEmail,fromJobtitle,toId,toEmail,toJobtitle,messageType,sentiment
+2000-08-13,96,matthew.lenhart@enron.com,Employee,77,eric.bass@enron.com,Trader,CC,0.0136986301369863
+2000-08-13,96,matthew.lenhart@enron.com,Employee,112,phillip.m.love@enron.com,Unknown,TO,0.0136986301369863
+2001-11-22,64,danny.mccarty@enron.com,Vice President,121,rod.hayslett@enron.com,Vice President,TO,0.0
+2000-10-29,139,susan.scott@enron.com,Unknown,104,monique.sanchez@enron.com,Unknown,TO,0.0
+2000-10-11,48,andy.zipper@enron.com,Vice President,2,mark.e.taylor@enron.com,Employee,TO,0.0273972602739726
+2001-09-25,69,debra.perlingiere@enron.com,Employee,105,patrice.l.mims@enron.com,Unknown,TO,0.0
+2000-07-27,148,j.kaminski@enron.com,Manager,15,kevin.m.presto@enron.com,Vice President,TO,0.0273972602739726
+2001-11-14,87,mark.whitt@enron.com,Unknown,49,barry.tycholiz@enron.com,Vice President,TO,0.0136986301369863
+2002-03-26,57,chris.germany@enron.com,Employee,57,chris.germany@enron.com,Employee,TO,0.0
+2000-08-20,87,mark.whitt@enron.com,Unknown,84,gerald.nemec@enron.com,Unknown,TO,0.0
+2001-04-08,62,dan.hyvl@enron.com,Employee,131,stacy.dickson@enron.com,Employee,TO,0.0
+2000-01-26,110,phillip.k.ellen@enron.com,Manager,35,hunter.s.shively@enron.com,Vice President,TO,0.0
+2000-01-26,110,phillip.k.ellen@enron.com,Manager,80,fletcher.j.sturm@enron.com,Vice President,TO,0.0
+2000-07-10,55,carol.clair@enron.com,Vice President,140,susan.bailey@enron.com,Unknown,CC,0.0136986301369863
+2001-11-04,17,kimberly.watson@enron.com,Unknown,3,lindy.donoho@enron.com,Employee,CC,0.0
+2001-06-02,75,elizabeth.sager@enron.com,Employee,9,kay.mann@enron.com,Employee,CC,0.0136986301369863
+2001-11-04,17,kimberly.watson@enron.com,Unknown,107,paul.y barbo@enron.com,Trader,CC,0.0
+2000-12-02,73,drew.fossum@enron.com,Vice President,3,lindy.donoho@enron.com,Employee,TO,0.0
+2000-10-14,79,errol.mclaughlin@enron.com,Employee,74,dutch.quigley@enron.com,Trader,TO,0.0
+2001-11-04,17,kimberly.watson@enron.com,Unknown,98,michelle.lokay@enron.com,Employee,TO,0.0
+2001-02-05,68,david.w.delainey@enron.com,CEO,134,steven.j.kean@enron.com,Vice President,TO,0.0
+2001-11-04,17,kimberly.watson@enron.com,Unknown,89,mark.mcconnell@enron.com,Unknown,TO,0.0
+2001-02-18,26,lavorato@enron.com,CEO,49,barry.tycholiz@enron.com,Vice President,TO,0.0
+2000-10-23,115,richard.b.sanders@enron.com,Vice President,42,jeff.dasovich@enron.com,Employee,TO,0.0
+2001-04-22,42,jeff.dasovich@enron.com,Employee,36,james.d.steffes@enron.com,Vice President,TO,-0.052631578947368474
+2000-12-02,73,drew.fossum@enron.com,Vice President,135,steven.harris@enron.com,Vice President,CC,0.0
+2000-11-13,71,don.baughman@enron.com,Trader,18,larry.f.campbell@enron.com,Employee,TO,0.0
+2000-10-23,115,richard.b.sanders@enron.com,Vice President,88,e..haedicke@enron.com,Managing Director,TO,0.0
+1999-12-14,2,mark.e.taylor@enron.com,Employee,141,tana.jones@enron.com,Unknown,TO,0.0136986301369863
+2002-02-04,130,stacey.w.white@enron.com,Unknown,15,kevin.m.presto@enron.com,Vice President,TO,0.0
+2000-10-23,115,richard.b.sanders@enron.com,Vice President,36,james.d.steffes@enron.com,Vice President,TO,0.0
+2000-12-02,73,drew.fossum@enron.com,Vice President,139,susan.scott@enron.com,Unknown,CC,0.0
+2000-05-11,69,debra.perlingiere@enron.com,Employee,21,kevin.ruscitti@enron.com,Trader,TO,0.0
+2000-10-23,115,richard.b.sanders@enron.com,Vice President,93,mary.hain@enron.com,Unknown,TO,0.0
+2001-07-30,42,jeff.dasovich@enron.com,Employee,116,richard.shapiro@enron.com,Vice President,TO,0.0
+2001-08-23,148,j.kaminski@enron.com,Manager,148,j.kaminski@enron.com,Manager,CC,0.0273972602739726
+2001-09-04,116,richard.shapiro@enron.com,Vice President,134,steven.j.kean@enron.com,Vice President,TO,0.0
+2001-11-28,6,lynn.blair@enron.com,Director,129,shelley.corman@enron.com,Vice President,TO,0.0
+2001-07-30,42,jeff.dasovich@enron.com,Employee,134,steven.j.kean@enron.com,Vice President,TO,0.0
+1999-12-07,2,mark.e.taylor@enron.com,Employee,14,louise.kitchen@enron.com,President,TO,0.0
+2001-10-01,99,mike.grigsby@enron.com,Manager,113,l..gay@enron.com,Employee,TO,0.0
+2000-12-11,148,j.kaminski@enron.com,Manager,148,j.kaminski@enron.com,Manager,CC,0.0
+2000-11-27,125,sara.shackleton@enron.com,Unknown,141,tana.jones@enron.com,Unknown,TO,0.0136986301369863
+2001-01-28,99,mike.grigsby@enron.com,Manager,38,jane.tholt@enron.com,Vice President,TO,0.0
+2000-05-18,73,drew.fossum@enron.com,Vice President,139,susan.scott@enron.com,Unknown,TO,0.0410958904109589
+2001-10-01,99,mike.grigsby@enron.com,Manager,39,jason.wolfe@enron.com,Unknown,TO,0.0
+2000-11-28,125,sara.shackleton@enron.com,Unknown,140,susan.bailey@enron.com,Unknown,CC,0.0136986301369863
+2001-10-01,99,mike.grigsby@enron.com,Manager,146,tori.kuykendall@enron.com,Trader,TO,0.0
+2001-11-26,147,tracy.geaccone@enron.com,Employee,17,kimberly.watson@enron.com,Unknown,TO,0.0136986301369863
+2001-02-07,9,kay.mann@enron.com,Employee,9,kay.mann@enron.com,Employee,TO,0.0
+2001-10-01,99,mike.grigsby@enron.com,Manager,137,steven.p.south@enron.com,Unknown,TO,0.0
+2001-10-01,99,mike.grigsby@enron.com,Manager,139,susan.scott@enron.com,Unknown,TO,0.0
+2001-11-18,42,jeff.dasovich@enron.com,Employee,116,richard.shapiro@enron.com,Vice President,TO,0.0136986301369863
+2000-03-15,148,j.kaminski@enron.com,Manager,148,j.kaminski@enron.com,Manager,CC,0.0136986301369863
+2000-12-12,67,c..giron@enron.com,Employee,22,kam.keiser@enron.com,Employee,TO,0.0
+2001-03-12,69,debra.perlingiere@enron.com,Employee,106,paul.lucci@enron.com,Employee,TO,0.0
+2001-10-23,7,kim.ward@enron.com,Unknown,40,jason.williams@enron.com,Vice President,TO,0.0136986301369863
+2000-10-08,148,j.kaminski@enron.com,Manager,148,j.kaminski@enron.com,Manager,CC,0.0
+2001-10-23,17,kimberly.watson@enron.com,Unknown,98,michelle.lokay@enron.com,Employee,TO,0.0
+2001-11-04,79,errol.mclaughlin@enron.com,Employee,29,john.griffith@enron.com,Manager,TO,0.0
+2001-10-23,17,kimberly.watson@enron.com,Unknown,135,steven.harris@enron.com,Vice President,TO,0.0
+2001-10-23,17,kimberly.watson@enron.com,Unknown,3,lindy.donoho@enron.com,Employee,TO,0.0
+2001-09-26,116,richard.shapiro@enron.com,Vice President,134,steven.j.kean@enron.com,Vice President,TO,0.0273972602739726
+2000-10-25,62,dan.hyvl@enron.com,Employee,115,richard.b.sanders@enron.com,Vice President,CC,0.0
+2001-10-23,17,kimberly.watson@enron.com,Unknown,107,paul.y barbo@enron.com,Trader,TO,0.0
+2000-11-15,104,monique.sanchez@enron.com,Unknown,139,susan.scott@enron.com,Unknown,TO,0.0
+2000-06-14,55,carol.clair@enron.com,Vice President,2,mark.e.taylor@enron.com,Employee,TO,0.0
+2001-03-01,42,jeff.dasovich@enron.com,Employee,134,steven.j.kean@enron.com,Vice President,TO,0.0
+2001-10-23,17,kimberly.watson@enron.com,Unknown,89,mark.mcconnell@enron.com,Unknown,TO,0.0
+2001-06-20,42,jeff.dasovich@enron.com,Employee,36,james.d.steffes@enron.com,Vice President,TO,0.0136986301369863
+2000-12-26,71,don.baughman@enron.com,Trader,31,juan.hernandez@enron.com,Employee,TO,0.0136986301369863
+2000-07-27,2,mark.e.taylor@enron.com,Employee,140,susan.bailey@enron.com,Unknown,CC,0.0136986301369863
+2000-10-01,134,steven.j.kean@enron.com,Vice President,85,greg.whalley@enron.com,President,TO,0.0
+2001-05-15,55,carol.clair@enron.com,Vice President,75,elizabeth.sager@enron.com,Employee,TO,0.0
+2000-02-29,139,susan.scott@enron.com,Unknown,3,lindy.donoho@enron.com,Employee,TO,-0.26315789473684215
+2000-07-27,2,mark.e.taylor@enron.com,Employee,141,tana.jones@enron.com,Unknown,CC,0.0136986301369863
+2000-12-10,125,sara.shackleton@enron.com,Unknown,140,susan.bailey@enron.com,Unknown,CC,0.0
+2002-01-01,14,louise.kitchen@enron.com,President,14,louise.kitchen@enron.com,President,TO,0.0
+2002-01-29,89,mark.mcconnell@enron.com,Unknown,135,steven.harris@enron.com,Vice President,TO,0.0
+2002-01-01,14,louise.kitchen@enron.com,President,48,andy.zipper@enron.com,Vice President,TO,0.0
+2001-01-23,56,charles.weldon@enron.com,Unknown,29,john.griffith@enron.com,Manager,TO,0.0
+2002-01-29,89,mark.mcconnell@enron.com,Unknown,17,kimberly.watson@enron.com,Unknown,TO,0.0
+2002-01-01,14,louise.kitchen@enron.com,President,123,sally.beck@enron.com,Employee,TO,0.0
+2000-08-14,141,tana.jones@enron.com,Unknown,131,stacy.dickson@enron.com,Employee,TO,0.0
+2000-11-16,44,jeffrey.a.shankman@enron.com,President,48,andy.zipper@enron.com,Vice President,CC,0.0273972602739726
+2000-12-26,71,don.baughman@enron.com,Trader,20,joe.stepenovitch@enron.com,Vice President,TO,0.0136986301369863
+2000-08-14,141,tana.jones@enron.com,Unknown,75,elizabeth.sager@enron.com,Employee,TO,0.0
+2002-01-01,14,louise.kitchen@enron.com,President,117,rick.buy@enron.com,Manager,TO,0.0
+2001-12-30,6,lynn.blair@enron.com,Director,6,lynn.blair@enron.com,Director,CC,0.0
+2000-08-14,141,tana.jones@enron.com,Unknown,1,marie.heard@enron.com,Unknown,TO,0.0
+2001-02-06,69,debra.perlingiere@enron.com,Employee,40,jason.williams@enron.com,Vice President,TO,0.0
+2002-01-29,89,mark.mcconnell@enron.com,Unknown,107,paul.y barbo@enron.com,Trader,TO,0.0
+2000-06-19,125,sara.shackleton@enron.com,Unknown,55,carol.clair@enron.com,Vice President,CC,0.0273972602739726
+2000-09-07,73,drew.fossum@enron.com,Vice President,12,kevin.hyatt@enron.com,Director,TO,0.0547945205479452
+2000-12-26,71,don.baughman@enron.com,Trader,18,larry.f.campbell@enron.com,Employee,TO,0.0136986301369863
+2002-01-29,89,mark.mcconnell@enron.com,Unknown,98,michelle.lokay@enron.com,Employee,TO,0.0
+2002-01-30,24,m..forney@enron.com,Manager,72,doug.gilbert-smith@enron.com,Employee,TO,0.0
+2002-02-01,14,louise.kitchen@enron.com,President,75,elizabeth.sager@enron.com,Employee,TO,0.0136986301369863
+2000-02-29,139,susan.scott@enron.com,Unknown,135,steven.harris@enron.com,Vice President,CC,-0.26315789473684215
+2001-06-20,42,jeff.dasovich@enron.com,Employee,116,richard.shapiro@enron.com,Vice President,TO,0.0136986301369863

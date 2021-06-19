@@ -47,13 +47,14 @@ vis1Graph, jobFrom, jobTo, mailFrom, mailTo, minDate, maxDate = nlf.createGraph(
 dateStart = minDate 
 dateEnd = maxDate
 
-# Get external styles for the Dash app
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+# Get external styles for the Dash app (the Dash stylesheet is hosted on Google Drive)
+external_stylesheets = ['https://drive.google.com/uc?export=view&id=1nqO1GRPAXQziZm9zDBCM09iutaRbqrt3']
 
 # Initialise Dash app
 #app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 from django_plotly_dash import DjangoDash
-app = DjangoDash('GraphVisualisation')
+app = DjangoDash('GraphVisualisation',
+                 external_stylesheets=external_stylesheets)
 app.title = "Email Network"
 
 ####
@@ -83,11 +84,9 @@ html.Div(children = [ #top compontent - containes two subdivs
                             value=[-1, 1],
                             allowCross=False,   
                             persistence= True,
-                            persistence_type= 'session'
+                            persistence_type= 'session',
                         ),
-                        html.Br(),#breaks space between the interactive elements
-                        html.Br(),#breaks space between the interactive elements
-                    ], style = {'width': '90%', 'margin-left':'5%'}
+                    ], style = {'width': '90%', 'margin-left':'5%', 'margin-bottom': '2rem'}
                 ),
                 html.Div(children = [
                         dcc.Dropdown(
@@ -108,10 +107,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                             placeholder="Select to Job, Nothing = all",
                             persistence= True,
                             persistence_type= 'session'                            
-                        )
-                    ], style = {'width': '100%'}
-                ),
-                html.Div(children = [
+                        ),
                         dcc.Dropdown(
                             id='mailFrom-dropdown',
                             options=[
@@ -162,7 +158,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                     persistence= True,
                     persistence_type= 'session',                    
                     labelStyle={'display': 'inline-block'},
-                    style={'color':'#65cca9', 'margin-left':'41.75%'}
+                    style={'color':'#65cca9', 'margin': '12px 0'}
                 ), 
                 dcc.RadioItems(
                     id = 'node-radio-items',
@@ -174,20 +170,18 @@ html.Div(children = [ #top compontent - containes two subdivs
                     persistence= True,
                     persistence_type= 'session',
                     labelStyle={'display': 'inline-block'},
-                    style={'color':'#65cca9', 'margin-left':'18%'}
+                    style={'color':'#65cca9'}
                 ),
-                html.Button(id='submit-button-state', n_clicks=0, children='Update Filters', style={'width': '90%', 'margin-left':'5%'}),
+                html.Button(id='submit-button-state', className='button', n_clicks=0, children='Update Filters', style= {'margin': '1rem 0'}),
                 html.Div(id='output-state')
-            ], style={'display': 'flex', 'flex-direction': 'column','justify-content':'space-around', 'background-color': '#363F48', 'width':'48.5%', 'height':'400px', 'border-radius':'1rem'}
+            ], style={'display': 'flex', 'flex-direction': 'column','justify-content':'space-around', 'border-radius':'1rem', 'width': '100%', 'padding-left': '2rem'}
         ),
 
         
         html.Div(children=[ #top right component - uploading dropdown + text + animation
                     dcc.Markdown('''
                         **Select your data set here:**
-                        ''',
-                        style={'margin-left':'5%'}
-                    ),
+                        ''', style={ 'margin-bottom': '4px' }),
                     html.Div(
                         id='refreshDropDown',
                         children = [
@@ -200,17 +194,17 @@ html.Div(children = [ #top compontent - containes two subdivs
                                 placeholder="select dataset from uploaded files",
                                 persistence= True,
                                 persistence_type= 'session',
+                                style={'color':'black'}
                             )
-                        ], style={'color':'black'}
+                        ]
                     ), 
                     dcc.Markdown('''
                         The enron-v1 dataset is the default on this website.
-                        The different versions differ in the amount of entries in the dataset.
-
+                        The different versions differ in the amount of entries in the dataset.  
+                        ''', style={ 'margin-top': '8px' }),
+                    dcc.Markdown('''
                         **Animation Controls:**
-                        ''',
-                        style={'margin-left':'5%'}
-                    ),
+                        ''', style={ 'margin': '12px 0 4px' }),
                     #html.Pre(id='click-data'),
                     dcc.Dropdown(
                         id='speed-dropdown',
@@ -242,7 +236,7 @@ html.Div(children = [ #top compontent - containes two subdivs
                         placeholder="Select Animation speed (in seconds - 3 default)",
                         persistence= True,
                         persistence_type= 'session',
-                        style={'width': '94.9%','margin-left':'2.5%', 'color':'black'}
+                        style={'color':'black'}
                     ),
                     html.Br(),
                     dcc.Interval(
@@ -251,10 +245,15 @@ html.Div(children = [ #top compontent - containes two subdivs
                         n_intervals = 0,
                         disabled = True
                     ),
-                    html.Button(id='play-button-state', n_clicks=0, children='Play Animation from the beginning', style={'width': '90%', 'margin-left':'5%'}),
+                    html.Button(id='play-button-state', className='button', n_clicks=0, children='Play Animation from the beginning'),
                     html.Br(),
-                    html.Button(id='pause-button-state', n_clicks=0, disabled = True, children='Pause Animation', style={'width': '90%', 'margin-left':'5%'}),
-                    html.Button(id='resume-button-state', n_clicks=0, disabled = True, children='Resume Animation', style={'width': '90%', 'margin-left':'5%'}),
+                    html.Div(
+                        children=[
+                            html.Button(id='pause-button-state', className='button', n_clicks=0, disabled = True, children='Pause Animation', style={'width': '100%'}),
+                            html.Button(id='resume-button-state', className='button', n_clicks=0, disabled = True, children='Resume Animation', style={'width': '100%', 'margin-left':'8px'}),
+                        ],
+                        style={'display': 'flex'}
+                    ),
                     html.Br(),
                     dcc.Textarea(
                         id='text-year-month',
@@ -265,16 +264,19 @@ html.Div(children = [ #top compontent - containes two subdivs
                         readOnly = True,
                         persistence= True,
                         persistence_type= 'session',
-                        style={'width': '89%', 'height':'30px', 'margin-left':'5%'},
+                        style={'height':'40px'},
                     ),
-                ], className='three columns', style={'color':'#65cca9', 'background':'#363F48', 'width':'48.5%', 'height':'400px', 'display':'flex','justify-content':'flex-start','flex-direction':'column', 'border-radius':'1rem'})
-], style={'display':'flex','flex-direction':'row','justify-content':'space-between', 'width':'100%', 'align-items':'center'}
+                ], className='three columns', style={'color':'#65cca9', 'display':'flex','justify-content':'flex-start','flex-direction':'column', 'border-radius':'1rem', 'width': '100%', 'padding-right': '2rem', 'margin-left': '2rem'})
+], style={'display':'flex','flex-direction':'row','justify-content':'space-between', 'width':'100%', 'align-items':'flex-start'}
 ),
 
-html.Div(children = [dcc.Graph(id="mail-graph", #bottom component - graph
-        figure = nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
-        ], style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw','width': '100%', 'height': '500px'}
-        )
+html.Div(
+    className="graph-wrapper",
+    children = [
+        dcc.Graph(id="mail-graph", figure = nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year))
+    ],
+    style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-top': '3vw', 'width': '100%', 'height': '500px'}
+)
 ], style={'display':'flex', 'flex-direction':'column','align-items':'center','justify-content': 'space-between'}
 )
 
@@ -428,10 +430,14 @@ def update_session_graph(n_clicks1, n_clicks2, n_clicks3, n_clicks4, data, n_int
         for cell in row:
             if cell > maxMatrixElement:
                 maxMatrixElement = cell
+
+    normalizedMatrix = []
+    if (len(matrix) > 0):
+        normalizedMatrix = np.vectorize(vectorizedNormalizing)(matrix, 1, maxMatrixElement)
             
     matrixdict = {
         'matrix': matrix,
-        'normMatrix': np.vectorize(vectorizedNormalizing)(matrix, 1, maxMatrixElement),
+        'normMatrix': normalizedMatrix,
         'nodeData': nodeData,
         'edgeData': edgeData
     }

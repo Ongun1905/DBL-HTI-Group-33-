@@ -13,37 +13,48 @@ Visualization 3 | DBL Group 33
 
 
 {% block div %}
-<div class="description">
-    <h1>Visualization 3: Node Link diagram and Adjacency matrix</h1>
-        <p>On this page you can view both visualisations at the same time. Do you want to view some specific data in both visualizations? No problem! Just press the "Update Filters" button! Or do you want to view the timestamp animation on both figures? Please use the animation controls!</p>
-        <br>
-        <p>For the timestamp animation we recommend a minimum speed of 7 seconds for the default data set. For an optimal simultaneous rendering, the speed may vary according to the used data.<p>
-        <br>
-</div>
 <div class="container">
-    <div class="combined">
-        <div class="combNodeVis">
-            <h1>Node Link diagram</h1>
-            {% load plotly_dash %}
-            {% plotly_app name="GraphVisualisation" ratio=1.5 %}
+    <div class="main">
+        <div class="description">
+            <h1>Visualization 3: Node Link diagram and Adjacency matrix</h1>
+            <p>On this page you can view both visualisations at the same time, using all interactive options from both Vis 1 and Vis 2 pages. Do you want to view some specific data in both visualizations? No problem! Just press the "Update Filters" button! Or do you want to watch the timestamp animation on both figures? Please use the animation controls!</p>
+            <br>
+            <p>For the timestamp animation we recommend a minimum speed of 10 seconds for the default data set. For an optimal and correct simultaneous rendering, the speed may vary according to the used data.<p>
         </div>
-        <div class=combAdjVis>
-            <h1>Adjacency matrix</h1>
+    </div>
+</div>
+
+<div class="combined">
+    <div class="combNodeVis">
+        <h1>Node Link diagram</h1>
+        <div class="iframe-wrapper">
+            {% load plotly_dash %}
+            {% plotly_app name="GraphVisualisation" ratio=1.55 %}
+        </div>
+    </div>
+    <div class="combAdjVis">
+        <h1>Adjacency matrix</h1>
+        <div class="am-vis-wrapper">
             {% include "homepage/am_controls.html" %}
         </div>
     </div>
 </div>
 
-<script>
-var oldMatrix
 
-let combinedNodeVisFrame = document.querySelector('.combNodeVis iframe')
-let outerLoopBool = true
+
+<script>
+console.log('Executing vis3 script...')
+
+const combinedVisFrame = document.querySelector('.iframe-wrapper iframe')
+const combinedVisContent = combinedVisFrame.contentWindow
+
+var outerLoopBool = true
+var oldMatrix
 
 // Constant loop that checks if the mailgraph is reloading
 const checkUpdateLoop = setInterval(() => {
     if (outerLoopBool) {
-        const mailGraph = combinedNodeVisFrame.contentWindow.document.querySelector('#mail-graph[data-dash-is-loading="true"]')
+        const mailGraph = combinedVisContent.document.querySelector('#mail-graph[data-dash-is-loading="true"]')
 
         if (mailGraph) {
             outerLoopBool = false // Stop the loop from checking
@@ -56,7 +67,7 @@ const checkUpdateLoop = setInterval(() => {
             console.log('Hiding matrix completed!')
             
             const waitingLoop = setInterval(() => {
-                const mailGraphDone = combinedNodeVisFrame.contentWindow.document.querySelector('#mail-graph:not([data-dash-is-loading="true"])')
+                const mailGraphDone = combinedVisContent.document.querySelector('#mail-graph:not([data-dash-is-loading="true"])')
                 if (mailGraphDone) {
                     clearInterval(waitingLoop)
                     outerLoopBool = true
@@ -127,7 +138,7 @@ async function updateMatrix() {
     const amWrapper = document.querySelector('.am-wrapper')
     const amLoader = document.querySelector('.am-wrapper .am-loader')
     const amLoaderText = document.getElementById('am-loader-text')
-    const am = document.querySelector('.adjacency-matrix')
+    const am = document.getElementById('adjacency-matrix')
 
     // Fetch the session data using promises
     let sessionUpdatePromise = new Promise((resolve, reject) => sessionUpdateHandler(resolve, reject));
@@ -192,25 +203,39 @@ async function updateMatrix() {
 
     am.innerHTML = tableInnerHTML
 
-    // Add event listeners back in
-    const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
+    // Check if there is edge data
+    if (edgeData.length < 1) {
+        // There's no edge data. Hide the table and display the "no data" element!
+        document.querySelector('.no-data').classList.remove('hidden')
+        am.classList.add('hidden')
+    } else {
+        // There is edge data. Display the table and hide the "no data" element!
+        document.querySelector('.no-data').classList.add('hidden')
+        am.classList.remove('hidden')
 
-    // Matrix cell interactions
-    matrixTableEntries.forEach(entry => {
-        // Hover interactions
-        entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
-        entry.onmouseout = () => exitCell()
+        // Only load event listeners and table entry based functions if there are edges
+        // Add event listeners back in
+        const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
 
-        // Click interactions
-        entry.addEventListener('click', () => clickCell(entry, nodeData, edgeData))
-    })
+        // Matrix cell interactions
+        matrixTableEntries.forEach(entry => {
+            // Hover interactions
+            entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
+            entry.onmouseout = () => exitCell()
 
-    // Initialize coloring by edge count
-    edgeCountColoring(matrixTableEntries, nodeData, edgeData)
+            // Click interactions
+            entry.addEventListener('click', () => clickCell(entry, nodeData, edgeData))
+        })
 
-    // Remove empty rows
-    amLoaderText.innerText = 'Removing empty rows...'
-    removeEmptyRows(nodeData, edgeData)
+        // Initialize coloring
+        amLoaderText.innerText = 'Applying cell coloring...'
+        if (document.getElementById('am-toggle-coloring-sentiment').checked === false) edgeCountColoring(matrixTableEntries, nodeData, edgeData)
+        else sentimentColoring(matrixTableEntries, nodeData, edgeData)
+
+        // Remove empty rows
+        amLoaderText.innerText = 'Removing empty rows...'
+        removeEmptyRows(nodeData, edgeData)
+    }
 
     // Hide the preloader on load
     amLoaderText.innerText = 'Done!'

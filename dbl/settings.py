@@ -12,9 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-import django_heroku
-import dj_database_url
-from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -44,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'channels_redis',
+    
 ]
 
 MIDDLEWARE = [
@@ -55,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_plotly_dash.middleware.BaseMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'dbl.urls'
@@ -157,8 +154,7 @@ PLOTLY_COMPONENTS = {
 STATIC_URL = '/static/'
 STATICFILES_LOCATION = 'static'
 STATIC_ROOT = 'static'
- 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -170,4 +166,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
-django_heroku.settings(locals())
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 # Increase the maximum memory upload size for transferring matrix data
+
+#Contact form
+EMAIL_BACKEND ="django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "dblgroup3333@gmail.com"
+EMAIL_HOST_PASSWORD = "Z3%DuvxC"

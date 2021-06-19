@@ -15,6 +15,7 @@ About | DBL Group 33
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body {
+  color: #65cca9;
   font: 17px "Rubik", sans-serif;
   margin: 0;
 }
@@ -49,6 +50,39 @@ html {
   width: 100%;
   margin-left: -50%;
   
+}
+
+input[type=text], select, textarea {
+  width: 100%; /* Full width */
+  padding: 12px; /* Some padding */ 
+  border: 1px solid #ccc; /* Gray border */
+  border-radius: 4px; /* Rounded borders */
+  box-sizing: border-box; /* Make sure that padding and width stays in place */
+  margin-top: 6px; /* Add a top margin */
+  margin-bottom: 16px; /* Bottom margin */
+  resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+}
+
+/* Style the submit button with a specific background color etc */
+button[type=submit] {
+  background-color: #65cca9;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* When moving the mouse over the submit button, add a darker green color */
+button[type=submit]:hover {
+  background-color: #339072;
+}
+
+/* Add a background color and some padding around the form */
+.containerContact {
+  border-radius: 5px;
+  background-color: #2d353c;
+  padding: 20px;
 }
 
 .card {
@@ -131,7 +165,6 @@ html {
           </div>
         </div>
         <br>
-        <p><button class="button">Contact</button></p>
       </div>
     </div>
   </div>
@@ -153,14 +186,13 @@ html {
           </div>
         </div>
         <br>
-        <p><button class="button">Contact</button></p>
       </div>
     </div>
   </div>
   
   <div class="column">
     <div class="card">
-      <img src="./static/jesse.png" alt="Jesse Traas" class="center">
+      <img src="./static/yeet.png" alt="Jesse Traas" class="center">
       <div class="container">
         <h2>Jesse Traas</h2>
         <p class="title">Computer Engineer</p>
@@ -170,7 +202,6 @@ html {
           </div>
         </div>
         <br>
-        <p><button class="button">Contact</button></p>
       </div>
     </div>
   </div>
@@ -186,14 +217,13 @@ html {
         <p class="title">Computer Engineer</p>
         <div class = 'container_row'>
           <div class="limit">
-            <span> I am currently a first-year student at TU/e, majoring in Computer Sciecne. 
+            <span> I am currently a first-year student at TU/e, majoring in Computer Science. 
             In this project, I am responsible for the backend (Django) and deployment. 
             I am seeking for SWE internship or undergratudates. If you are interested, please contact me. 
             </span>
           </div>
         </div>
         <br>
-        <p><button class="button">Contact</button></p>
       </div>
     </div>
   </div>
@@ -211,7 +241,6 @@ html {
           </div>
         </div>
         <br>
-        <p><button class="button">Contact</button></p>
       </div>
     </div>
   </div>
@@ -224,18 +253,37 @@ html {
         <p class="title">Computer Engineer</p>
         <div class = 'container_row'>
           <div class="limit">
-            <span>Hello, thank you for visiting our website! 
-            I’m a first-year Computer Science & Engineering student at TU/e just like my other colleagues here. I’ve mainly focused on the UI elements, visualizations, and the tools we’ve added to our visualizations. 
-            We’ve made sure that you can use this website to its full potential. Have fun using our tools and website!
+            <span>Hi, my name is Johan and I‘m 19 years old. I study computer science at University of Technology Eindhoven. I worked on the uploading application and made sure that the uploaded files are communicated with the visualizations. I also helped set up the main web design. Have fun exploring the website!
             </span>
           </div>
         </div>
         <br>
-        <p><button class="button">Contact</button></p>
       </div>
     </div>
   </div>
 </div>
+
+
+<div class="containerContact">
+  <h1>Contact Us!</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <!--
+    <label for="fname">Your Email</label>
+    <input type="text" id="fname" name="Your Email" placeholder="Your email...">
+
+    <label for="lname">Subject</label>
+    <input type="text" id="lname" name="Subject" placeholder="The Subject...">
+
+    <label for="subject">Message</label>
+    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+    -->
+    <button type="submit" value="Submit">Submit</button>
+    
+  </form>
+</div>
+
 
 
 </body>

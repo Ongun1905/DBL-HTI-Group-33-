@@ -14,3 +14,9 @@ class UploadFileForm(forms.ModelForm):
         widgets = {
             'file': forms.FileInput(attrs={'id': 'upload-file', 'class': 'custom-upload'})
         }
+
+#contactForm
+class ContactForm(forms.Form):
+    Your_Email = forms.CharField(required=True)
+    subject = forms.CharField(required=True)
+    message = forms.CharField(widget=forms.Textarea, required=True)
