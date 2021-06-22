@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="icon" href="{% static 'favicon/33-16.png' %}" sizes="16x16"> <!-- Browsers -->
+  <link rel="icon" href="{% static 'favicon/33-32.png' %}" sizes="32x32"> <!-- Desktop taskbars -->
+  <link rel="icon" href="{% static 'favicon/33-96.png' %}" sizes="96x96"> <!-- Desktop app icons -->
+  <link rel="icon" href="{% static 'favicon/33-196.png' %}" sizes="196x196"> <!-- Android -->
+  <link rel="apple-touch-icon" href="{% static 'favicon/33-152.png' %}" sizes="152x152"> <!-- Apple devices -->
+  <link rel="apple-touch-icon" href="{% static 'favicon/33-167.png' %}" sizes="167x167"> <!-- Apple devices -->
+  <link rel="apple-touch-icon" href="{% static 'favicon/33-180.png' %}" sizes="180x180"> <!-- Apple devices -->
+  <!-- Importing stylesheets -->
+  <link href="{% static 'homepage/components.css' %}" type="text/css" rel="stylesheet">
+  <link href="{% static 'homepage/styles.css' %}" type="text/css" rel="stylesheet">
+  <!-- Importing fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Meta tags -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block head %}{% endblock %}
+</head>
+
+<body class="{% block bodyclass %}{% endblock %}">
+  <div id="page-container">
+    <div id="content-wrapper">
+      <header>
+        <p><strong>DBL</strong> Group 33</p>
+        {% block nav %}{% endblock %}
+      </header>
+
+      {% block div %}
+      {% endblock %}
+    </div>
+
+    <footer>
+      <p>&copy; 2021</p>
+      <p>Made by Jelte, Jesse, Johan, Minh, Ongun and Victor</p>
+    </footer>
+  </div>
+  <div class="modal">
+    <div class="modal-content"></div>
+  </div>
+  <div class="overlay"></div>
+</body>
+
+</html>

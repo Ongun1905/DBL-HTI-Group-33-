@@ -1,0 +1,438 @@
+/* Variables */
+/* CSS also has variables, which can come in handy for frequently occurring values like colors and paddings. */
+/* They can be defined in any block, but it's good practice to declare them in the :root block. */
+/* They can be declared by typing `--var-name: #ffffff;` and they can be used by typing `color: var(--var-name)` */
+:root {
+	--color-black-softest: #485461; /* softer black */
+	--color-black-soft: #363F48; /* softer black */
+	--color-black-hard: #2d353c; /* harder black */
+	--color-black-hardest: #21282e; /* hardest black */
+	--color-green-light: #65cca9; /* light green */
+	--color-green: #29b586; /* medium green */
+	--color-red: #cc6688;
+	--padding-sides: 15%;
+	--footer-height: 3rem;
+	--timing-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box; /* Changes the behaviour of padding and borders. It makes sure the element doesn't become larger because of it's padding, since the padding is put inside the element. Try commenting out this line to see what it does! The navbar will go "outside of the page" to the right. */
+}
+
+body {
+	color: #fff;
+	background-color: var(--color-black-hard);
+	font: 17px "Rubik", sans-serif;
+	overflow-x: hidden;
+}
+
+/* General font settings */
+h1, h2, h3, h4, h5, h6 { margin-bottom: 0.33em; }
+
+/* I try to keep an order in which position is above, then z-index, width,height, floats and display, padding and margins, fonts and colors.*/
+
+/*Menu						************************************************************************************************************************************************/
+header {
+	position: relative;
+	width: 100%;
+	height: 80px;
+
+	/* Positioning */
+	display: flex;
+	justify-content: space-between; /* Puts the two child elements (website name and nav) as far away from eachother as possible. */
+	align-items: center; /* Vertical align */
+	padding: 0 var(--padding-sides);
+	
+	color: white;
+	background-color: var(--color-black-soft);
+}
+
+/* Website name */
+header p {
+	color: var(--color-green-light);
+	font-size: 30px;
+}
+
+header nav {
+	position: relative; /* z-index only works if the position is set to anything other than "static", the default */
+	z-index: 10; /* Makes sure dropdown menu is seen as a top layer| higher z-index -> higher layer */
+}
+header nav > ul > li {
+	position: relative;
+	display: inline-block;
+	margin: 0px 5px;
+	padding: 5px;
+}
+header nav ul li a {
+	text-decoration: none; /*No line under link as usual*/
+	padding: 5px;
+	font-size: 20px;
+	color: white;
+}
+header nav ul li:hover { background-color: var(--color-green-light); }
+header nav ul li ul {
+	position: absolute;
+	width: 100%;
+	left: 0;
+	display: none;
+	margin-top: 5px; 			/*same 5 as padding in 'li a'*/
+	background-color: var(--color-black-softest);
+	box-shadow: 1px 4px 8px 0 rgba(0,0,0,0.3);
+}
+header nav ul li:hover ul {
+	display: block; /* Display submenu's when their list item is hovered */
+}
+header nav ul li ul li, header nav ul li ul li a {
+	display: block; /* Set the display type to block to make sure the submenu items take up the full width and height */
+}
+header nav ul li ul li a {
+  padding: 5px 12px; /* Adding a bit of padding to the left and the right of elements in submenus */
+}
+
+/* Current page highlighthed in menu */
+.current {
+	background-color: var(--color-green-light);
+}
+/*End Menu						************************************************************************************************************************************************/
+
+.container {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	justify-content: center;
+	
+	color: #fff;
+	background-color: var(--color-black-hard);
+}
+.container h1, h2, h3, strong, bold { color: #65cca9; }
+.container .main {
+	width: 100%;
+	padding: 2rem var(--padding-sides);
+}
+
+
+/* Make the footer stay at the bottom of the page */
+#page-container { position: relative; min-height: 100vh; }
+#content-wrapper { padding-bottom: var(--footer-height); }
+
+footer {
+	/* Final 4 lines of forcing the footer to stay at the bottom of the page */
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: var(--footer-height);
+
+	/* Positioning the elements in the footer */
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	/* Adding the same side padding as the rest of the page */
+	padding: 0 var(--padding-sides);
+
+	color: #ccc;
+	background-color: var(--color-black-soft);
+}
+
+/* ------------------------------
+Homepage row layout design
+------------------------------ */
+.row-layout {
+	position: relative;
+	padding: 2rem;
+	background-color: var(--color-black-softest);
+	border-radius: 1rem;
+	overflow: hidden;
+}
+.row-layout + .row-layout { margin-top: 1rem; }
+.row-layout .button { margin-top: 1rem; }
+.row-layout .button + .button {
+	margin-left: 8px; /* Any buttons that are preceded by another button get a left margin */
+}
+.row-layout .side-img {
+	position: absolute;
+	right: -20px;
+	top: -20px;
+	max-height: 125%;
+	opacity: 0.5;
+}
+.row-layout p { max-width: 80%; }
+
+
+/* ------------------------------
+Adjacency matrix styling
+------------------------------ */
+.adjacency-matrix {
+  position: relative;
+	margin-top: 2rem;
+	border-collapse: separate; /* Don't collapse for header borders */
+  border-spacing: 0;
+	background-color: var(--color-black-soft);
+
+	/* Sizing and scroll setup */
+	display: block;
+	overflow: auto;
+	max-height: 600px;
+	max-width: calc(100vw - 2 * var(--padding-sides));
+}
+
+.adjacency-matrix thead th {
+	padding: 4px 8px;
+	position: sticky;
+	top: 0;
+	background-color: var(--color-black-softest);
+	z-index: 1;
+	border-bottom: 2px solid #839ab1;
+}
+
+.adjacency-matrix tbody th {
+	position: sticky;
+	z-index: 1;
+	left: 0;
+	padding: 4px 8px;
+	text-align: left;
+	border-right: 2px solid #839ab1;
+	background-color: var(--color-black-softest);
+}
+
+.adjacency-matrix th { font-size: 14px; }
+
+
+.adjacency-matrix .matrix-data-element {
+	position: relative;
+	text-align: center;
+	cursor: pointer;
+}
+
+.field .title { margin-bottom: 4px; }
+.field { max-width: 300px; }
+.field + .field { margin-top: 1rem; }
+
+
+/* Adjacency matrix - Loading animation */
+.am-wrapper { position: relative;}
+.am-wrapper::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-black-soft);
+  z-index: 2;
+	opacity: 1;
+	transition: opacity 300ms ease;
+}
+.am-wrapper.loaded::before {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.am-wrapper .am-loader {
+	position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+	opacity: 1;
+  z-index: 3;
+	transition: opacity 300ms ease;
+}
+
+.am-wrapper.loaded .am-loader { opacity: 0; } /* Animate the loader out */
+.am-wrapper.loaded .am-loader.hidden { display: none; } /* Remove element from page */
+
+.am-loader #am-loader-text {
+	display: block;
+	margin-top: 1rem;
+	color: #999;
+	text-align: center;
+}
+
+.am-wrapper .circle {
+  box-sizing: border-box;
+  width: 80px;
+  height: 80px;
+	margin: 0 auto;
+  border-radius: 100%;
+  border: 10px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #FFF;
+  animation: spin 1s infinite linear;
+}
+.am-wrapper.loaded .circle { display: none; }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); 
+  }
+  100% {
+    transform: rotate(360deg); 
+  } 
+}
+
+
+/* Adjacency matrix - Popup */
+.edge-info-popup {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	padding: 1em;
+	background-color: var(--color-black-hardest);
+	color: #fff;
+	border-radius: 6px;
+	opacity: 0;
+	z-index: 10;
+	pointer-events: none;
+}
+
+.edge-info-popup p { white-space: nowrap; }
+.edge-info-popup::after {
+	content: " ";
+	position: absolute;
+	top: 99%;
+	left: 50%;
+	margin-left: -8px;
+	border-width: 8px;
+	border-style: solid;
+	border-color: var(--color-black-hardest) transparent transparent transparent;
+}
+
+.matrix-data-element span { pointer-events: none; }
+.edge-info-popup.show { opacity: 1; animation: pop 200ms ease forwards; }
+
+@keyframes pop {
+	0% { transform: var(--translate-eip) scale(0.9); }
+	80% { transform: var(--translate-eip) scale(1.01); }
+	100% { transform: var(--translate-eip) scale(1); }
+}
+
+
+/* Email list within modal */
+.edge-info-modal .col-2 {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 2rem;
+}
+.edge-info-modal p { white-space: nowrap; }
+
+.email-list {
+	width: 100%;
+	text-align: left;
+	border-spacing: 0;
+	margin-top: 2em;
+
+	/* Sizing and scroll setup */
+	display: block;
+	overflow: auto;
+	max-height: 500px;
+}
+.email-list th {
+	padding: 8px 20px;
+	white-space: nowrap;
+	font-weight: 400;
+	border-top: 1px solid var(--color-black-softest);
+  border-bottom: 1px solid var(--color-black-softest);
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background-color: var(--color-black-hard);
+	cursor: pointer;
+}
+.email-list th[data-order="asc"]::after {
+	margin-left: 8px;
+	content: '\25B4';
+}
+.email-list th[data-order="desc"]::after {
+	margin-left: 8px;
+	content: '\25BE';
+}
+
+.email-list th:first-child, .email-list td:first-child { padding-left: 1rem; }
+.email-list th:last-child, .email-list td:last-child { padding-right: 1rem; }
+
+.email-list td:nth-child(2), .email-list th:nth-child(2) { text-align: right; }
+
+.email-list td { padding: 6px 20px; color: #fff; white-space: nowrap; }
+
+.email-list tbody tr { transition: color 200ms ease; }
+.email-list tbody tr:hover { background-color: var(--color-black-soft); }
+
+.email-list td.positive { color: var(--color-green); }
+.email-list td.negative { color: var(--color-red); }
+
+.no-emphasis { color: #999; }
+
+
+
+
+
+/* ------------------------------
+node link styling
+------------------------------ */
+.node-link-graph {
+	margin-top: 3rem;
+	overflow: hidden;
+	border: 10px solid #65cca9;
+	border-radius: 20px;
+}
+
+.graph-wrapper #mail-graph {
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: 3vw;
+	width: 100%;
+	height: 500px;
+}
+
+/* ------------------------------
+vis 3 styling
+------------------------------ */
+body.wide {
+	--padding-sides: 2rem; /* making body wider for vis3 */
+}
+.combined {
+	padding: 3rem;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.combNodeVis, .combAdjVis {
+	width: 50%;
+	overflow: hidden;
+	border: 1px solid #65cca9;
+	border-radius: 20px;
+}
+.combAdjVis {
+	margin-left: 3rem;
+}
+.combNodeVis h1, .combAdjVis h1 {
+	color: #65cca9;
+	text-align: center;
+}
+.AdjForms {
+	text-align: left;
+	height: 400px;
+}
+.am-wrapper-vis3 {
+	margin-top: 3vh;
+}
+.reload-vis3 {
+	border-radius: 10px;
+	background-color: var(--color-black-soft);
+	text-align: center;
+	width: 10%;
+	color: #65cca9;
+	margin: auto;	
+	margin-top: 3vh;
+}
+.reload-vis3 a {
+	border-radius: 10px;
+	display: block;
+	margin: auto;
+	text-decoration: none;
+	color: white;
+}
+.reload-vis3 a:hover {
+	background: #65cca9;
+}

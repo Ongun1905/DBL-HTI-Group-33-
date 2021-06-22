@@ -1,0 +1,523 @@
+/**
+ * Variables
+ *
+ * "Since this file is initialized before `styles.css` but we do want to
+ * use the same variables, we have to declare them in here. Declaring
+ * them here means that the declaration in `styles.css` is obsolete,
+ * but I've chosen not to delete them yet as not to confuse anyone."
+  - Jesse
+*/
+:root {
+	--color-black-softest: #485461; /* softer black */
+	--color-black-soft: #363F48; /* softer black */
+	--color-black-hard: #2d353c; /* harder black */
+	--color-black-hardest: #21282e; /* hardest black */
+	--color-green-light: #65cca9; /* light green */
+	--color-green: #29b586; /* medium green */
+	--padding-sides: 15%;
+	--footer-height: 3rem;
+}
+
+/**
+ * General components
+ *
+ * Any non-specific class that is used in multiple pages (one could say
+ * the "global" components) is declared in this block.
+*/
+
+/* Overlay */
+.overlay {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0;
+  z-index: 10;
+  transition: 300ms opacity ease;
+}
+
+.overlay.show {
+  opacity: 0.7;
+}
+
+
+/* Modals */
+.modal {
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 600px;
+  max-width: 1000px;
+  max-height: 100vh;
+  overflow-y: hidden;
+  padding: 3em 4em;
+  color: #fff;
+  background-color: var(--color-black-hard);
+  text-align: start;
+  opacity: 0;
+  z-index: 11;
+  transition: opacity 300ms ease;
+}
+.modal-content, .modal-body { width: 100%; }
+.modal.show { opacity: 1; }
+
+.modal-content > h1 { margin-bottom: 0.5em; }
+
+.modal .modal-body { color: rgba(255, 255, 255, 0.68); }
+
+
+/**
+ * Reusable UI components
+ *
+ * Micro and macro components that can be used everywhere
+ * in the application by applying classes. Examples include
+ * buttons, inputs and scrollbars.
+*/
+
+/* Toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .switch-slider {
+  background-color: var(--color-green);
+}
+
+input:focus + .switch-slider {
+  box-shadow: 0 0 1px var(--color-green);
+}
+
+input:checked + .switch-slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+
+/* Button */
+.button {
+	display: inline-block;
+	padding: 8px 12px;
+	text-decoration: none;
+	color: #fff;
+	background-color: var(--color-green-light);
+	border: 2px solid var(--color-green-light);
+	border-radius: 4px;
+	transition: background-color 200ms ease, border-color 200ms ease;
+}
+.button:hover {
+	background-color: var(--color-green);
+	border-color: var(--color-green);
+}
+.button.outline {
+	background-color: transparent;
+}
+.button.outline:hover {
+	background-color: var(--color-green);
+}
+
+
+/* Range slider */
+.range-slider {
+	-webkit-appearance: none;
+	width: 100%;
+  height: 25px;
+	background-color: var(--color-black-softest);
+	outline: none;
+	opacity: 0.7;
+	transition: opactiy 200ms ease;
+}
+.range-slider:hover {
+	opacity: 1;
+}
+.range-slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 25px;
+	height: 25px;
+	cursor: pointer;
+	background: var(--color-green-light);
+}
+
+/* Double input range slider */
+[slider] {
+  width: 300px;
+  position: relative;
+  height: 5px;
+  margin: 1rem 0;
+  margin-bottom: 4em;
+}
+
+[slider] > div {
+  position: absolute;
+  left: 13px;
+  right: 15px;
+  height: 5px;
+}
+[slider] > div > [inverse-left] {
+  position: absolute;
+  left: 0;
+  height: 5px;
+  border-radius: 10px;
+  background-color: #CCC;
+}
+
+[slider] > div > [inverse-right] {
+  position: absolute;
+  right: 0;
+  height: 5px;
+  border-radius: 10px;
+  background-color: #CCC;
+}
+
+
+[slider] > div > [range] {
+  position: absolute;
+  left: 0;
+  height: 5px;
+  border-radius: 14px;
+  background-color: var(--color-green);
+}
+
+[slider] > div > [thumb] {
+  position: absolute;
+  top: -7px;
+  z-index: 2;
+  height: 20px;
+  width: 20px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  background-color: #FFF;
+  border-radius: 50%;
+  outline: none;
+  transform: translateX(-50%);
+}
+
+[slider] > input[type=range] {
+  position: absolute;
+  pointer-events: none;
+  -webkit-appearance: none;
+  z-index: 3;
+  height: 14px;
+  top: -2px;
+  width: 100%;
+  opacity: 0;
+}
+
+div[slider] > input[type=range]:focus::-webkit-slider-runnable-track {
+  background: transparent;
+  border: transparent;
+}
+
+div[slider] > input[type=range]:focus {
+  outline: none;
+}
+
+div[slider] > input[type=range]::-webkit-slider-thumb {
+  pointer-events: all;
+  width: 28px;
+  height: 28px;
+  border-radius: 0px;
+  border: 0 none;
+  background: var(--color-green);
+  -webkit-appearance: none;
+}
+
+div[slider] > input[type=range]::-ms-fill-lower {
+  background: transparent;
+  border: 0 none;
+}
+
+div[slider] > input[type=range]::-ms-fill-upper {
+  background: transparent;
+  border: 0 none;
+}
+
+div[slider] > input[type=range]::-ms-tooltip {
+  display: none;
+}
+
+[slider] > div > [sign] {
+  opacity: 0;
+  position: absolute;
+  top: -39px;
+  z-index:3;
+  background-color: var(--color-green);
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 28px;
+  -webkit-border-radius: 28px;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+[slider] > div > [sign]:after {
+  position: absolute;
+  content: '';
+  left: 0;
+  border-radius: 16px;
+  top: 19px;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top-width: 16px;
+  border-top-style: solid;
+  border-top-color: var(--color-green);
+}
+
+[slider] > div > [sign] > span {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+[slider]:hover > div > [sign] {
+  opacity: 1;
+}
+
+/* Tickmark setup */
+[tickmarks] { display: flex; }
+[tickmarks] span {
+  position: relative;
+  width: 2px;
+  height: 6px;
+  margin: 0 auto;
+  margin-top: 18px;
+  background-color: var(--color-black-softest);
+}
+
+[tickmarks] span:first-child { margin-left: 0px; }
+[tickmarks] span:last-child { margin-right: 0px; }
+[tickmarks] span::after {
+  position: absolute;
+  content: attr(data-label);
+  top: 12px;
+  transform: translateX(-50%);
+}
+
+
+/* Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 16px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: var(--color-black-hardest);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--color-green);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-green-light);
+}
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: var(--color-black-hardest);
+}
+
+
+/**
+ * Layouts
+ *
+ * Layout-based components like predefined columns,
+ * rows and grids.
+*/
+.flex-col {
+  display: flex;
+}
+
+/*.flex-col > * + * { margin-left: 2rem; }*/ /* column gutter */
+
+/**
+ * Code blocks
+ *
+ * Inline and block-level codeblocks to highlight file extensions or code blocks
+*/
+pre.code {
+  display: inline-block;
+  background-color: rgba(0, 0, 0, .2);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+
+
+
+
+
+
+
+
+
+/* File upload input */
+.upload {
+  --color-green-light: #65cca9;
+  --ease-in-out-quartic: cubic-bezier(0.645, 0.045, 0.355, 1);
+  position: relative;
+  display: inline-flex;
+  background: var(--color-black-hard);
+  border-radius: 10px;
+  box-shadow: 0 1.7px 1.4px rgba(0, 0, 0, 0.02), 0 4px 3.3px rgba(0, 0, 0, 0.028), 0 7.5px 6.3px rgba(0, 0, 0, 0.035), 0 13.4px 11.2px rgba(0, 0, 0, 0.042), 0 25.1px 20.9px rgba(0, 0, 0, 0.05), 0 60px 50px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+  transform: rotate(0);
+}
+.upload-info {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  margin-right: 40px;
+  fill: #fff;
+  color: #fff;
+}
+.upload-filename {
+  padding-left: 8px;
+  transition: opacity 300ms ease;
+}
+.upload-filename.inactive {
+  opacity: 0.6;
+}
+.upload-button {
+  position: relative;
+  margin: 0;
+  font-size: 100%;
+  padding: 0 8px;
+  font-family: inherit;
+  background: none;
+  border: none;
+  border-radius: inherit;
+  outline: none;
+}
+.upload-button-text {
+  padding: 8px 16px;
+  color: white;
+  background-color: var(--color-green);
+  border-radius: inherit;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 300ms ease, box-shadow 300ms ease;
+}
+.upload-button-text:hover, .upload-button-text:focus {
+  background-color: var(--color-green-light);
+}
+.upload-button-text.inactive {
+  background-color: rgba(255, 255, 255, 0.38);
+  cursor: not-allowed;
+}
+.upload-hint {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: white;
+  transform: translateY(100%);
+}
+.upload-progress {
+  position: absolute;
+  top: 90%;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  color: white;
+  background: linear-gradient(270deg, #87e0c2 0%, #65cca9 50%, #26b082 100%);
+  transform-origin: left;
+}
+.upload.uploading .upload-button-text {
+  animation: fade-up-out 0.4s 0.4s forwards, button-pulse 500ms forwards;
+}
+.upload.uploading .upload-info > * {
+  animation: fade-up-out 0.4s 0.4s forwards;
+}
+.upload.uploading .upload-hint {
+  animation: fade-up-in 0.4s 0.8s forwards;
+}
+.upload.uploading .upload-progress {
+  animation: load-right 2s 1s var(--ease-in-out-quartic) forwards;
+  animation-iteration-count: infinite;
+}
+
+@keyframes button-pulse {
+  from {
+    box-shadow: 0 0 0 0 var(--color-green-light);
+  }
+  to {
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+  }
+}
+@keyframes fade-up-out {
+  to {
+    opacity: 0;
+    transform: translateY(-40%);
+  }
+}
+@keyframes fade-up-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes load-right {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 0;
+  }
+  100% {
+    left: 100%;
+  }
+}
+[type=file] {
+  height: 0;
+  overflow: hidden;
+  width: 0;
+  cursor: pointer;
+}
+#submit-upload-file { display: none; }
+
+.drop-area { border: 1px solid var(--color-black-hard); }
+.drop-area.droppable { border: 1px dashed rgba(255, 255, 255, 0.6); }
+.drop-area.highlight { border: 1px dashed var(--color-green); }

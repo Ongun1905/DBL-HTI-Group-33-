@@ -1,0 +1,248 @@
+{% extends "homepage/layout.html" %}
+
+{% load filters %}
+{% load static %}
+
+{% block title %}
+Visualization 3 | DBL Group 33
+{% endblock %}
+
+{% block nav %}
+{% include "homepage/navbar.html" with active_page='vis3' %}
+{% endblock %}
+
+
+{% block div %}
+<div class="container">
+    <div class="main">
+        <div class="description">
+            <h1>Visualization 3: Node Link diagram and Adjacency matrix</h1>
+            <p>On this page you can view both visualisations at the same time, using all interactive options from both Vis 1 and Vis 2 pages. Do you want to view some specific data in both visualizations? No problem! Just press the "Update Filters" button! Or do you want to watch the timestamp animation on both figures? Please use the animation controls!</p>
+            <br>
+            <p>For the timestamp animation we recommend a minimum speed of 10 seconds for the default data set. For an optimal and correct simultaneous rendering, the speed may vary according to the used data.<p>
+        </div>
+    </div>
+</div>
+
+<div class="combined">
+    <div class="combNodeVis">
+        <h1>Node Link diagram</h1>
+        <div class="iframe-wrapper">
+            {% load plotly_dash %}
+            {% plotly_app name="GraphVisualisation" ratio=1.55 %}
+        </div>
+    </div>
+    <div class="combAdjVis">
+        <h1>Adjacency matrix</h1>
+        <div class="am-vis-wrapper">
+            {% include "homepage/am_controls.html" %}
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+console.log('Executing vis3 script...')
+
+const combinedVisFrame = document.querySelector('.iframe-wrapper iframe')
+const combinedVisContent = combinedVisFrame.contentWindow
+
+var outerLoopBool = true
+var oldMatrix
+
+// Constant loop that checks if the mailgraph is reloading
+const checkUpdateLoop = setInterval(() => {
+    if (outerLoopBool) {
+        const mailGraph = combinedVisContent.document.querySelector('#mail-graph[data-dash-is-loading="true"]')
+
+        if (mailGraph) {
+            outerLoopBool = false // Stop the loop from checking
+            console.log("MailGraph is currently loading! Start a new interval that waits until it's done to update the matrix")
+
+            // Remove loaded class from matrix wrapper to show load animation and add appropriate text
+            amLoaderText.innerText = 'Reloading matrix...'
+            amWrapper.classList.remove('loaded')
+            amLoader.classList.remove('hidden')
+            console.log('Hiding matrix completed!')
+            
+            const waitingLoop = setInterval(() => {
+                const mailGraphDone = combinedVisContent.document.querySelector('#mail-graph:not([data-dash-is-loading="true"])')
+                if (mailGraphDone) {
+                    clearInterval(waitingLoop)
+                    outerLoopBool = true
+                    updateMatrix()
+                }
+            }, 1000)
+        }
+    }
+}, 1000)
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function sessionUpdateHandler(resolve, reject) {
+    var success = false
+
+    if (!oldMatrix) {
+        // No old matrix, just fetch the data (on a small delay for the session data to update if necessary)
+        sleep(1000)
+        console.log(`[%csession%c]%c Couldn't find an old matrix, returning session data`, 'color: #65cca9;', 'color: #ddd;', 'color: #ddd;')
+        success = true
+        oldMatrix = JSON.parse(window.sessionStorage.session)
+        resolve(JSON.parse(window.sessionStorage.session))
+    } else if (oldMatrix.edgeData.length == JSON.parse(window.sessionStorage.session).edgeData.length) {
+        // Old matrix is the same as the current session data: Don't update yet, keep checking
+        // If after 3 seconds it has not changed, abort refresh
+
+        // Set up the loop that checks for changes
+        console.log(`[%csession%c]%cMatrices were equal! Starting the fetching loop...`, 'color: #65cca9;', 'color: #ddd;', 'color: #ddd;')
+        let loopFetchIndex = 0
+
+        loopFetchInterval = setInterval(() => {
+            // Handle loop exiting on too long loads
+            loopFetchIndex++
+            if (loopFetchIndex > 3) {
+                clearInterval(loopFetchInterval)
+                // The loopFetchInterval is done and the code has not returned. Matrix could't be updated!
+                if (success) resolve(JSON.parse(window.sessionStorage.session))
+                else resolve(false)
+            }
+
+            // Check the matrices
+            if (oldMatrix.edgeData.length == JSON.parse(window.sessionStorage.session).edgeData.length) {
+                console.log(`[%csession%c]%cThe matrices are still equal...`, 'color: #65cca9;', 'color: #ddd;', 'color: #ddd;')
+            } else {
+                console.log(`[%csession%c]%cThe matrices are no longer equal! Returning result...`, 'color: #65cca9;', 'color: #ddd;', 'color: #ddd;')
+                success = true
+                oldMatrix = JSON.parse(window.sessionStorage.session)
+                clearInterval(loopFetchInterval)
+                resolve(JSON.parse(window.sessionStorage.session))
+            }
+        }, 500)
+    } else {
+        // The old matrix exists and is different from the session data! Fetch and return the data
+        console.log(`[%csession%c]%cThe matrices were never equal! Returning result and printing oldMatrix and newMatrix...`, 'color: #65cca9;', 'color: #ddd;', 'color: #ddd;')
+        console.log(oldMatrix, JSON.parse(window.sessionStorage.session))
+        success = true
+        oldMatrix = JSON.parse(window.sessionStorage.session)
+        resolve(JSON.parse(window.sessionStorage.session))
+    }
+}
+
+async function updateMatrix() {
+    console.log(`The matrix is going to update...`)
+
+    // Init variables
+    const amWrapper = document.querySelector('.am-wrapper')
+    const amLoader = document.querySelector('.am-wrapper .am-loader')
+    const amLoaderText = document.getElementById('am-loader-text')
+    const am = document.getElementById('adjacency-matrix')
+
+    // Fetch the session data using promises
+    let sessionUpdatePromise = new Promise((resolve, reject) => sessionUpdateHandler(resolve, reject));
+    const sessionMatrixData = await sessionUpdatePromise
+
+    if (sessionMatrixData === false) {
+        console.log('Data did not change!')
+
+        // Hide the preloader again
+        amLoaderText.innerText = 'Aborted...'
+        amWrapper.classList.add('loaded')
+        setTimeout(() => amLoader.classList.add('hidden'), 300)
+
+        return
+    } else {
+        console.log(`Session data found! Here's the object: %o`, sessionMatrixData)
+    }
+
+    // Fetch the new nodeData, edgeData, matrix and normalized matrix
+    const updatedMatrix = sessionMatrixData.matrix
+    const updatedNormMatrix = sessionMatrixData.normMatrix
+    nodeData = sessionMatrixData.nodeData
+    edgeData = sessionMatrixData.edgeData
+
+    // Empty the table element
+    am.innerHTML = ''
+
+    // Re-fill the table element from scratch by looping over the node and edge data, similar to the python loop version in vis2.html
+    let headerElements = []
+    nodeData.forEach(data => headerElements.push(`<th><span>${data.id}</span></th>`))
+
+    let bodyRows = []
+    updatedMatrix.forEach((row, rowIndex) => {
+
+        // Generate the matrix cell elements
+        let bodyRowCells = []
+        row.forEach((cell, colIndex) => {
+            bodyRowCells.push(`<td class="matrix-data-element" data-row-index="${rowIndex}" data-column-index="${colIndex}" data-edge-count-norm="${updatedNormMatrix[rowIndex][colIndex]}">${cell > 0 ? '<span>' + cell + '</span>' : ''}</td>`)
+        })
+        
+        // Generate the row elements and append the cell elements
+        bodyRows.push(`
+            <tr id="node-${nodeData[rowIndex].id}">
+                <th>${nodeData[rowIndex].id}</th>
+                ${bodyRowCells.join('')}
+            </tr>
+        `)
+    })
+
+    // Fill the table with the new data
+    const tableInnerHTML = `
+    <thead>
+        <tr>
+            <th><span>x</span></th>
+            ${headerElements.join('')}
+        </tr>
+    </thead>
+    <tbody>
+        ${bodyRows.join('')}
+    </tbody>
+    `
+
+    am.innerHTML = tableInnerHTML
+
+    // Check if there is edge data
+    if (edgeData.length < 1) {
+        // There's no edge data. Hide the table and display the "no data" element!
+        document.querySelector('.no-data').classList.remove('hidden')
+        am.classList.add('hidden')
+    } else {
+        // There is edge data. Display the table and hide the "no data" element!
+        document.querySelector('.no-data').classList.add('hidden')
+        am.classList.remove('hidden')
+
+        // Only load event listeners and table entry based functions if there are edges
+        // Add event listeners back in
+        const matrixTableEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
+
+        // Matrix cell interactions
+        matrixTableEntries.forEach(entry => {
+            // Hover interactions
+            entry.onmouseenter = () => enterCell(entry, nodeData, edgeData)
+            entry.onmouseout = () => exitCell()
+
+            // Click interactions
+            entry.addEventListener('click', () => clickCell(entry, nodeData, edgeData))
+        })
+
+        // Initialize coloring
+        amLoaderText.innerText = 'Applying cell coloring...'
+        if (document.getElementById('am-toggle-coloring-sentiment').checked === false) edgeCountColoring(matrixTableEntries, nodeData, edgeData)
+        else sentimentColoring(matrixTableEntries, nodeData, edgeData)
+
+        // Remove empty rows
+        amLoaderText.innerText = 'Removing empty rows...'
+        removeEmptyRows(nodeData, edgeData)
+    }
+
+    // Hide the preloader on load
+    amLoaderText.innerText = 'Done!'
+    amWrapper.classList.add('loaded')
+    setTimeout(() => amLoader.classList.add('hidden'), 300)
+
+    console.log('Finished matrix update!')
+}
+</script>
+{% endblock %}

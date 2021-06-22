@@ -1,0 +1,25 @@
+{% extends "homepage/layout.html" %}
+
+{% block title %}
+Visualization 2 | DBL Group 33
+{% endblock %}
+
+{% block nav %}
+{% include "homepage/navbar.html" with active_page='vis2' %}
+{% endblock %}
+
+{% block div %}
+<div class="container">
+    <div class="main">
+        <h1>Visualization 2: Adjacency matrix</h1>
+        <p>This visualization displays an adjacency matrix of the input data. The left table header corresponds to outgoing edges while the top header corresponds to incoming edges. In the case of the Enron dataset, the left header corresponds to the sender of the email while the top header corresponds to the receiver of the email. The number in the table cell corresponds to the amount of emails sent between the two individuals.</p>
+        <br />
+
+        <p>There are multiple options for interaction. One can hover over cells to view some basic information or click on them to display data about individual emails.</p>
+        <br />
+        <br />
+
+        {% include "homepage/am_controls.html" %}
+    </div>
+</div>
+{% endblock %}
