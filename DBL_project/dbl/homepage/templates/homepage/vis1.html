@@ -11,7 +11,7 @@ Visualization 1 | DBL Group 33
 
 {% block div %}
 <div class="container">
-    <div class="main">
+    <section>
         <h1>Visualization 1: MultiDiGraph</h1>
         <p>This visualization consists of a Network MultiDiGraph, where each node represents a user's e-mail address and each edge represents a message sent between two users. With the help of interactive tools, you can easily analyze the e-mail traffic of Enron's company.</p>
         <br>
@@ -36,6 +36,6 @@ Visualization 1 | DBL Group 33
             <br>
             {% plotly_app name="GraphVisualisation" ratio=1.0 %}
         </div>
-    </div>
+    </section>
 </div>
 {% endblock %}
