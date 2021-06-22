@@ -13,7 +13,6 @@ import datetime as dt
 # The overarching function that does all the graph creating
 def createGraph(filename):
     # Read CSV and setup NX graph data structure
-    #mailSet = pd.read_csv(settings.BASE_DIR / 'enron-v1.csv', engine='python')
     mailSet = pd.read_csv(settings.BASE_DIR / 'media' / str(filename), engine='python')
     mailSet['date'] = pd.to_datetime(mailSet['date']) # Filter the date for Dash
     mailSet['month'] = mailSet['date'].dt.month
@@ -60,13 +59,13 @@ def createGraph(filename):
 
 
 def filterGraph(graph, sentimentValue, jobFromValue, jobToValue, mailFromValue, mailToValue, mailDateStart, mailDateEnd, toccSelect, showhide, isLive, month, year):
+    # This global variable will be used as a data structure for both the graph and the matrix as well
     global filteredGraph
     filteredGraph = graph.copy(as_view=False)
     mailDateStart = pd.to_datetime(mailDateStart)
     mailDateEnd = pd.to_datetime(mailDateEnd)
 
-
-    # Remove the edges that don't satisfy the range
+    # Remove the edges that don't satisfy the filters
     for edge in graph.edges:
         edgeAttribute = graph.get_edge_data(*edge)
         flag = False
@@ -101,6 +100,7 @@ def filterGraph(graph, sentimentValue, jobFromValue, jobToValue, mailFromValue, 
         if(flag):
             filteredGraph.remove_edge(*edge)
     
+    # Remove the nodes if the hiding option was chosen
     if(showhide == 'False'):
         for node in graph.nodes:
             if(filteredGraph.degree(node) == 0):
@@ -125,7 +125,7 @@ def drawGraph(filteredGraph):
         edge_y.append(None)
 
     # Drawing edge lines
-    edge_trace = go.Scatter(
+    edge_trace = go.Scattergl(
         x=edge_x, y=edge_y,
         line=dict(width=0.5, color='rgba(152, 152, 152, 0.5)'),
         hoverinfo='none',
@@ -140,7 +140,7 @@ def drawGraph(filteredGraph):
         node_y.append(y)
 
     # Drawing nodes
-    node_trace = go.Scatter(
+    node_trace = go.Scattergl(
         x=node_x, y=node_y,
         mode='markers',
         hoverinfo='text',
@@ -174,14 +174,8 @@ def drawGraph(filteredGraph):
     node_trace.marker.color = node_adjacencies
     node_trace.text = node_text
 
-    #node_trace.on_click(update_point(node_trace, filteredGraph))
-    
-        
-
-
-
     # Drawing the graph as a figure
-    figure = go.Figure(data=[edge_trace, node_trace],
+    figure = go.Figure(data=[node_trace, edge_trace],
         layout=go.Layout(
         title='Network Graph Visualisation',
         titlefont_size=16,
@@ -201,10 +195,6 @@ def drawGraph(filteredGraph):
 # Generate random positions for the network nodes
 def generatePositions(graph):
     random.seed(10)
-
-    # Random position distributions
-    # pos = {v: [random.gauss(0, 2), random.gauss(0, 2)] for v in graph.nodes}     # Gaussian position distribution
-    # pos = {v: [random.random(), random.random()] for v in graph.nodes}           # Standard position distribution
 
     # Calculated position distribution
     nf = len(graph.nodes) / (2 * math.pi) # Normalization factor for normalizing the nodes to 2*pi (full circle)

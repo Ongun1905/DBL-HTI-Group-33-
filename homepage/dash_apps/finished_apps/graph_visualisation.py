@@ -50,7 +50,7 @@ dateEnd = maxDate
 # Get external styles for the Dash app (the Dash stylesheet is hosted on Google Drive)
 external_stylesheets = ['https://drive.google.com/uc?export=view&id=1nqO1GRPAXQziZm9zDBCM09iutaRbqrt3']
 
-# Initialise Dash app
+# Initialise Django Dash app
 #app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 from django_plotly_dash import DjangoDash
 app = DjangoDash('GraphVisualisation',
@@ -280,8 +280,8 @@ html.Div(
 ], style={'display':'flex', 'flex-direction':'column','align-items':'center','justify-content': 'space-between'}
 )
 
-
-@app.callback(                                                              # This app callback updates the graph when played or paused
+# This app callback updates the graph when filtered, played or paused
+@app.callback(                                                          
      [dash.dependencies.Output('interval-component', 'interval'),
       dash.dependencies.Output('interval-component', 'disabled'),
       dash.dependencies.Output('text-year-month', 'value'),
@@ -320,16 +320,10 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
     dateEnd = pd.to_datetime(mailEndDate)
     toccSelect = tocc
     showhideNodes = showhide
-    #month = (dateStart.month + n_intervals - n_intervals_start) % 12
-    #if (month == 0):
-    #    month = 12
-    #year = dateStart.year + mt.floor((dateStart.month + n_intervals - n_intervals_start) / 12) - 1
-    #if (not (month == 12)):
-    #    year += 1
     ctx = dash.callback_context
+    # Here is defined what happens to the graph according to the buttons, whether it's in filtering or animation mode
     if (not ctx.triggered and n_clicks1 == 0 and n_clicks2 == 0 and n_clicks3 == 0 and n_clicks4 == 0):
         if (isLive):
-            #return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
             return dash.no_update, disableState, 'Animation status: paused. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), pauseDisabled, resumeDisabled, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
         else:
             return dash.no_update, disableState, 'Animation status: not active.', True, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
@@ -383,9 +377,10 @@ def update_play_output(n_clicks1, n_clicks2, n_clicks3, n_clicks4, n_intervals, 
                     return dash.no_update, disableState, 'Animation status: active. Timestamps: Year: ' + str(year) + ', Month: ' + str(month), False, True, nlf.filterGraph(vis1Graph, sentimentRange, jobFromRange, jobToRange, mailFromRange, mailToRange, dateStart, dateEnd, toccSelect, showhideNodes, isLive, month, year)
 
 
-@app.callback(output=dash.dependencies.Output('fileDropDown', 'options'),       # This app callback makes sure the media folder is
-              inputs=[dash.dependencies.Input('refreshDropDown', 'n_clicks')])  # updated when clicking the dataset dropdown menu
-def change_my_dropdown_options(n_clicks):                                       # The newly uploaded files can now also be selected
+# This app callback makes sure the media folder is updated when clicking the dataset dropdown menu
+@app.callback(output=dash.dependencies.Output('fileDropDown', 'options'),       
+              inputs=[dash.dependencies.Input('refreshDropDown', 'n_clicks')]) 
+def change_my_dropdown_options(n_clicks):      # The newly uploaded files can now also be selected
     if n_clicks is None:
         raise dash.exceptions.PreventUpdate
     options = [{'label': j, 'value': j} for j in os.listdir(settings.MEDIA_ROOT)]
@@ -454,7 +449,6 @@ def vectorizedNormalizing(z, norm, max):
 # List comprehension object key exclusion
 def without_keys(d, keys):
     return {x: d[x] for x in d if x not in keys}
-
 
 
 if __name__ == '__main__':
