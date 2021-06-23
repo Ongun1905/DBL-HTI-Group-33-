@@ -21,21 +21,21 @@ Visualization 3 | DBL Group 33
             <br>
             <p>For the timestamp animation we recommend a minimum speed of 10 seconds for the default data set. For an optimal and correct simultaneous rendering, the speed may vary according to the used data.<p>
         </div>
-    </div>
-</div>
+    </section>
 
-<div class="combined">
-    <div class="combNodeVis">
-        <h1>Node Link diagram</h1>
-        <div class="iframe-wrapper">
-            {% load plotly_dash %}
-            {% plotly_app name="GraphVisualisation" ratio=1.55 %}
+    <div class="combined">
+        <div class="combNodeVis">
+            <h1>Node Link diagram</h1>
+            <div class="iframe-wrapper">
+                {% load plotly_dash %}
+                {% plotly_app name="GraphVisualisation" ratio=1.55 %}
+            </div>
         </div>
-    </div>
-    <div class="combAdjVis">
-        <h1>Adjacency matrix</h1>
-        <div class="am-vis-wrapper">
-            {% include "homepage/am_controls.html" %}
+        <div class="combAdjVis">
+            <h1>Adjacency matrix</h1>
+            <div class="am-vis-wrapper">
+                {% include "homepage/am_controls.html" %}
+            </div>
         </div>
     </div>
 </div>
