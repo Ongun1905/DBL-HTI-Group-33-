@@ -9,174 +9,41 @@ About | DBL Group 33
 {% endblock %}
 
 {% block div %}
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  color: #65cca9;
-  font: 17px "Rubik", sans-serif;
-  margin: 0;
-}
+<div class="container">
+  <section class="about">
+    <div class="about-intro">
+      <h1>Meet Our Team</h1>
+    </div>
 
-html {
-  box-sizing: border-box;
-}
-
-*, *:before, *:after {
-  box-sizing: inherit;
-}
-
-.column {
-  float: left;
-  width: 33.3%;
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  padding: 0 8px;
-}
-
-.container_row{
-  width: 90%;
-}
-
-.layer1 {
-  width: 100%;
-  
-}
-
-.layer2{
-  width: 100%;
-  margin-left: -50%;
-  
-}
-
-input[type=text], select, textarea {
-  width: 100%; /* Full width */
-  padding: 12px; /* Some padding */ 
-  border: 1px solid #ccc; /* Gray border */
-  border-radius: 4px; /* Rounded borders */
-  box-sizing: border-box; /* Make sure that padding and width stays in place */
-  margin-top: 6px; /* Add a top margin */
-  margin-bottom: 16px; /* Bottom margin */
-  resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
-}
-
-/* Style the submit button with a specific background color etc */
-button[type=submit] {
-  background-color: #65cca9;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-/* When moving the mouse over the submit button, add a darker green color */
-button[type=submit]:hover {
-  background-color: #339072;
-}
-
-/* Add a background color and some padding around the form */
-.containerContact {
-  border-radius: 5px;
-  background-color: #2d353c;
-  padding: 20px;
-}
-
-.card {
-  box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  margin: 100px;
-  width: 450px;
-}
-
-
-.container {
-  padding: 2px 16px;
-  flex-direction: column;
-}
-
-.container::after, .row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-.title {
-  color: grey;
-}
-
-.limit{
-    width: 350px;
-    word-wrap: break-word;
-    text-align:left;
-}
-
-.button {
-  border: none;
-  outline: 0;
-  display: inline-block;
-  padding: 8px;
-  color: white;
-  background-color: #000;
-  text-align: center;
-  cursor: pointer;
-  width: 100%;
-}
-
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-}
-
-.button:hover {
-  background-color: #555;
-}
-
-@media screen and (max-width: 650px) {
-  .column {
-    width: 100%;
-    display: block;
-  }
-}
-</style>
-</head>
-<body>	
-
-<h2 style="text-align:center">Our Team</h2>
-<div class="row">
-  <div class="column">
-    <div class="card">
-      <img src="./static/OngunK.jpg" alt="Ongun" class="center">
-      <div class="container">
-        <h2>Ongun Korkmaz</h2>
-        <p class="title">Computer Engineer</p>
-        <div class = 'container_row'>
-          <div class="limit">
+    <div class="about-grid">
+      <div class="card">
+        <div class="card-img">
+          <img src="./static/OngunK.jpg" alt="Ongun">
+        </div>
+        <div class="card-text">
+          <div>
+            <h2>Ongun Korkmaz</h2>
+            <p class="title">UI &amp; interaction designer</p>
             <span>Hello, thank you for visiting our website! 
-            I’m a first-year Computer Science & Engineering student at TU/e just like my other colleagues here. I’ve mainly focused on the UI elements, visualizations, and the tools we’ve added to our visualizations. 
+            I’m a first-year Computer Science &amp; Engineering student at TU/e just like my other colleagues here. I’ve mainly focused on the UI elements, visualizations, and the tools we’ve added to our visualizations. 
             We’ve made sure that you can use this website to its full potential. Have fun using our tools and website!
             </span>
+            <br>
+          </div>
+          <div class="buttons">
+            <a href="mailto:ongun.korkmaz@gmail.com" target="_blank" class="about-button mail"><i class="far fa-envelope"></i></a>
           </div>
         </div>
-        <br>
       </div>
-    </div>
-  </div>
 
-  <div class="column">
-    <div class="card">
-      <img src="./static/Jelte.png" alt="Jelte Schuurmans" class="center">
-      <div class="container">
-        <h2>Jelte Schurmaans</h2>
-        <p class="title">Computer Engineer</p>
-        <div class = 'container_row'>
-          <div class="limit">
+      <div class="card">
+        <div class="card-img">
+          <img src="./static/Jelte.png" alt="Jelte Schuurmans">
+        </div>
+        <div class="card-text">
+          <div>
+            <h2>Jelte Schuurmans</h2>
+            <p class="title">Scrum master</p>
             <span>Hi, I'm Jelte and I am 21 years old. 
               I study Computer science and engineering at the university of technology in Eindhoven.
               I've worked on deploying the website and a bit on the MultiDiGraph.
@@ -184,109 +51,97 @@ button[type=submit]:hover {
               I hope the tools the website provides you will be helpful!
             </span>
           </div>
-        </div>
-        <br>
-      </div>
-    </div>
-  </div>
-  
-  <div class="column">
-    <div class="card">
-      <img src="./static/yeet.png" alt="Jesse Traas" class="center">
-      <div class="container">
-        <h2>Jesse Traas</h2>
-        <p class="title">Computer Engineer</p>
-        <div class = 'container_row'>
-          <div class="limit">
-            <span>Hi! I'm Jesse and I'm an 18 year old computer scientist at the University of Technology Eindhoven with a passion for web development and web design. I'm the main developer of the adjacency matrix in this tool and I helped lay the groundwork for the node-link diagram.</span>
+          <div class="buttons">
+            <a href="mailto:j.j.w.schuurmans@student.tue.nl" target="_blank" class="about-button mail"><i class="far fa-envelope"></i></a>
           </div>
         </div>
-        <br>
       </div>
-    </div>
-  </div>
-  
-</div>
-
-<div class="row">
-  <div class="column">
-    <div class="card">
-      <img src="./static/Minh.jpg" alt="Ongun" class="center">
-      <div class="container">
-        <h2>Pham Duc Minh</h2>
-        <p class="title">Computer Engineer</p>
-        <div class = 'container_row'>
-          <div class="limit">
-            <span> I am currently a first-year student at TU/e, majoring in Computer Science. 
-            In this project, I am responsible for the backend (Django) and deployment. 
-            I am seeking for SWE internship or undergratudates. If you are interested, please contact me. 
-            </span>
+      
+      <div class="card">
+        <div class="card-img">
+          <img src="./static/jesse.png" alt="Jesse Traas">
+        </div>
+        <div class="card-text">
+          <div>
+            <h2>Jesse Traas</h2>
+            <p class="title">Visualization developer</p>
+            <span>Hi! I'm Jesse and I'm an 18 year old Computer Science student at the University of Technology Eindhoven with a passion for web development and web design. I'm the main developer of the adjacency matrix in this tool and I helped lay the groundwork for the node-link diagram.</span>
+          </div>
+          <div class="buttons">
+            <a href="mailto:j.g.a.traas@student.tue.nl" target="_blank" class="about-button mail"><i class="far fa-envelope"></i></a>
+            <a href="https://www.linkedin.com/in/jesse-traas-0829ba1b9/" target="_blank" class="about-button linkedin"><i class="fab fa-linkedin"></i></a>
+            <a href="https://errato.nl" target="_blank" class="about-button site"><i class="far fa-globe"></i></a>
           </div>
         </div>
-        <br>
       </div>
-    </div>
-  </div>
 
-  <div class="column">
-    <div class="card">
-      <img src="./static/Victor.jpg" alt="Victor Asanache" class="center">
-      <div class="container">
-        <h2>Victor Asanache</h2>
-        <p class="title">Computer Engineer</p>
-        <div class = 'container_row'>
-          <div class="limit">
+      <div class="card">
+        <div class="card-img">
+          <img src="./static/Minh.jpg" alt="Ongun">
+        </div>
+        <div class="card-text">
+          <div>
+            <h2>Pham Duc Minh</h2>
+            <p class="title">Back-end engineer</p>
+            <span>I am currently a first-year student at TU/e, majoring in Computer Science. In this project, I am responsible for the backend (Django) and deployment. I am seeking for SWE internship or undergratudates. If you are interested, please contact me.</span>
+          </div>
+          <div class="buttons">
+            <a href="mailto:d.pham.duc.minh@student.tue.nl" target="_blank" class="about-button mail"><i class="far fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <img src="./static/Victor.jpg" alt="Victor Asanache">
+        </div>
+        <div class="card-text">
+          <div>
+            <h2>Victor Asanache</h2>
+            <p class="title">Visualization developer</p>
             <span>Hello there! My name is Victor and I'm currently finishing my first year in Computer Science and Engineering at TU/e! I enjoyed working on the interactive controls of the Node Link diagram and I have to say that implementing the timestamp animation was an interesting experience! We hope that our diverse tools will help you with the data set analysis and we wish you to have fun while exploring our website!
             </span>
           </div>
-        </div>
-        <br>
-      </div>
-    </div>
-  </div>
-
-  <div class="column">
-    <div class="card">
-      <img src="./static/Johan.jpeg" alt="Johan van Dongen" class="center">
-      <div class="container">
-        <h2>Johan van Dongen</h2>
-        <p class="title">Computer Engineer</p>
-        <div class = 'container_row'>
-          <div class="limit">
-            <span>Hi, my name is Johan and I‘m 19 years old. I study computer science at University of Technology Eindhoven. I worked on the uploading application and made sure that the uploaded files are communicated with the visualizations. I also helped set up the main web design. Have fun exploring the website!
-            </span>
+          <div class="buttons">
+            <a href="mailto:v.asanache@student.tue.nl" target="_blank" class="about-button mail"><i class="far fa-envelope"></i></a>
           </div>
         </div>
-        <br>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <img src="./static/Johan.jpeg" alt="Johan van Dongen">
+        </div>
+        <div class="card-text">
+          <div>
+            <h2>Johan van Dongen</h2>
+            <p class="title">UI designer</p>
+            <span>Hi, my name is Johan and I‘m 19 years old. I study computer science at University of Technology Eindhoven. 
+              I worked on the uploading application and made sure that the uploaded files are communicated with the visualizations. 
+              I also helped set up the main web design. Have fun exploring the website!
+            </span>
+          </div>
+          <div class="buttons">
+            <a href="j.p.v.dongen@student.tue.nl" target="_blank" class="about-button mail"><i class="far fa-envelope"></i></a>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <section class="contact">
+    <div class="containerContact">
+      <h1>Contact Us!</h1>
+      <form method="post">
+
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button class="button" type="submit" value="Submit">Submit</button>
+        
+      </form>
+    </div>
+  </section>
 </div>
-
-
-<div class="containerContact">
-  <h1>Contact Us!</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <!--
-    <label for="fname">Your Email</label>
-    <input type="text" id="fname" name="Your Email" placeholder="Your email...">
-
-    <label for="lname">Subject</label>
-    <input type="text" id="lname" name="Subject" placeholder="The Subject...">
-
-    <label for="subject">Message</label>
-    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
-    -->
-    <button type="submit" value="Submit">Submit</button>
-    
-  </form>
-</div>
-
-
-
-</body>
-</html>
 
 {% endblock %}

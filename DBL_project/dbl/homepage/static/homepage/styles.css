@@ -47,6 +47,7 @@ header {
 	
 	color: white;
 	background-color: var(--color-black-soft);
+	/*border-bottom: 2px solid var(--color-black-softest);*/
 }
 
 /* Website name */
@@ -100,16 +101,23 @@ header nav ul li ul li a {
 .container {
 	position: relative;
 	z-index: 1;
-	display: flex;
-	justify-content: center;
-	
 	color: #fff;
 	background-color: var(--color-black-hard);
 }
 .container h1, h2, h3, strong, bold { color: #65cca9; }
-.container .main {
+.container > section {
 	width: 100%;
 	padding: 2rem var(--padding-sides);
+}
+.container > section h1 {
+	font-size: 2em;
+}
+.container > section:nth-child(even) {
+	background-color: var(--color-black-soft);
+}
+
+.container > section:last-child {
+	/*padding-bottom: 4rem;*/
 }
 
 
@@ -133,6 +141,7 @@ footer {
 	padding: 0 var(--padding-sides);
 
 	color: #ccc;
+	border-top: 2px solid var(--color-black-softest);
 	background-color: var(--color-black-soft);
 }
 
@@ -435,4 +444,121 @@ body.wide {
 }
 .reload-vis3 a:hover {
 	background: #65cca9;
+}
+
+
+
+/* ------------------------------
+About page styling
+------------------------------ */
+.about .about-intro {
+	text-align: center;
+	max-width: 60%;
+	margin: 0px auto;
+}
+
+.about .about-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+	grid-gap: 4rem 6rem;
+	margin: 2rem 0;
+}
+
+.about-grid .card {
+	--card-radius: 12px;
+  display: flex;
+  flex-direction: column;
+	width: 100%;
+}
+
+.about-grid .card-img {
+	position: relative;
+	width: 100%;
+	height: 0;
+	padding-top: 100%;
+}
+
+.about-grid .card-img img {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: var(--card-radius);
+}
+
+.about-grid .card-text {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+  padding: 1.5rem 0;
+}
+
+.about-grid .card-text > *:last-child { margin-top: 1rem; }
+
+
+.about-grid .card .about-button {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	color: #ccc;
+	background-color: var(--color-black-softest);
+	transition: color 200ms ease, background-color 200ms ease;
+}
+.about-grid .card .about-button + .about-button { margin-left: 0.5em; }
+
+.about-grid .card .about-button:hover { color: #fff; background-color: #576575; }
+.about-grid .card .about-button.linkedin:hover { background-color: #0084bf; }
+
+.about-grid .card .title {
+	display: block;
+  color: #aaa;
+	margin-bottom: 1rem;
+}
+
+.about-grid .card .button { width: 100%; }
+
+
+@media screen and (max-width: 550px) {
+  .about .about-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+
+/* Contact */
+input[type=text], select, textarea {
+  width: 100%; /* Full width */
+  padding: 12px; /* Some padding */ 
+  border: 1px solid #ccc; /* Gray border */
+  border-radius: 4px; /* Rounded borders */
+  box-sizing: border-box; /* Make sure that padding and width stays in place */
+  margin-top: 6px; /* Add a top margin */
+  margin-bottom: 16px; /* Bottom margin */
+  resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+}
+
+/* Style the submit button with a specific background color etc */
+input[type=submit] {
+  background-color: #65cca9;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* When moving the mouse over the submit button, add a darker green color */
+input[type=submit]:hover {
+  background-color: #339072;
+}
+
+/* Add a background color and some padding around the form */
+.containerContact {
+  border-radius: 5px;
 }

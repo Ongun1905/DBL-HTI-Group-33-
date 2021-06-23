@@ -11,8 +11,8 @@ DBL Group 33 | Homepage
 
 {% block div %}
 <div class="container">
-	<div class="main">
-		<section class="row-layout">
+	<section>
+		<div class="row-layout">
 			<h2> Upload </h2>
 			<span>You can upload your <pre class="code">.csv</pre> data set here, which will then be visualized in several different types of visualizations.</span><br/>
 			<br/>
@@ -39,27 +39,27 @@ DBL Group 33 | Homepage
 				</div>
 			</form>
 
-		</section>
-		<section class="row-layout">
+		</div>
+		<div class="row-layout">
 			<h2>Visualization 1: Node-link diagram</h2>
 			<p>This visualization displays a node-link diagram of the network graph, made using Plotly and Dash.</p>
 			<a class="button" href="/vis1">Go to visualization 1</a>
 			<img src="{% static 'homepage/network_node_link.png' %}" alt="Node-link diagram" class="side-img" />
-		</section>
-		<section class="row-layout">
+		</div>
+		<div class="row-layout">
 			<h2>Visualization 2: Adjacency matrix</h2>
 			<p>This visualization displays an adjacency matrix of the input data.</p>
 			<a class="button" href="/vis2">Go to visualization 2</a>
 			<img src="{% static 'homepage/adjacency_matrix_fade.png' %}" alt="Node-link diagram" class="side-img" />
-		</section>
+		</div>
 
-		<section class="row-layout">
+		<div class="row-layout">
 			<h2>Visualization 3: Combined Visualization</h2>
 			<p>This page contains both of the visualizations.</p>
 			<a class="button" href="/vis3">Go to visualization 3</a>
 			<img src="{% static 'homepage/image.png' %}" alt="Node-link diagram" class="side-img" />
-		</section>
-	</div>
+		</div>
+	</section>
 </div>
 
 <script src="{% static '/homepage/file_uploading.js' %}"></script>
