@@ -78,6 +78,7 @@ def vis3(request):
     # Fetch data from the adjacency matrix vis file
     matrix, nodeInfo, edges = adjacency_matrix.getMultiMatrix()
     normalizedMatrix = adjacency_matrix.getNormalizedMultiMatrix(1)
+    sentimentMatrix = adjacency_matrix.getSentimentMultiMatrix(1)
 
     hasEdges = True
     if (len(edges) < 1):
@@ -86,7 +87,7 @@ def vis3(request):
     # Create the data object to pass to the view
     matrixDataObject = {
         # Combine the data ("zipping" the data) to allow iterating over multiple lists asynchronously
-        "zippedMatrixData": zip(matrix, normalizedMatrix, nodeInfo),
+        "zippedMatrixData": zip(matrix, normalizedMatrix, sentimentMatrix, nodeInfo),
         "edgeData": json.dumps(edges),
         "nodeData": nodeInfo,
         "hasEdges": hasEdges

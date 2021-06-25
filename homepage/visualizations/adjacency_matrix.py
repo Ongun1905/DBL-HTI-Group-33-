@@ -116,8 +116,14 @@ def getSentimentMultiMatrix(norm):
         cellArr.append(normalizedAverageSentiment)
     
     sentimentMatrix.append(cellArr)
-  
-  return sentimentMatrix
+
+  print('Sentiment matrix from AM:')
+  print(sentimentMatrix)
+
+  if (len(sentimentMatrix) > 0):
+    return sentimentMatrix
+  else:
+    return []
 
 
 # Normalization mathematics
