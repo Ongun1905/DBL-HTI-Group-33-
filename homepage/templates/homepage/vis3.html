@@ -14,28 +14,28 @@ Visualization 3 | DBL Group 33
 
 {% block div %}
 <div class="container">
-    <div class="main">
+    <section>
         <div class="description">
             <h1>Visualization 3: Node Link diagram and Adjacency matrix</h1>
             <p>On this page you can view both visualisations at the same time, using all interactive options from both Vis 1 and Vis 2 pages. Do you want to view some specific data in both visualizations? No problem! Just press the "Update Filters" button! Or do you want to watch the timestamp animation on both figures? Please use the animation controls!</p>
             <br>
             <p>For the timestamp animation we recommend a minimum speed of 10 seconds for the default data set. For an optimal and correct simultaneous rendering, the speed may vary according to the used data.<p>
         </div>
-    </div>
-</div>
+    </section>
 
-<div class="combined">
-    <div class="combNodeVis">
-        <h1>Node Link diagram</h1>
-        <div class="iframe-wrapper">
-            {% load plotly_dash %}
-            {% plotly_app name="GraphVisualisation" ratio=1.55 %}
+    <div class="combined">
+        <div class="combNodeVis">
+            <h1>Node Link diagram</h1>
+            <div class="iframe-wrapper">
+                {% load plotly_dash %}
+                {% plotly_app name="GraphVisualisation" ratio=1.55 %}
+            </div>
         </div>
-    </div>
-    <div class="combAdjVis">
-        <h1>Adjacency matrix</h1>
-        <div class="am-vis-wrapper">
-            {% include "homepage/am_controls.html" %}
+        <div class="combAdjVis">
+            <h1>Adjacency matrix</h1>
+            <div class="am-vis-wrapper">
+                {% include "homepage/am_controls.html" %}
+            </div>
         </div>
     </div>
 </div>
