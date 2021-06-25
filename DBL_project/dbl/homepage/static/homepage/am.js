@@ -88,7 +88,7 @@ function clickCell(matrixCell, nodeData, edgeData) {
   relatedEdgeData.forEach((el, index) => {
     emailListHTML.push(`
       <tr>
-        <td>Email #${index + 1}</td>
+        <td>${index + 1}</td>
         <td class="${el.sentiment < 0 ? 'negative' : el.sentiment > 0 ? 'positive' : ''}">${roundTo(el.sentiment, 3)}</td>
         <td>${el.messageType}</td>
         <td>${el.date}</td>
@@ -100,10 +100,10 @@ function clickCell(matrixCell, nodeData, edgeData) {
     <table class="email-list custom-scrollbar">
       <thead>
         <tr>
-          <th style="width: 100%;" onclick="orderModalTable(0)" data-order="none">Email number</th>
-          <th onclick="orderModalTable(1)" data-order="none">Sentiment</th>
-          <th onclick="orderModalTable(2)" data-order="none">Type</th>
-          <th onclick="orderModalTable(3)" data-order="none">Date</th>
+          <th style="width: 100%;" onclick="onColumnHeaderClicked(event)" >Email number</th>
+          <th onclick="onColumnHeaderClicked(event)">Sentiment</th>
+          <th onclick="onColumnHeaderClicked(event, 'string')">Type</th>
+          <th onclick="onColumnHeaderClicked(event, 'date')">Date</th>
         </tr>
       </thead>
       <tbody>
@@ -139,66 +139,61 @@ function clickCell(matrixCell, nodeData, edgeData) {
 }
 
 
-function orderModalTable(index) {
-  const table = document.querySelector('.email-list')
-  var rows, switchCount, x, y
 
-  if (table.rows.length > 100) {
-    alert('Table sorting is not supported for tables with more than 100 rows! Sorry for the inconvenience.')
-    return
-  }
 
-  const tableHeadEls = table.tHead.children[0].children
-  const orderHeadEl = tableHeadEls[index]
 
-  var switching = true
-  var dir = orderHeadEl.dataset.order == 'asc' ? 'desc' : 'asc'
 
-  console.log(`Current order is ${orderHeadEl.dataset.order}, so changing it to ${dir}`)
+// This code has TypeScript type annotations, but can be used directly as pure JavaScript by just removing the type annotations first.
 
-  while (switching) {
-    switching = false
-    rows = table.rows
+function sortTableRowsByColumn(table, columnIndex, ascending, type) {
 
-    for (i = 1; i < (rows.length - 1); i++) {
-      shouldSwitch = false
+  const rows = Array.from(table.querySelectorAll(':scope > tbody > tr'));
 
-      x = rows[i].getElementsByTagName("TD")[index].innerText
-      y = rows[i + 1].getElementsByTagName("TD")[index].innerText
+  rows.sort((x, y) => {
+    const xValue = x.cells[columnIndex].textContent;
+    const yValue = y.cells[columnIndex].textContent;
 
-      if (dir == 'asc') {
-        if (x.localeCompare(y, undefined, { numeric: true, sensitivity: 'base' }) === 1) {
-          shouldSwitch = true
-          break
-        }
-      } else if (dir == 'desc') {
-        if (y.localeCompare(x, undefined, { numeric: true, sensitivity: 'base' }) === 1) {
-          shouldSwitch = true
-          break
-        }
-      }
+    // Handle explicit data types
+    if (type === 'date') {
+      const xDate = new Date(xValue)
+      const yDate = new Date(yValue)
+
+      return ascending ? (xDate - yDate) : (yDate - xDate)
+    } else if (type === 'string') {
+      const xString = xValue
+      const yString = yValue
+
+      return ascending ? (xString > yString) ? 1 : -1 : (yString > xString) ? 1 : -1
     }
 
-    if (shouldSwitch) {
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
+    // Assuming values are numeric (use parseInt or parseFloat):
+    const xNum = parseFloat(xValue);
+    const yNum = parseFloat(yValue);
 
-      // Each time a switch is done, increase this count by 1:
-      switchCount++;
-    } else {
-      if (switchCount == 0 && dir == "asc") {
-        dir = "desc";
-        switching = true;
-      }
-    }
+    return ascending ? (xNum - yNum) : (yNum - xNum); // <-- Neat comparison trick.
+  });
+
+  for (let row of rows) {
+    table.tBodies[0].appendChild(row);
   }
-  
-  // Toggle data-order for styling
-  orderHeadEl.dataset.order = dir
+}
 
-  // Toggle data-order for no-longer-ordered elements for styling
-  const nonOrderHeadEls = Array.from(tableHeadEls).filter(el => el !== orderHeadEl)
-  nonOrderHeadEls.forEach(el => el.dataset.order = 'none')
+function onColumnHeaderClicked(ev, type) {
+
+  const th = ev.currentTarget;
+  const table = th.closest('table');
+  const thIndex = Array.from(th.parentElement.children).indexOf(th);
+
+  const ascending = (th.dataset).sort != 'asc';
+
+  sortTableRowsByColumn(table, thIndex, ascending, type);
+
+  const allTh = table.querySelectorAll(':scope > thead > tr > th');
+  for (let th2 of allTh) {
+    delete th2.dataset['sort'];
+  }
+
+  th.dataset['sort'] = ascending ? 'asc' : 'desc';
 }
 
 
@@ -251,47 +246,12 @@ function removeEmptyRows(nodeData, edgeData) {
  * will display like red and a positive value will display like green.
  * 
  * @param {HTMLElement} matrixCells All cells in the matrix
- * @param {Array.<Object>} nodeData An array of node objects
- * @param {Array.<Array>} edgeData An array of the form [senderId, receiverId, {data}]
  */
-function sentimentColoring(matrixCells, nodeData, edgeData) {
+function sentimentColoring(matrixCells) {
   console.log('Coloring by sentiment...')
 
-  // Fetch sentiment values
-  let sentimentValues = []
-  let sentimentValuesAbs = []
-  matrixCells.forEach(cell => {
-    // Get the header & column id
-    const rowId = cell.dataset.columnIndex
-    const colId = cell.dataset.rowIndex
-
-    // Fetch the average sentiment of the cell
-    const relatedEdgeData = edgeData.filter(item => item[0] === nodeData[colId].id && item[1] === nodeData[rowId].id).map(item => item[2])
-    const averageSentiment = relatedEdgeData.length === 0 ? 0 : relatedEdgeData.reduce((a, b) => a + (b['sentiment'] || 0), 0) / relatedEdgeData.length
-    const maxSentiment = 1
-
-    // Push sentiment to the global array
-    sentimentValues.push(averageSentiment)
-    sentimentValuesAbs.push(Math.abs(averageSentiment))
-
-    // Normalize to 1 instead of max
-    const normalizedVal = 0.25 * logb(15 * Math.abs(averageSentiment) + 1, maxSentiment + 1)
-
-    if (averageSentiment < 0) cell.style.backgroundColor = `rgba(204, 102, 136, ${normalizedVal})`
-    else cell.style.backgroundColor = `rgba(101, 204, 169, ${normalizedVal})`
-  })
-
-  // Find the maximum sentiment value
-  const maxSentimentValue = 1 /*arrayMax(sentimentValuesAbs)*/
-
-  // Normalizing the sentiment value logarithmically and setting the background color of cells
-  matrixCells.forEach((cell, index) => {
-    const averageSentiment = sentimentValues[index]
-    const normalizedVal = 0.25 * logb(15 * Math.abs(averageSentiment) + 1, maxSentimentValue + 1)
-
-    if (averageSentiment < 0) cell.style.backgroundColor = `rgba(204, 102, 136, ${normalizedVal})`
-    else cell.style.backgroundColor = `rgba(101, 204, 169, ${normalizedVal})`
-  })
+  matrixCells.forEach(cell => cell.style.backgroundColor = cell.dataset.averageSentiment > 0 ? `rgba(101, 204, 169, ${cell.dataset.averageSentiment})` : `rgba(204, 102, 136, ${-cell.dataset.averageSentiment})`)
+  
   console.log('Done! The data is now colored by sentiment.')
 }
 

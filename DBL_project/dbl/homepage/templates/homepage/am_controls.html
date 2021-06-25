@@ -26,6 +26,13 @@
                     <span class="switch-slider"></span>
                 </label>
             </div>
+            <div class="field">
+                <p class="title">Display micro matrix</p>
+                <label class="switch">
+                    <input type="checkbox" id="am-toggle-micro-layout">
+                    <span class="switch-slider"></span>
+                </label>
+            </div>
         </form>
     </div>
     <br />
@@ -46,11 +53,11 @@
                 </tr>
             </thead>
             <tbody>
-                {% for matrixRow, normMatrixRow, nodeDataLeftHeader in zippedMatrixData %}
+                {% for matrixRow, normMatrixRow, sentimentMatrixRow, nodeDataLeftHeader in zippedMatrixData %}
                 <tr id="node-{{ nodeDataLeftHeader.id  }}">
-                    <th>{{ nodeDataLeftHeader.id  }}</th>
+                    <th><span>{{ nodeDataLeftHeader.id  }}</span></th>
                     {% for matrixCell in matrixRow %}
-                        <td class="matrix-data-element" data-row-index="{{ forloop.parentloop.counter0 }}" data-column-index="{{ forloop.counter0 }}" data-edge-count-norm="{{ normMatrixRow|index:forloop.counter0 }}">
+                        <td class="matrix-data-element" data-row-index="{{ forloop.parentloop.counter0 }}" data-column-index="{{ forloop.counter0 }}" data-edge-count-norm="{{ normMatrixRow|index:forloop.counter0 }}" data-average-sentiment="{{ sentimentMatrixRow|index:forloop.counter0 }}">
                             {% if matrixCell > 0 %}
                             <span>{{ matrixCell }}</span>
                             {% endif %}
@@ -81,6 +88,8 @@
     const inputToggleEmails = document.getElementById('am-toggle-emails')
     const inputToggleHover = document.getElementById('am-toggle-hover')
     const inputToggleColoring = document.getElementById('am-toggle-coloring-sentiment')
+    const inputToggleMicro = document.getElementById('am-toggle-micro-layout')
+    const am = document.querySelector('.adjacency-matrix')
     const amWrapper = document.querySelector('.am-wrapper')
     const amLoader = document.querySelector('.am-wrapper .am-loader')
     const amLoaderText = document.getElementById('am-loader-text')
@@ -143,6 +152,10 @@
         if (inputToggleColoring.checked)
             sentimentColoring(currentMatrixEntries, nodeData, edgeData) // Recolor according to positivity/negativity
         else edgeCountColoring(currentMatrixEntries, nodeData, edgeData) // Recolor according to edge count
+    })
+    inputToggleMicro.addEventListener('click', () => {
+        if (inputToggleMicro.checked) am.classList.add('micro') // Add the micro class
+        else am.classList.remove('micro') // Remove the micro class
     })
     </script>
 </div>
