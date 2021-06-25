@@ -1,0 +1,9 @@
+# The files & folders below are ignored by Github and are thus not uploaded to the repo
+
+# Python cache & temporary files
+DBL_project/dbl/db.sqlite3
+**/__pycache__
+*.pyc
+
+# Python virtual environments (Add the path to your virtual environment below!)
+/venv
