@@ -116,10 +116,6 @@ header nav ul li ul li a {
 	background-color: var(--color-black-soft);
 }
 
-.container > section:last-child {
-	/*padding-bottom: 4rem;*/
-}
-
 
 /* Make the footer stay at the bottom of the page */
 #page-container { position: relative; min-height: 100vh; }
@@ -181,10 +177,10 @@ Adjacency matrix styling
 	background-color: var(--color-black-soft);
 
 	/* Sizing and scroll setup */
-	display: block;
+	display: inline-block;
 	overflow: auto;
 	max-height: 600px;
-	max-width: calc(100vw - 2 * var(--padding-sides));
+	max-width: 100%;
 }
 
 .adjacency-matrix thead th {
@@ -281,6 +277,23 @@ Adjacency matrix styling
 }
 
 
+/* Adjacency matrix - Micro layout overwrites */
+.adjacency-matrix.micro {
+	--am-micro-size: 6px;
+	max-height: 100%;
+}
+.adjacency-matrix.micro thead, .adjacency-matrix.micro th  { display: none; }
+.adjacency-matrix.micro td {
+	height: var(--am-micro-size);
+	width: var(--am-micro-size);
+	padding: 0;
+}
+
+.adjacency-matrix.micro td span, .adjacency-matrix.micro th span {
+	display: none;
+}
+
+
 /* Adjacency matrix - Popup */
 .edge-info-popup {
 	position: absolute;
@@ -347,11 +360,11 @@ Adjacency matrix styling
 	background-color: var(--color-black-hard);
 	cursor: pointer;
 }
-.email-list th[data-order="asc"]::after {
+.email-list th[data-sort="asc"]::after {
 	margin-left: 8px;
 	content: '\25B4';
 }
-.email-list th[data-order="desc"]::after {
+.email-list th[data-sort="desc"]::after {
 	margin-left: 8px;
 	content: '\25BE';
 }
