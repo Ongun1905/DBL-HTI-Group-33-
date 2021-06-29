@@ -41,7 +41,7 @@ Quit the server with CTRL-BREAK.
 Follow the link in the console output (http://127.0.0.1:8000/) to view the web app in action!
 
 # Feature explanation
-This tool is a web-based network visualization application. It contains 2 visualizations: A node-link diagram and an adjacency matrix. The beginnings of a data upload tool can be seen on the frontpage, but the source code still uses a static file in the source directory.
+This tool is a web-based network visualization application. It contains 2 visualizations: A node-link diagram and an adjacency matrix. The data upload tool can be seen on the frontpage, as well as links to all three visualization option. The first visualization option is reserved to the node-link diagram, the second one is to the adjacency matrix and the final one is reserved to the combined version of both visualizations, including all interactive options.
 
 
 <hr>
