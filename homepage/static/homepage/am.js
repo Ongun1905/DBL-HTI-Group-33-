@@ -46,7 +46,7 @@ function displayPopup(matrixCell, nodeData, edgeData) {
 
   // Change the top distance based on whether or not it's in the combined view
   // -80 is to account for the navbar, window.scrollY to prevent positioning issues
-  const topDistance = matrixCell.closest('.combined') ? cellRect.top + window.scrollY : cellRect.top - 80 + window.scrollY
+  const topDistance = cellRect.top - 80 + window.scrollY
   edgeInfoPopup.style.top = topDistance + 'px'
   
   // Set translate property to the :root element

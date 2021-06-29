@@ -159,9 +159,10 @@ async function updateMatrix() {
 
     // Fetch the new nodeData, edgeData, matrix and normalized matrix
     const updatedMatrix = sessionMatrixData.matrix
-    const updatedNormMatrix = sessionMatrixData.normMatrix
     nodeData = sessionMatrixData.nodeData
     edgeData = sessionMatrixData.edgeData
+
+    console.log(updatedMatrix)
 
     // Empty the table element
     am.innerHTML = ''
@@ -176,7 +177,7 @@ async function updateMatrix() {
         // Generate the matrix cell elements
         let bodyRowCells = []
         row.forEach((cell, colIndex) => {
-            bodyRowCells.push(`<td class="matrix-data-element" data-row-index="${rowIndex}" data-column-index="${colIndex}" data-edge-count-norm="${updatedNormMatrix[rowIndex][colIndex]}">${cell > 0 ? '<span>' + cell + '</span>' : ''}</td>`)
+            bodyRowCells.push(`<td class="matrix-data-element" data-row-index="${rowIndex}" data-column-index="${colIndex}" data-edge-count-norm="${cell.norm}" data-average-sentiment="${cell.sent}">${cell.default > 0 ? '<span>' + cell.default + '</span>' : ''}</td>`)
         })
         
         // Generate the row elements and append the cell elements

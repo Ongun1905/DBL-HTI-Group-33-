@@ -64,7 +64,6 @@ def getNormalizedMultiMatrix(norm):
   # Logarithmic normalization between 0 and norm
   if (len(matrix) > 0):
     normalizedMatrix = np.vectorize(logarithmicNormalizing)(matrix, norm, maxMatrixElement)
-    print('Normalized matrix: ' + str(len(normalizedMatrix)))
     return normalizedMatrix
   else:
     return []
@@ -116,9 +115,6 @@ def getSentimentMultiMatrix(norm):
         cellArr.append(normalizedAverageSentiment)
     
     sentimentMatrix.append(cellArr)
-
-  print('Sentiment matrix from AM:')
-  print(sentimentMatrix)
 
   if (len(sentimentMatrix) > 0):
     return sentimentMatrix

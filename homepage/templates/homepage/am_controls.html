@@ -144,14 +144,15 @@
     })
     inputToggleColoring.addEventListener('click', () => {
         let currentMatrixEntries = document.querySelectorAll('.adjacency-matrix .matrix-data-element')
-        let sessionMatrixData = JSON.parse(window.sessionStorage.session)
+        /*
+        let sessionMatrixData = window.sessionStorage.session === undefined ? undefined : JSON.parse(window.sessionStorage.session)
 
         if (sessionMatrixData && nodeData !== sessionMatrixData.nodeData) nodeData = sessionMatrixData.nodeData
         if (sessionMatrixData && edgeData !== sessionMatrixData.edgeData) edgeData = sessionMatrixData.edgeData
-
+        */
         if (inputToggleColoring.checked)
-            sentimentColoring(currentMatrixEntries, nodeData, edgeData) // Recolor according to positivity/negativity
-        else edgeCountColoring(currentMatrixEntries, nodeData, edgeData) // Recolor according to edge count
+            sentimentColoring(currentMatrixEntries) // Recolor according to positivity/negativity
+        else edgeCountColoring(currentMatrixEntries) // Recolor according to edge count
     })
     inputToggleMicro.addEventListener('click', () => {
         if (inputToggleMicro.checked) am.classList.add('micro') // Add the micro class

@@ -157,17 +157,25 @@ PLOTLY_COMPONENTS = {
 STATIC_URL = '/static/'
 STATICFILES_LOCATION = 'static'
 STATIC_ROOT = 'static'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
  
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATIC_URL = '/static/'
+# Increase the maximum memory upload size for transferring matrix data
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-MEDIA_URL = '/media/'
+# Contact form
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "dblgroup3333@gmail.com"
+EMAIL_HOST_PASSWORD = "Z3%DuvxC"
 
 django_heroku.settings(locals())
