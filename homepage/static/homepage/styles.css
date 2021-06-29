@@ -97,6 +97,26 @@ header nav ul li ul li a {
 	background-color: var(--color-green-light);
 }
 /*End Menu						************************************************************************************************************************************************/
+/* small add-on so that website looks somewhat reasonable on mobile devices*/
+@media screen and (max-width:768px) {
+	header {
+		flex-direction: column;
+	}
+	.upload-button{
+		width: 50%;
+	}
+	.row-layout .side-img{
+		width: 40%;
+		right: -20px;
+		margin-top: 135px;
+	}
+	footer .copy{
+		width: 30%;
+	}
+	footer .madeBy{
+		width: 70%;
+	}
+}
 
 .container {
 	position: relative;
