@@ -9,7 +9,7 @@
 Warning: we are using heroku free plan so users might have to wait a few seconds to wake up the app. 
 
 
-# Usage to run website locally 
+# Running website locally 
 To run the web app locally, there are a few steps that need to be followed. Using a Python virtual environment is recommended<sup>1</sup> but not required. If you don't want to use a virtual environment, skip the "(Optional) Python virtual environment setup" step.
 
 ## Installation
