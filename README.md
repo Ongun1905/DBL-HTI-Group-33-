@@ -24,7 +24,7 @@ For more information about virtual environments in Python, you can read the [doc
 
 ## Starting the web app on a local server
 1. Open up a console and navigate to the root of this repository
-2. Enter `python DBL_Project/dbl/manage.py runserver`
+2. Enter `python manage.py runserver`
 
 After a few seconds, the console log should look similar to this:
 ```
