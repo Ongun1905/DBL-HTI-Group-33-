@@ -479,6 +479,90 @@ body.wide {
 	background: #65cca9;
 }
 
+coolHover{
+	position: relative;
+	color: white;
+	padding: 10px 8px;
+	font-size: 17px;
+	border-radius: 4px;
+	letter-spacing: 0.5px;
+	overflow: hidden;
+	background: #65cca9;
+	transition: .5s linear;
+	transition-delay: 0s;
+}
+
+coolHover:hover{
+	background: #29b586;
+	color: white;
+	transition: 0.5s linear;
+	transition-delay: 1s;
+}
+
+coolHover vis1go{
+	display: block;
+	position: absolute;
+	
+}
+
+coolHover vis1go:nth-child(1) {
+	top: 0;
+	left: -100%;
+	height: 4px;
+	width: 45%;
+	background: linear-gradient(90deg, transparent, var(--color-black-softest));
+}
+
+coolHover:hover vis1go:nth-child(1) {
+	left: 100%;
+	transition: 1s;
+}
+
+coolHover vis1go:nth-child(2) {
+	top: -100%;
+	right: 0;
+	height: 45%;
+	width: 4px;
+	background: linear-gradient(180deg, transparent, var(--color-black-softest));
+}
+
+coolHover:hover vis1go:nth-child(2) {
+	top: 100%;
+	transition: 1s;
+	transition-delay: 0.25s;
+}
+
+coolHover vis1go:nth-child(3) {
+	bottom: 0;
+	right: -100%;
+	height: 4px;
+	width: 45%;
+	background: linear-gradient(270deg, transparent, var(--color-black-softest));
+}
+
+coolHover:hover vis1go:nth-child(3) {
+	right: 100%;
+	transition: 1s;
+	transition-delay: 0.5s;
+}
+
+coolHover vis1go:nth-child(4) {
+	top: 100%;
+	left: 0;
+	height: 20%;
+	width: 4px;
+	background: linear-gradient(360deg, transparent, var(--color-black-softest));
+}
+
+coolHover:hover vis1go:nth-child(4) {
+	top: -100%;
+	transition: 1s;
+	transition-delay: 0.9s;
+}
+
+
+
+
 
 
 /* ------------------------------
