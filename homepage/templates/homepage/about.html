@@ -9,6 +9,11 @@ About | DBL Group 33
 {% endblock %}
 
 {% block div %}
+<div class = "loader_bg">
+	<div class ="loader">
+	</div>
+</div>
+
 <div class="container">
   <section class="about">
     <div class="about-intro">
@@ -23,7 +28,7 @@ About | DBL Group 33
         <div class="card-text">
           <div>
             <h2>Ongun Korkmaz</h2>
-            <p class="title">UI &amp; interaction designer</p>
+            <p class="title">UI &amp; Interaction Designer</p>
             <span>Hello, thank you for visiting our website! 
             I’m a first-year Computer Science &amp; Engineering student at TU/e just like my other colleagues here. I’ve mainly focused on the UI elements, visualizations, and the tools we’ve added to our visualizations. 
             We’ve made sure that you can use this website to its full potential. Have fun using our tools and website!
@@ -32,6 +37,7 @@ About | DBL Group 33
           </div>
           <div class="buttons">
             <a href="mailto:ongun.korkmaz@gmail.com" target="_blank" class="about-button mail"><i class="far fa-envelope"></i></a>
+            <a href="https://www.linkedin.com/in/ongun-k-710022140/" target="_blank" class="about-button linkedin"><i class="fab fa-linkedin"></i></a>
           </div>
         </div>
       </div>
@@ -143,5 +149,13 @@ About | DBL Group 33
     </div>
   </section>
 </div>
+
+<script>
+	let loaderBackground = document.querySelector('.loader_bg');
+
+	window.addEventListener('load', function() {
+		loaderBackground.style.display = 'none';
+	});
+</script>
 
 {% endblock %}

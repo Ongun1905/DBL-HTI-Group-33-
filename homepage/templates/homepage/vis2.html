@@ -9,6 +9,11 @@ Visualization 2 | DBL Group 33
 {% endblock %}
 
 {% block div %}
+<div class = "loader_bg">
+	<div class ="loader">
+	</div>
+</div>
+
 <div class="container">
     <section>
         <h1>Visualization 2: Adjacency matrix</h1>
@@ -22,4 +27,12 @@ Visualization 2 | DBL Group 33
         {% include "homepage/am_controls.html" %}
     </section>
 </div>
+
+<script>
+	let loaderBackground = document.querySelector('.loader_bg');
+
+	window.addEventListener('load', function() {
+		loaderBackground.style.display = 'none';
+	});
+</script>
 {% endblock %}

@@ -13,6 +13,11 @@ Visualization 3 | DBL Group 33
 
 
 {% block div %}
+<div class = "loader_bg">
+	<div class ="loader">
+	</div>
+</div>
+
 <div class="container">
     <section>
         <div class="description">
@@ -245,5 +250,13 @@ async function updateMatrix() {
 
     console.log('Finished matrix update!')
 }
+</script>
+
+<script>
+	let loaderBackground = document.querySelector('.loader_bg');
+
+	window.addEventListener('load', function() {
+		loaderBackground.style.display = 'none';
+	});
 </script>
 {% endblock %}

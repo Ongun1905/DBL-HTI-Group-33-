@@ -10,6 +10,11 @@ Visualization 1 | DBL Group 33
 
 
 {% block div %}
+<div class = "loader_bg">
+	<div class ="loader">
+	</div>
+</div>
+
 <div class="container">
     <section>
         <h1>Visualization 1: MultiDiGraph</h1>
@@ -38,4 +43,12 @@ Visualization 1 | DBL Group 33
         </div>
     </section>
 </div>
+
+<script>
+	let loaderBackground = document.querySelector('.loader_bg');
+
+	window.addEventListener('load', function() {
+		loaderBackground.style.display = 'none';
+	});
+</script>
 {% endblock %}

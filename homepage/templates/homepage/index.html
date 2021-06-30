@@ -10,6 +10,13 @@ DBL Group 33 | Homepage
 {% endblock %}
 
 {% block div %}
+<div class = "loader_bg">
+	<div class ="loader">
+	</div>
+</div>
+
+
+
 <div class="container">
 	<section>
 		<div class="row-layout">
@@ -62,5 +69,15 @@ DBL Group 33 | Homepage
 	</section>
 </div>
 
+
+
 <script src="{% static '/homepage/file_uploading.js' %}"></script>
+
+<script>
+	let loaderBackground = document.querySelector('.loader_bg');
+
+	window.addEventListener('load', function() {
+		loaderBackground.style.display = 'none';
+	});
+</script>
 {% endblock %}
