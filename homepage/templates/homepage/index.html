@@ -113,33 +113,33 @@ DBL Group 33 | Homepage
 	let logo = document.querySelector('logo-header');
 	let logoSpan = document.querySelectorAll('.logo');
 
-	var splash = true;
+	
 
 	window.addEventListener('DOMContentLoaded', ()=>{
-		
-		setTimeout(()=>{
-			logoSpan.forEach((span, idx)=>{
-				setTimeout(()=>{
-					span.classList.add('active');
-				}, (idx + 1) * 400)
-			});
-
+		if(sessionStorage.getItem('splash') !== true) {
 			setTimeout(()=>{
 				logoSpan.forEach((span, idx)=>{
 					setTimeout(()=>{
-						span.classList.remove('active');
-						span.classList.add('fade');
-					}, (idx + 1) * 50)
-				})
-			}, 2000);
+						span.classList.add('active');
+					}, (idx + 1) * 400)
+				});
 
-			setTimeout(()=>{
-				splash = false;
-				mainintro.style.top = '-100vh';
-			}, 2400)
+				setTimeout(()=>{
+					logoSpan.forEach((span, idx)=>{
+						setTimeout(()=>{
+							span.classList.remove('active');
+							span.classList.add('fade');
+						}, (idx + 1) * 50)
+					})
+				}, 2000);
 
-			
-		})
+				setTimeout(()=>{
+					mainintro.style.top = '-100vh';
+				}, 2400)
+			})
+			sessionStorage.setItem('splash','true');
+			console.debug('splash set to true')
+		}
 	})
 </script>
 
