@@ -10,11 +10,19 @@ DBL Group 33 | Homepage
 {% endblock %}
 
 {% block div %}
-<div class = "loader_bg">
+<!--<div class = "loader_bg">
 	<div class ="loader">
 	</div>
 </div>
+-->
 
+<div class="main-intro">
+	<h1 class="logo-header">
+		<span class ="logo">DBL</span>
+		<span class ="logo">Group</span>
+		<span class ="logo"> 33</span>
+	</h1>
+</div>
 
 
 <div class="container">
@@ -98,11 +106,43 @@ DBL Group 33 | Homepage
 
 <script src="{% static '/homepage/file_uploading.js' %}"></script>
 
-<script>
+<!--
+	<script>
 	let loaderBackground = document.querySelector('.loader_bg');
 
 	window.addEventListener('load', function() {
 		loaderBackground.style.display = 'none';
 	});
 </script>
+-->
+
+<script >
+	let mainintro = document.querySelector('.main-intro');
+	let logo = document.querySelector('logo-header');
+	let logoSpan = document.querySelectorAll('.logo');
+
+	window.addEventListener('DOMContentLoaded', ()=>{
+		setTimeout(()=>{
+			logoSpan.forEach((span, idx)=>{
+				setTimeout(()=>{
+					span.classList.add('active');
+				}, (idx + 1) * 400)
+			});
+
+			setTimeout(()=>{
+				logoSpan.forEach((span, idx)=>{
+					setTimeout(()=>{
+						span.classList.remove('active');
+						span.classList.add('fade');
+					}, (idx + 1) * 50)
+				})
+			}, 2000);
+
+			setTimeout(()=>{
+				mainintro.style.top = '-100vh';
+			}, 3000)
+		})
+	})
+</script>
+
 {% endblock %}
