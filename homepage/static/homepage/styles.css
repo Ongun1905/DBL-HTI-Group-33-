@@ -742,6 +742,7 @@ input[type=submit]:hover {
 	height: 100vh;
 	background-color: var(--color-black-softest);
 	transition: 1s;
+	display: none;
 }
 
 .logo-header{

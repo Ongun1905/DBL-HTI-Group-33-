@@ -114,9 +114,9 @@ DBL Group 33 | Homepage
 	let logoSpan = document.querySelectorAll('.logo');
 
 	
-
 	window.addEventListener('DOMContentLoaded', ()=>{
 		if(sessionStorage.getItem('splash') !== 'true') {
+			mainintro.style.display = 'inline';
 			setTimeout(()=>{
 				logoSpan.forEach((span, idx)=>{
 					setTimeout(()=>{
@@ -138,8 +138,9 @@ DBL Group 33 | Homepage
 				}, 2400)
 			})
 			sessionStorage.setItem('splash','true');
-			console.debug('splash set to true')
+			
 		}
+		
 	})
 </script>
 
